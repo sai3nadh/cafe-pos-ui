@@ -1,0 +1,48 @@
+<!-- <p>register works!</p> -->
+<div class="register-page">
+    <div class="card">
+      <div class="card-header">
+        <h2>Register</h2>
+      </div>
+      <div class="card-content">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="name"
+          placeholder="Enter your name"
+        />
+  
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email"
+        />
+  
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          placeholder="Enter your password"
+        />
+  
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          [(ngModel)]="confirmPassword"
+          placeholder="Confirm your password"
+        />
+      </div>
+      <div class="card-footer">
+        <button (click)="handleRegister()">Register</button>
+        <p class="toggle-text">
+          Already have an account? <a [routerLink]="'/login'">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  

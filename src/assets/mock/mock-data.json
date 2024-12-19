@@ -1,0 +1,50 @@
+{
+  "featuredProducts": [
+    {
+      "id": 1,
+      "name": "iPhone 11",
+      "description": "A powerful smartphone with advanced features.",
+      "imageUrl": "assets/product1.jpg"
+    },
+    {
+      "id": 2,
+      "name": "MacBook Air",
+      "description": "A sleek and lightweight laptop for everyday use.",
+      "imageUrl": "assets/product2.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Samsung Galaxy S21",
+      "description": "Experience the new era of smartphone technology with Samsung.",
+      "imageUrl": "assets/product2.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Dell XPS 13",
+      "description": "A high-performance laptop with a stunning display.",
+      "imageUrl": "assets/product1.jpg"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Mobiles",
+      "description": "A wide range of smartphones with the latest features."
+    },
+    {
+      "id": 2,
+      "name": "Laptops",
+      "description": "Find laptops for all your computing needs, from gaming to business."
+    },
+    {
+      "id": 3,
+      "name": "Tablets",
+      "description": "Explore a variety of tablets for work, study, and entertainment."
+    },
+    {
+      "id": 4,
+      "name": "Accessories",
+      "description": "All the accessories you need to complement your devices."
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f7fc;
+  }
+  
+  /* Fixed Top Navigation */
+  .top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #007bff;
+    padding: 15px;
+    color: white;
+    z-index: 1000; /* Ensure the top bar stays above other content */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .nav-buttons button,
+  .avatar-section button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    padding: 10px;
+    margin-left: 20px;
+  }
+  
+  .avatar-section img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  /* Main Content Container */
+  .main-content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 80px; /* Offset the content by the height of the fixed top bar */
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Left Section (Items Grid) */
+  .left-section {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll; /* Make this section scrollable */
+    max-height: 90vh; /* Make sure it's scrollable if the content exceeds the viewport height */
+    padding: 10px;
+  }
+  
+  /* Item Cards */
+  .item-card {
+    width: 200px;
+    height: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  /* Style for Item Names */
+  .item-card h3 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for Item Prices */
+  .item-card p {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+  }
+  
+  /* Style for Buttons */
+  .item-card button {
+    font-size: 1.1em;
+    padding: 12px 20px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .item-card button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Adjust Grid Layout */
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Right Section (Cart) */
+  .right-section {
+    width: 400px; /* Increased the width of the cart */
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow-y: scroll; /* Make it scrollable if content overflows */
+    max-height: 90vh; /* Ensure the cart content does not exceed the viewport height */
+  }
+  
+  /* Cart Total Section */
+  .total {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  /* Cart Checkout Button */
+  .right-section button {
+    width: 100%;
+    padding: 15px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .right-section button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Category Buttons Styling */
+  .categories button {
+    font-size: 1.2em;
+    padding: 15px 25px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .categories button:hover {
+    background-color: #0056b3;
+  }
+  

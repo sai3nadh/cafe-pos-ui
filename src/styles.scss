@@ -1,1 +1,35 @@
+/* src/styles.scss */
 /* You can add global styles to this file, and also import other style files */
+// body {
+//     position: relative; /* Enable positioning for the pseudo-element */
+//     margin: 0; /* Remove default margin */
+//     padding: 0; /* Remove default padding */
+//     height: 100vh; /* Ensure it spans the entire viewport height */
+//     overflow: hidden; /* Prevent unwanted scrolling */
+//   }
+  
+//   body::before {
+//     content: ""; /* Required for pseudo-elements */
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     background: url('assets/logo.png') no-repeat center center fixed; /* Full-page watermark */
+//     background-size: cover; /* Make the image cover the entire page */
+//     opacity: 0.1; /* Apply opacity only to the image */
+//     z-index: -1; /* Place it behind all content */
+//     pointer-events: none; /* Ensure it doesn’t interfere with clicks */
+//   }
+//   body::after {
+//     content: ""; /* Required for pseudo-elements */
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     background-color: rgba(0, 0, 0, 0.5); /* Dark overlay with 50% opacity */
+//     z-index: -1; /* Place it above the image but below the content */
+//     pointer-events: none; /* Ensure it doesn’t interfere with clicks */
+//   }
+  

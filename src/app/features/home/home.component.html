@@ -1,0 +1,64 @@
+<!-- Container: Entire viewport -->
+<div class="container">
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+      <div class="nav-buttons">
+        <button (click)="goToDrafts()">Drafts</button>
+        <button (click)="goToPrevOrders()">Prev Orders</button>
+        <button (click)="goToAllOrders()">All Orders</button>
+      </div>
+      <div class="avatar-section">
+        <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" />
+        <!-- <img class="avatar" src="/logo.png" alt="Avatar" /> -->
+        <button (click)="logout()">Logout</button>
+      </div>
+    </div>
+  
+    <!-- Main Content Section -->
+    <div class="main-content">
+      <!-- Left Section -->
+      <div class="left-section">
+        <!-- Category Buttons -->
+        <div class="categories">
+          <button *ngFor="let category of categories" (click)="selectCategory(category)">
+            {{ category.name }}
+          </button>
+        </div>
+  
+        <!-- Items in Selected Category -->
+        <div class="items-section" *ngIf="selectedCategory">
+          <h2>{{ selectedCategory.name }}</h2>
+          <div class="items-grid">
+            <div class="item-card" *ngFor="let item of getItemsByCategory(selectedCategory.id)">
+              <h3>{{ item.name }}</h3>
+              <p>${{ item.price.toFixed(2) }}</p>
+              <button (click)="addToCart(item)">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Right Section (Cart) -->
+      <div class="right-section">
+        <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" />
+  
+        <h2>Cart</h2>
+        <ul>
+          <li *ngFor="let cartItem of cart">
+            <div class="cart-item">
+              <h3>{{ cartItem.name }}</h3>
+              <div class="cart-item-details">
+                <label>Qty:</label>
+                <input type="number" [(ngModel)]="cartItem.qty" (change)="updateCartItem(cartItem)" />
+                <span> x ${{ (cartItem.price * (cartItem.qty || 1)).toFixed(2) }} = ${{ (cartItem.price * (cartItem.qty || 1)).toFixed(2) }}</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+  
+        <p class="total">Total: ${{ getTotal().toFixed(2) }}</p>
+        <button (click)="checkout()">Checkout</button>
+      </div>
+    </div>
+  </div>
+  
