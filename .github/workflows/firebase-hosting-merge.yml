@@ -50,7 +50,7 @@ jobs:
 
       # Build the Angular project
       - name: Build Angular project
-        run: ng build # --configuration production  # Use --prod if using Angular 11 or below
+        run: npx ng build # ng build # --configuration production  # Use --prod if using Angular 11 or below
 
       # Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
