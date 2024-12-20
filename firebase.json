@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/cafe-pos-ui",
+    "public": "dist/cafe-pos-ui/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
