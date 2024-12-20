@@ -56,16 +56,50 @@ body {
     flex: 3;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll; /* Make this section scrollable */
-    max-height: 90vh; /* Make sure it's scrollable if the content exceeds the viewport height */
     padding: 10px;
+    position: relative; /* Adjusted to handle the fixed categories section */
+  }
+  
+  /* Fixed Categories Section */
+  .categories {
+    position: fixed;
+    top: 80px; /* Start below the top bar */
+    left: 10px;
+    width: calc(65% - 20px); /* To make it fit in the left section */
+    z-index: 100;
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .categories button {
+    font-size: 1.2em;
+    padding: 15px 25px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .categories button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Items Section - Scrollable */
+  .items-section {
+    margin-top: 100px; /* Ensure it starts below the fixed categories */
+    overflow-y: auto;
+    max-height: calc(100vh - 150px); /* Limit item section height to fit within viewport */
   }
   
   /* Item Cards */
   .item-card {
     width: 200px;
     height: 300px;
-    padding: 20px;
+    padding: 5px;
     border: 1px solid #ccc;
     display: flex;
     flex-direction: column;
@@ -108,12 +142,55 @@ body {
   }
   
   /* Adjust Grid Layout */
-  .items-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-  }
+//   .items-grid {
+//     display: grid;
+//     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+//     gap: 20px;
+//   }
   
+//   .items-grid {
+//     display: flex;
+//     flex-wrap: wrap;  /* Allow the items to wrap into the next row */
+//     justify-content: space-between; /* Space out the items evenly */
+//     gap: 20px;  /* Space between items */
+//     padding: 10px;
+//     overflow: hidden;  /* Prevent horizontal scrollbar */
+//   }
+
+  /* Adjust layout of the items container */
+/* Adjust layout of the items container */
+// .items-grid {
+//     display: grid;
+//     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatically adjust column count */
+//     gap: 20px;  /* Fixed space between items (adjust as needed) */
+//     justify-items: center;  /* Center the items horizontally in the available space */
+//     padding: 10px;
+//     overflow: hidden;  /* Prevent horizontal scrollbar */
+//   }
+
+ .items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatically adjust column count */
+  gap: 20px;  /* Dynamic space between items */
+  padding: 10px;
+  overflow: hidden;  /* Prevent horizontal scrollbar */
+  justify-items: center;  /* Center the items horizontally in the available space */
+}
+  
+  /* Ensure each item card is the same size and aligned */
+  .item-card {
+    width: 200px;
+    height: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 10px;  /* Consistent bottom margin for spacing */
+  }
   /* Right Section (Cart) */
   .right-section {
     width: 400px; /* Increased the width of the cart */
@@ -148,21 +225,119 @@ body {
     background-color: #0056b3;
   }
   
-  /* Category Buttons Styling */
-  .categories button {
-    font-size: 1.2em;
-    padding: 15px 25px;
-    margin: 5px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  /* Right Section (Cart) */
+.right-sections {
+    // width: 400px; /* Increased the width of the cart */
+    width: 100%; /* Make it 100% width */
+    max-width: 400px; /* Maximum width */
+   
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures the total is pushed to the bottom */
+    max-height: 90vh; /* Ensure the cart doesn't overflow */
   }
   
-  .categories button:hover {
+  /* Cart Items Container */
+  .cart-items {
+    flex: 1;  /* This takes up remaining space */
+    overflow-y: auto; /* Makes the items section scrollable */
+    padding-right: 10px; /* Padding to avoid the scrollbar overlapping the content */
+  }
+  
+  .cart-items ul {
+    list-style-type: none; /* Removes the bullets from the list */
+    padding: 0; /* Removes any default padding */
+    margin: 0; /* Removes any default margin */
+  }
+  .cart-item-details input[type="number"] {
+    width: 4ch; /* Ensures input field is wide enough for 4 characters */
+  }
+  
+  .cart-items li {
+    margin-bottom: 10px; /* Optional: Adds some spacing between list items */
+  }
+  /* Cart Total Section */
+  .total {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: right;  /* Aligns the total to the right */
+  }
+   /* Cart Total Section */
+   input {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: left;  /* Aligns the total to the right */
+  }
+  
+  /* Cart Checkout Button */
+  .right-section button {
+    width: 100%;
+    padding: 15px;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;  /* Add some space above the button */
+  }
+  
+  .right-section button:hover {
     background-color: #0056b3;
   }
   
+   
+  /* Right Section (Cart) */
+.right-section {
+    width: 100%;
+    max-width: 400px; /* Maximum width */
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    overflow: -moz-scrollbars-none; /* For Firefox */
+    overflow: hidden;
+    scrollbar-width: none; /* For Firefox */
+  }
   
+  /* On screens smaller than 600px, reduce padding and adjust width */
+  @media screen and (max-width: 600px) {
+    .right-section {
+      padding: 10px;
+      width: 100%;
+      max-width: 90%; /* Allow more space on small devices */
+    }
+  }
+  
+  /* On screens larger than 1200px, you can increase the max-width */
+  @media screen and (min-width: 1200px) {
+    .right-section {
+      max-width: 500px; /* Increase max-width for larger devices */
+    }
+  }
+  
+  .right-section button:hover {
+  background-color: #0056b3;
+}
+
+.right-section {
+  overflow: auto; /* Allow scrolling if content overflows */
+}
+
+.right-section::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in WebKit browsers (Chrome, Safari) */
+}
+
+.right-section {
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+}

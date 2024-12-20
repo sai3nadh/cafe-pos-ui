@@ -9,14 +9,13 @@
       </div>
       <div class="avatar-section">
         <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" />
-        <!-- <img class="avatar" src="/logo.png" alt="Avatar" /> -->
         <button (click)="logout()">Logout</button>
       </div>
     </div>
   
     <!-- Main Content Section -->
     <div class="main-content">
-      <!-- Left Section -->
+      <!-- Left Section (Categories and Items) -->
       <div class="left-section">
         <!-- Category Buttons -->
         <div class="categories">
@@ -41,9 +40,37 @@
           </div>
         </div>
       </div>
-  
-      <!-- Right Section (Cart) -->
       <div class="right-section">
+
+        <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" />
+  
+        <!-- <h2>Cart</h2> -->
+        <div class="cart-items">
+          <!-- Loop through cart items -->
+          <ul>
+            <li *ngFor="let item of cart">
+                <hr>
+              <div class="cart-item" style="font-size: xx-large;">
+                <h3 style="font-size: xx-large; padding: 0; margin-bottom: 0; margin-top: 1; ">{{ item.name }}</h3>
+                <div class="cart-item-details" style="font-size: xx-large;">
+                  <label>Qty:</label>
+                  <input type="number" [(ngModel)]="item.qty" (change)="updateCartItem(item)" size="4"/>
+                  <span> x ${{ item.price?.toFixed(2) }} = ${{ (item.price ?? 0) * (item.qty ?? 0) | number: '1.2-2' }}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+    
+        <div class="total">
+          Total: ${{ getTotal()?.toFixed(2) }}
+        </div>
+    
+        <button (click)="checkout()">Checkout</button>
+    </div>
+    
+      <!-- Right Section (Cart) -->
+      <!-- <div class="right-section">
         <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" />
   
         <h2>Cart</h2>
@@ -62,7 +89,7 @@
   
         <p class="total">Total: ${{ getTotal().toFixed(2) }}</p>
         <button (click)="checkout()">Checkout</button>
-      </div>
+      </div> -->
     </div>
   </div>
   
