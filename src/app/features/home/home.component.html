@@ -48,10 +48,13 @@
         <div class="cart-items">
           <!-- Loop through cart items -->
           <ul>
-            <li *ngFor="let item of cart">
+            <li *ngFor="let item of cart; let i = index">
                 <hr>
               <div class="cart-item" style="font-size: xx-large;">
                 <h3 style="font-size: xx-large; padding: 0; margin-bottom: 0; margin-top: 1; ">{{ item.name }}</h3>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+                <i class="fas fa-trash-alt" (click)="confirmDeleteItem(i)" style="cursor: pointer; font-size: 20px; color: rgb(10, 10, 10); margin-left: 10px;"></i>
+                <!-- <button (click)="confirmDeleteItem(i)">Delete</button> -->
                 <div class="cart-item-details" style="font-size: xx-large;">
                   <label>Qty:</label>
                   <input type="number" [(ngModel)]="item.qty" (change)="updateCartItem(item)" size="4"/>
@@ -90,6 +93,19 @@
         <p class="total">Total: ${{ getTotal().toFixed(2) }}</p>
         <button (click)="checkout()">Checkout</button>
       </div> -->
+    </div>
+  </div>
+  <!-- Confirmation Modal -->
+<!-- Confirmation Modal -->
+
+  <!-- Confirmation Modal -->
+<div *ngIf="showDeleteModal" class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal" (click)="$event.stopPropagation()"> <!-- Prevent modal from closing when clicking inside -->
+      <h3>Are you sure you want to remove this item?</h3>
+      <div class="modal-buttons">
+        <button (click)="deleteItem()">Confirm</button>
+        <button (click)="cancelDelete()">Cancel</button>
+      </div>
     </div>
   </div>
   

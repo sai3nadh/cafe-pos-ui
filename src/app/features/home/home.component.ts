@@ -59,6 +59,11 @@ export class HomeComponent {
     { id: 13, name: 'Soda', category: 1, price: 3.00 },
   ];
 
+  showDeleteModal = false;
+  itemToDeleteIndex: number | null = null;
+  showToast = false;
+
+
   selectedCategory: Category | null = null;
   cart: Item[] = [];
   guestName: string = '';
@@ -78,6 +83,43 @@ export class HomeComponent {
     } else {
       this.cart.push({ ...item, qty: 1 });
     }
+  }
+
+  //  // Method to show confirmation and delete item
+  //  confirmDeleteItem(index: number) {
+  //   const isConfirmed = confirm('Do you really want to remove this item from your cart?');
+  //   if (isConfirmed) {
+  //     this.cart.splice(index, 1);  // Remove the item from the cart array
+  //   }
+  // }
+
+   // Method to show the confirmation modal
+   confirmDeleteItem(index: number) {
+    this.itemToDeleteIndex = index;  // Store the index of the item to be deleted
+    this.showDeleteModal = true;     // Show the modal
+    // Hide the toast after 5 seconds
+    setTimeout(() => {
+      console.log("Timer triggered: Hiding toast...");
+      this.showToast = false;
+      this.showDeleteModal = false;     // Show the modal
+    }, 5000); // 5000 ms = 5 seconds
+    
+  }
+
+  // Method to delete the item from the cart
+  deleteItem() {
+    if (this.itemToDeleteIndex !== null) {
+      this.cart.splice(this.itemToDeleteIndex, 1);  // Remove the item from the cart
+    }
+    this.showToast = false;  // Hide the toast
+    this.showDeleteModal = false;  // Close the modal
+    this.itemToDeleteIndex = null; // Reset the index
+  }
+
+  // Method to cancel the deletion
+  cancelDelete() {
+    this.showDeleteModal = false;  // Close the modal without deleting
+    this.itemToDeleteIndex = null; // Reset the index
   }
 
   updateCartItem(item: Item) {

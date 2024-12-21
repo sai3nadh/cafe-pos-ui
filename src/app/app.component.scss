@@ -1,0 +1,26 @@
+/* Ensure the container takes the full width and height */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  /* Make items responsive, for example, making sure items don't overflow */
+  .item {
+    flex: 1 1 200px;  /* Flexbox with minimum width of 200px */
+    margin: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+  }
+  
