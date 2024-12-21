@@ -31,6 +31,13 @@ export class HomeComponent {
   ngOnInit() {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
+     // Find the category with the name "Beverages"
+  const selectedCategory = this.categories.find(category => category.name === "Beverages");
+  
+  // If the category is found, select it
+  if (selectedCategory) {
+    this.selectCategory(selectedCategory);
+  }
   }
   
   categories: Category[] = [
@@ -63,6 +70,13 @@ export class HomeComponent {
   itemToDeleteIndex: number | null = null;
   showToast = false;
 
+  dropdownVisible = false;
+  //below for checkout confirmation
+  showCheckoutModal = false;
+  partialPayMode = false;
+  partialPayAmount: number = 0;
+  isPartialAmountValid = false;
+  selectedPaymentType: string = 'cash'; // Default payment type
 
   selectedCategory: Category | null = null;
   cart: Item[] = [];
@@ -97,6 +111,7 @@ export class HomeComponent {
    confirmDeleteItem(index: number) {
     this.itemToDeleteIndex = index;  // Store the index of the item to be deleted
     this.showDeleteModal = true;     // Show the modal
+    console.log("clicked here...");
     // Hide the toast after 5 seconds
     setTimeout(() => {
       console.log("Timer triggered: Hiding toast...");
@@ -150,5 +165,28 @@ export class HomeComponent {
 
   goToAllOrders() {
     console.log('Going to All Orders...');
+  }
+
+   // Toggle dropdown visibility
+   toggleDropdown() {
+    this.dropdownVisible = !this.dropdownVisible;
+  }
+
+  // View Profile action
+  viewProfile() {
+    // Add your logic for viewing profile here
+    console.log('Viewing profile');
+  }
+
+  // // Logout action
+  // logout() {
+  //   // Add your logic for logging out here
+  //   console.log('Logging out');
+  // }
+
+  // Report action
+  report() {
+    // Add your logic for reporting here
+    console.log('Reporting');
   }
 }

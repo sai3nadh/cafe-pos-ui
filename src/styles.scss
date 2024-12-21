@@ -16,6 +16,8 @@ body {
     min-height: 100vh;
     background-color: #f4f7fc;
     font-size: x-large; /* Set base font size to x-large */
+    overflow: hidden; /* Prevent scrolling */
+
 }
 
 //   body::before {

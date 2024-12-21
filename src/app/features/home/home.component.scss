@@ -15,7 +15,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #007bff;
+    background-color: #445f7b;
     padding: 15px;
     color: white;
     z-index: 1000; /* Ensure the top bar stays above other content */
@@ -32,7 +32,7 @@ body {
     font-size: 1em;
     cursor: pointer;
     padding: 10px;
-    margin-left: 20px;
+    margin-left: 5px;
     font-size: xx-large;
   }
   
@@ -76,7 +76,7 @@ body {
     font-size: 1.2em;
     padding: 15px 25px;
     margin: 5px;
-    background-color: #007bff;
+    background-color: #656f98;
     color: white;
     border: none;
     border-radius: 15px;
@@ -84,10 +84,10 @@ body {
     transition: background-color 0.3s;
   }
   
-  .categories button:hover {
-    background-color: #0056b3;
+  .categories button:hover,.categories button.active-category {
+    background-color: #f01c1c;
   }
-  
+ 
   /* Items Section - Scrollable */
   .items-section {
     margin-top: 100px; /* Ensure it starts below the fixed categories */
@@ -170,7 +170,7 @@ body {
 
  .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatically adjust column count */
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); /* Automatically adjust column count */
   gap: 20px;  /* Dynamic space between items */
   padding: 10px;
   overflow: hidden;  /* Prevent horizontal scrollbar */
@@ -216,7 +216,7 @@ body {
     padding: 15px;
     background-color: #007bff;
     color: white;
-    font-size: 1.2em;
+    font-size: 1.0em;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -239,19 +239,19 @@ body {
     padding: 0; /* Removes any default padding */
     margin: 0; /* Removes any default margin */
   }
-  .cart-item-details input[type="number"] {
-    width: 4ch; /* Ensures input field is wide enough for 4 characters */
-  }
+//   .cart-item-details input[type="number"] {
+//     width: 4ch; /* Ensures input field is wide enough for 4 characters */
+//   }
   
-  .cart-items li {
-    margin-bottom: 0px; /* Optional: Adds some spacing between list items */
-  }
+//   .cart-items li {
+//     margin-bottom: 0px; /* Optional: Adds some spacing between list items */
+//   }
   /* Cart Total Section */
   .total {
     font-size: 1.5em;
     font-weight: bold;
     margin-top: 20px;
-    text-align: right;  /* Aligns the total to the right */
+    text-align: left;  /* Aligns the total to the right */
   }
    /* Cart Total Section */
    input {
@@ -391,5 +391,187 @@ i.fas.fa-trash-alt {
   
   button:hover {
     opacity: 0.8;
+  }
+  
+  /* Cart Item */
+.cart-item {
+    display: flex;
+    flex-direction: column; /* Stack the delete button and item details vertically */
+    justify-content: flex-start;
+    align-items: flex-start;
+    font-size: xx-large;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    // border-bottom: 1px solid #ccc; /* Horizontal line between items */
+  }
+  
+  /* Item Name & Delete Button */
+  .cart-item-header {
+    display: flex;
+    justify-content: space-between; /* Align item name and delete button on the same row */
+    width: 100%; /* Ensures full width */
+  }
+  
+  .cart-item h3 {
+    margin: 0;  /* Remove any default margin */
+    font-size: xx-large;
+    flex-grow: 1;  /* Pushes the delete button to the right */
+  }
+  
+  /* Cart Item Details (Quantity, Price) */
+  .cart-item-details {
+    display: flex;
+    justify-content: flex-start; /* Aligns quantity, price, and other details to the left */
+    align-items: center;
+    font-size: xx-large;
+    margin-top: 10px; /* Adds some spacing between item name and quantity/price */
+  }
+  
+  .cart-item-details label {
+    margin-right: 10px;
+  }
+  
+  .cart-item-details input[type="number"] {
+    width: 4ch; /* Ensures input field is wide enough for 4 characters */
+    margin-right: 10px;
+  }
+  
+  .cart-item-details span {
+    margin-left: 10px;
+  }
+  
+  /* Delete Icon */
+  i.fas.fa-trash-alt {
+    cursor: pointer;
+    font-size: 35px;
+    color: rgb(245, 26, 26);
+    margin-left: 10px;
+  }
+  
+  i.fas.fa-trash-alt:hover {
+    color: rgb(200, 0, 0); /* Change color on hover to indicate action */
+  }
+  
+
+  /* Ensure mobile responsiveness */
+@media screen and (max-width: 600px) {
+    .main-content {
+        flex-direction: column; /* Stack left and right sections vertically on small screens */
+    }
+    
+    /* Right section - make it full width and scrollable on mobile */
+    .right-section {
+        width: 100%;
+        padding: 10px;
+        height: auto; /* Let it grow based on content */
+        overflow-y: auto; /* Make it scrollable */
+        margin-top: 10px; /* Adjust for spacing */
+        position: relative;
+    }
+    
+    /* Left section - make items more compact and responsive */
+    .left-section {
+        flex: 1;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    /* Ensure items grid is responsive */
+    .items-grid {
+        grid-template-columns: 1fr 1fr; /* Show two columns on mobile */
+        gap: 15px;
+    }
+
+    /* Adjust buttons and item cards for mobile */
+    .item-card button {
+        font-size: 1.2em;
+        padding: 10px 15px;
+    }
+
+    .categories button {
+        font-size: 1em;
+        padding: 10px 15px;
+    }
+
+    /* Adjust cart total and checkout button layout for small screens */
+    .total {
+        font-size: 1.2em;
+        text-align: left;
+    }
+
+    .right-section button {
+        font-size: 1.1em;
+        padding: 15px;
+    }
+}
+
+// /* On tablet (iPad) view or larger devices */
+// @media screen and (min-width: 601px) and (max-width: 1024px) {
+//     .main-content {
+//         flex-direction: row; /* Keep left and right sections side by side */
+//     }
+
+//     /* Adjust layout on tablets to maintain good spacing */
+//     .left-section {
+//         padding: 20px;
+//     }
+
+//     .right-section {
+//         width: 40%;
+//     }
+// }
+
+/* Avatar section styles */
+.avatar-section {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Avatar image */
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 15px;
+  }
+  
+  /* Dropdown menu styling */
+  .dropdown-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background-color: #085084f0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+    min-width: 200px;
+    padding: 10px;
+    transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
+    opacity: 1;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Dropdown button styling */
+  .dropdown-menu button {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: x-large;
+  }
+  
+  .dropdown-menu button:hover {
+    background-color: #f0f0f0;
+    color: #007bff; /* Highlight text on hover */
+  }
+  
+  /* Section styling */
+  hr {
+    margin: 10px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
   }
   

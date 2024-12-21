@@ -3,14 +3,54 @@
     <!-- Top Navigation Bar -->
     <div class="top-bar">
       <div class="nav-buttons">
+        <button>Cafe-ABCD</button>
         <button (click)="goToDrafts()">Drafts</button>
         <button (click)="goToPrevOrders()">Prev Orders</button>
         <button (click)="goToAllOrders()">All Orders</button>
       </div>
-      <div class="avatar-section">
+      <!-- <div class="avatar-section">
         <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" />
         <button (click)="logout()">Logout</button>
-      </div>
+      </div> -->
+      <!-- Avatar Section with Dropdown -->
+      <!-- Avatar Section with Dropdown -->
+<!-- <div class="avatar-section">
+    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
+    
+    <!- - Dropdown Menu (Initially Hidden) - ->
+    <div *ngIf="dropdownVisible" class="dropdown-menu">
+      <button (click)="viewProfile()">View Profile</button>
+      <button (click)="logout()">Logout</button>
+      <button (click)="report()">Report</button>
+    </div>
+  </div>
+   -->
+  <!-- Avatar Section with Dropdown -->
+<!-- <div class="avatar-section">
+    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
+    
+    <!- - Dropdown Menu (Initially Hidden) -- >
+    <div *ngIf="dropdownVisible" class="dropdown-menu">
+      <button (click)="viewProfile()">View Profile</button>
+      <button (click)="logout()">Logout</button>
+      <button (click)="report()">Report</button>
+    </div>
+  </div> -->
+  <!-- Avatar Section with Dropdown -->
+<div class="avatar-section">
+    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
+    
+    <!-- Dropdown Menu (Initially Hidden) -->
+    <div *ngIf="dropdownVisible" class="dropdown-menu">
+        <!-- <button (click)="viewOrders()">View Orders</button>
+        <button (click)="viewReports()">View Reports</button> -->
+        <button >View Orders</button>
+        <button >View Reports</button>
+          <hr />
+      <button (click)="logout()">Logout</button>
+    </div>
+  </div>
+  
     </div>
   
     <!-- Main Content Section -->
@@ -19,7 +59,10 @@
       <div class="left-section">
         <!-- Category Buttons -->
         <div class="categories">
-          <button *ngFor="let category of categories" (click)="selectCategory(category)">
+          <button *ngFor="let category of categories" (click)="selectCategory(category)"
+          [ngClass]="{'active-category': selectedCategory?.id === category.id}"
+          
+          >
             {{ category.name }}
           </button>
         </div>
@@ -35,7 +78,8 @@
             <!-- <div class="item-card" *ngFor="let item of getItemsByCategory(selectedCategory.id)"> -->
               <h3>{{ item.name }}</h3>
               <p>${{ item.price.toFixed(2) }}</p>
-              <button (click)="addToCart(item)">Add</button>
+              <button>Add</button>
+              <!-- <button (click)="addToCart(item)">Add</button> -->
             </div>
           </div>
         </div>
@@ -47,14 +91,13 @@
         <!-- <h2>Cart</h2> -->
         <div class="cart-items">
           <!-- Loop through cart items -->
-          <ul>
+          <!-- <ul>
             <li *ngFor="let item of cart; let i = index">
                 <hr>
               <div class="cart-item" style="font-size: xx-large;">
                 <h3 style="font-size: xx-large; padding: 0; margin-bottom: 0; margin-top: 1; ">{{ item.name }}</h3>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
                 <i class="fas fa-trash-alt" (click)="confirmDeleteItem(i)" style="cursor: pointer; font-size: 20px; color: rgb(10, 10, 10); margin-left: 10px;"></i>
-                <!-- <button (click)="confirmDeleteItem(i)">Delete</button> -->
                 <div class="cart-item-details" style="font-size: xx-large;">
                   <label>Qty:</label>
                   <input type="number" [(ngModel)]="item.qty" (change)="updateCartItem(item)" size="4"/>
@@ -62,7 +105,27 @@
                 </div>
               </div>
             </li>
-          </ul>
+          </ul> -->
+          <ul>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+            <li *ngFor="let item of cart; let i = index">
+              <div class="cart-item">
+                <!-- Item Name and Delete Button on the same row -->
+                <div class="cart-item-header">
+                  <h3>{{ item.name }}</h3>
+                  <i class="fas fa-trash-alt" (click)="confirmDeleteItem(i)"></i>
+                </div>
+          
+                <!-- Cart Item Details (Quantity, Price) in the next row -->
+                <div class="cart-item-details">
+                  <label>Qty:</label>
+                  <input type="number" [(ngModel)]="item.qty" (change)="updateCartItem(item)" size="4" />
+                  <span> x ${{ item.price?.toFixed(2) }} = ${{ (item.price ?? 0) * (item.qty ?? 0) | number: '1.2-2' }}</span>
+                </div>
+              </div>
+              <hr />
+            </li>
+          </ul>         
         </div>
     
         <div class="total">
