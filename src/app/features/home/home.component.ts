@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
 
 interface Category {
@@ -16,6 +16,21 @@ interface Item {
   qty?: number;
 }
 
+
+interface Item {
+  id: number;
+  name: string;
+  price: number;
+  qty?: number;
+}
+
+interface Order {
+  id: number;
+  time: string;
+  status: string;
+  items: Item[];
+  total: number;
+}
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -28,6 +43,7 @@ interface Item {
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  constructor(private router: Router) {}
   ngOnInit() {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
@@ -65,6 +81,81 @@ export class HomeComponent {
     { id: 12, name: 'Tea', category: 1, price: 2.00 },
     { id: 13, name: 'Soda', category: 1, price: 3.00 },
   ];
+
+  showOrders: boolean = false;  // Control visibility of orders modal
+  // cart: Item[] = [];
+  // orders: Order[] = [
+  //   { id: 1, time: '10:00 AM', status: 'Pending', items: [{ id: 1, name: 'Coffee', price: 2.5 }, { id: 2, name: 'Tea', price: 2.0 }], total: 4.5 },
+  //   { id: 2, time: '11:00 AM', status: 'Completed', items: [{ id: 3, name: 'Soda', price: 3.0 }, { id: 4, name: 'Chips', price: 1.5 }], total: 4.5 },
+  //   // Add more orders as needed
+  // ];
+  ordersq: Order[] = [
+    { 
+      id: 1, 
+      time: '10:00 AM', 
+      status: 'Pending', 
+      items: [
+        { id: 1, name: 'Coffee', price: 2.5, category: 1 },  // Add the category
+        { id: 2, name: 'Tea', price: 2.0, category: 1 }     // Add the category
+      ], 
+      total: 4.5 
+    },
+    { 
+      id: 2, 
+      time: '11:00 AM', 
+      status: 'Completed', 
+      items: [
+        { id: 3, name: 'Soda', price: 3.0, category: 1 },
+        { id: 4, name: 'Chips', price: 1.5, category: 2 }
+      ], 
+      total: 4.5 
+    },
+    // Add more orders as needed
+  ];
+  orders: Order[] = [
+    { 
+      id: 1, 
+      time: '10:00 AM', 
+      status: 'Pending', 
+      items: [
+        { id: 1, name: 'Coffee', price: 2.5, category: 1, qty: 2 },  // Coffee with qty 2
+        { id: 2, name: 'Tea', price: 2.0, category: 1, qty: 3 }     // Tea with qty 3
+      ], 
+      total: 13.0  // total = (2 * 2.5) + (3 * 2.0)
+    },
+    { 
+      id: 2, 
+      time: '11:00 AM', 
+      status: 'Completed', 
+      items: [
+        { id: 3, name: 'Soda', price: 3.0, category: 1, qty: 1 }, // Soda with qty 1
+        { id: 4, name: 'Chips', price: 1.5, category: 2, qty: 5 }  // Chips with qty 5
+      ], 
+      total: 10.5  // total = (1 * 3.0) + (5 * 1.5)
+    }
+  ];
+  
+  
+// Method to populate the cart with the selected order's items
+editOrder(order: Order) {
+  this.cart = order.items.map(item => ({
+    ...item,
+    qty: item.qty || 1,      // Set default qty to 1 if not defined
+    category: item.category,  // Ensure category is included
+  }));
+
+  // Close the modal after selecting the order
+  this.showOrders = false;
+}
+
+  //  // Method to populate the cart with the selected order's items
+  //  editOrder(order: Order) {
+  //   this.cart = [...order.items.map(item => ({ ...item, qty: item.qty || 1 }))]; // Ensure qty is initialized
+  //   // Navigate to the cart page or home page where the cart is displayed
+  //   this.showOrders = false;  // Close the modal after selecting the order
+  // }
+
+  
 
   showDeleteModal = false;
   itemToDeleteIndex: number | null = null;
@@ -143,16 +234,69 @@ export class HomeComponent {
     }
   }
 
-  getTotal(): number {
-    return this.cart.reduce((acc, item) => acc + (item.price * (item.qty || 1)), 0);
+  // Method to select payment type
+  selectPaymentType(type: string) {
+    this.selectedPaymentType = type;
+  }
+  // getTotal(): number {
+  //   return this.cart.reduce((acc, item) => acc + (item.price * (item.qty || 1)), 0);
+  // }
+
+  // checkout() {
+  //   console.log('Checking out:', { guestName: this.guestName, cart: this.cart });
+  // }
+  // Trigger Checkout Modal
+  checkout() {
+    this.showCheckoutModal = true;
   }
 
-  checkout() {
-    console.log('Checking out:', { guestName: this.guestName, cart: this.cart });
+  // Close Checkout Modal
+  closeCheckoutModal() {
+    this.showCheckoutModal = false;
+    this.partialPayMode = false;
+    this.partialPayAmount = 0;
+    this.isPartialAmountValid = false;
+  }
+
+  // Handle Full Pay
+  confirmFullPay() {
+    const totalAmount = this.getTotal();
+    console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
+    this.closeCheckoutModal();
+    // Add your payment processing logic here
+  }
+
+  // Handle Partial Pay
+  confirmPartialPay() {
+    this.partialPayMode = true;
+  }
+
+  // Validate Partial Payment Amount
+  validatePartialPayAmount() {
+    const totalAmount = this.getTotal();
+    this.isPartialAmountValid = this.partialPayAmount > 0 && this.partialPayAmount <= totalAmount;
+  }
+
+  // Submit Partial Pay
+  submitPartialPay() {
+    console.log(`Partial Payment Confirmed: ${this.partialPayAmount}, Type: ${this.selectedPaymentType}`);
+    this.closeCheckoutModal();
+    // Add your payment processing logic here
+  }
+
+  // Example Function to Calculate Total
+  getTotal() {
+    return this.cart.reduce((acc, item) => acc + (item.price * (item.qty ?? 1)), 0);
   }
 
   logout() {
+    this.router.navigate(['/login']);
     console.log('Logging out...');
+  }
+
+  goToHome() {
+    this.cart=[];
+    console.log('Going to Drafts...');
   }
 
   goToDrafts() {
