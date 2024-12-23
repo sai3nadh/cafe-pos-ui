@@ -67,6 +67,7 @@ export class HomeComponent {
   ];
 
   items: Item[] = [
+
     { id: 1, name: 'Coffee', category: 1, price: 2.50 },
     { id: 2, name: 'Tea', category: 1, price: 2.00 },
     { id: 3, name: 'Soda', category: 1, price: 3.00 },
@@ -74,12 +75,12 @@ export class HomeComponent {
     { id: 5, name: 'Popcorn', category: 2, price: 2.00 },
     { id: 6, name: 'Burger', category: 3, price: 5.00 },
     { id: 7, name: 'Sandwich', category: 3, price: 4.50 },
-    { id: 8, name: 'Coffee', category: 1, price: 2.50 },
-    { id: 9, name: 'Tea', category: 1, price: 2.00 },
-    { id: 10, name: 'Soda', category: 1, price: 3.00 },
-    { id: 11, name: 'Coffee', category: 1, price: 2.50 },
-    { id: 12, name: 'Tea', category: 1, price: 2.00 },
-    { id: 13, name: 'Soda', category: 1, price: 3.00 },
+    { id: 8, name: 'Iced Coffee', category: 1, price: 2.50 },
+    { id: 9, name: 'Green Tea', category: 1, price: 2.00 },
+    { id: 10, name: 'Lemonade', category: 1, price: 2.50 },
+    { id: 11, name: 'Hot Chocolate', category: 1, price: 3.00 },
+    { id: 12, name: 'Fruit Punch', category: 1, price: 2.50 },
+    { id: 13, name: 'Sparkling Water', category: 1, price: 3.00 }
   ];
 
   showOrders: boolean = false;  // Control visibility of orders modal
@@ -182,6 +183,7 @@ editOrder(order: Order) {
   }
 
   addToCart(item: Item) {
+    this.closeDropdown();
     const existingItem = this.cart.find(i => i.id === item.id);
     if (existingItem) {
       existingItem.qty = (existingItem.qty || 1) + 1;
@@ -248,6 +250,7 @@ editOrder(order: Order) {
   // Trigger Checkout Modal
   checkout() {
     this.showCheckoutModal = true;
+    this.closeDropdown();
   }
 
   // Close Checkout Modal
@@ -297,17 +300,21 @@ editOrder(order: Order) {
   goToHome() {
     this.cart=[];
     console.log('Going to Drafts...');
+    this.closeDropdown();
   }
 
   goToDrafts() {
+    this.closeDropdown();
     console.log('Going to Drafts...');
   }
 
   goToPrevOrders() {
+    this.closeDropdown();
     console.log('Going to Previous Orders...');
   }
 
   goToAllOrders() {
+    this.closeDropdown();
     console.log('Going to All Orders...');
   }
 
@@ -316,6 +323,10 @@ editOrder(order: Order) {
     this.dropdownVisible = !this.dropdownVisible;
   }
 
+  // Toggle dropdown visibility
+  closeDropdown() {
+    this.dropdownVisible = false;
+  }
   // View Profile action
   viewProfile() {
     // Add your logic for viewing profile here

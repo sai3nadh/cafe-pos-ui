@@ -14,21 +14,21 @@
 // @tailwind components;
 // @tailwind utilities;
 
-// body {
-//     font-family: Arial, sans-serif;
-//     margin: 0;
-//     padding: 0;
-//     display: flex;
-//     flex-direction: column;
-//     min-height: 100vh;
-//     background-color: #f4f7fc;
-//     font-size: x-large; /* Set base font size to x-large */
-//     // overflow: hidden; /* Prevent scrolling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f7fc;
+    font-size: x-large; /* Set base font size to x-large */
+    // overflow: hidden; /* Prevent scrolling */
 
-// }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+}
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
 
 //   body::before {
 //     content: ""; /* Required for pseudo-elements */

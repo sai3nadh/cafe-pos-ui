@@ -23,8 +23,8 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 20px;
-    width: 100%;
-    max-width: 400px; /* Adjust width for responsive design */
+    width: 90%;
+    max-width: 650px; /* Adjust width for responsive design */
   }
   
   /* Text inside the card */
@@ -40,19 +40,19 @@
   }
   
   .card-content input {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   
   .card-footer button {
     width: 100%; /* Full width for mobile devices */
     padding: 10px;
-    font-size: 1rem;
-    background-color: #007bff;
+    font-size: 1.2rem;
+    background-color: #0a498d;
     color: white;
     border: none;
     border-radius: 5px;

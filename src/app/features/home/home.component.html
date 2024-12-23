@@ -5,12 +5,12 @@
       <div class="nav-buttons">
         <button (click)="goToHome()">Cafe-ABCD</button>
         <!-- Orders Button -->
-    <button (click)="showOrders = !showOrders" class="bg-blue-500 text-white px-4 py-2 rounded">
+    <button (click)="showOrders = !showOrders; closeDropdown()" class="bg-blue-500 text-white px-4 py-2 rounded">
         Orders
       </button>
-        <button (click)="goToDrafts()">Drafts</button>
+        <!-- <button (click)="goToDrafts()">Drafts</button>
         <button (click)="goToPrevOrders()">Prev Orders</button>
-        <button (click)="goToAllOrders()">All Orders</button>
+        <button (click)="goToAllOrders()">All Orders</button> -->
       </div>
       <!-- <div class="avatar-section">
         <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" />
@@ -250,7 +250,7 @@
   </button> -->
   
   <!-- Orders List Modal (when clicking on Orders) -->
-  <div *ngIf="showOrders" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+  <!-- <div *ngIf="showOrders" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
     <div class="bg-white p-6 rounded-lg shadow-xl w-3/4 md:w-2/3 lg:w-1/2">
       <h3 class="text-2xl font-semibold mb-4">Orders</h3>
       <table class="w-full table-auto">
@@ -276,4 +276,33 @@
       <button (click)="showOrders = false" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
     </div>
   </div>
+   -->
+
+   <div *ngIf="showOrders" class="modal-overlay">
+    <div class="modal-content">
+      <h3 class="modal-title">Orders</h3>
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th class="table-cell">Order ID</th>
+            <th class="table-cell">Time</th>
+            <th class="table-cell">Status</th>
+            <th class="table-cell actions-cell">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders" class="order-row">
+            <td class="table-cell">{{ order.id }}</td>
+            <td class="table-cell">{{ order.time }}</td>
+            <td class="table-cell">{{ order.status }}</td>
+            <td class="table-cell actions-cell">
+              <button (click)="editOrder(order)" class="edit-btn">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button (click)="showOrders = false" class="close-btn">Close</button>
+    </div>
+  </div>
+
   
