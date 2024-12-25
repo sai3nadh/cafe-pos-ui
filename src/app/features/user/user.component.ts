@@ -1,3 +1,18 @@
+// import { Component } from '@angular/core';
+
+// @Component({
+//   selector: 'app-user',
+//   standalone: true,
+//   imports: [],
+//   templateUrl: './user.component.html',
+//   styleUrl: './user.component.scss'
+// })
+// export class UserComponent {
+
+// }
+
+
+// == bleo old good
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -17,6 +32,11 @@ interface Item {
 }
 
 
+interface User {
+  id: number;
+  name: string;
+  avatar: string;
+}
 interface Item {
   id: number;
   name: string;
@@ -39,10 +59,10 @@ interface Order {
     RouterModule, // To enable routerLink
     CommonModule, // Add CommonModule here to make ngFor and ngIf work
   ],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss']
 })
-export class HomeComponent {
+export class UserComponent {
   constructor(private router: Router) {}
   ngOnInit() {
     console.log('Categories:', this.categories);
@@ -82,6 +102,9 @@ export class HomeComponent {
     { id: 12, name: 'Fruit Punch', category: 1, price: 2.50 },
     { id: 13, name: 'Sparkling Water', category: 1, price: 3.00 }
   ];
+ // Define showUsers to control the visibility of user list
+ showUsers: boolean = false;
+ searchTerm: string = '';
 
   showOrders: boolean = false;  // Control visibility of orders modal
   // cart: Item[] = [];
@@ -136,6 +159,16 @@ export class HomeComponent {
     }
   ];
   
+   // Define an array of users
+   users: User[] = [
+    { id: 1, name: 'John Doe', avatar: 'https://github.com/nutlope.png' },
+    { id: 2, name: 'Jane Doe', avatar: 'https://github.com/nutlope.png' },
+    { id: 3, name: 'Bob Smith', avatar: 'https://github.com/nutlope.png' },
+    { id: 4, name: 'Alice Johnson', avatar: 'https://github.com/nutlope.png' },
+    { id: 5, name: 'Mike Brown', avatar: 'https://github.com/nutlope.png' },
+    { id: 6, name: 'Emily Davis', avatar: 'https://github.com/nutlope.png' },
+    { id: 7, name: 'David Lee', avatar: 'https://github.com/nutlope.png' },
+  ];
   
 // Method to populate the cart with the selected order's items
 editOrder(order: Order) {
@@ -147,6 +180,16 @@ editOrder(order: Order) {
 
   // Close the modal after selecting the order
   this.showOrders = false;
+}
+// Method to toggle user list visibility
+toggleUsers() {
+  this.showUsers = !this.showUsers;
+}
+// Method to filter users based on search term
+filteredUsers(): User[] {
+  return this.users.filter(user =>
+    user.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+  );
 }
 
   //  // Method to populate the cart with the selected order's items
@@ -297,14 +340,10 @@ editOrder(order: Order) {
     console.log('Logging out...');
   }
 
-  users() {
-    this.router.navigate(['/user']);
-    console.log('Users page...');
-  }
-
   goToHome() {
     this.cart=[];
     console.log('Going to Drafts...');
+    this.router.navigate(['/home']);
     this.closeDropdown();
   }
 
