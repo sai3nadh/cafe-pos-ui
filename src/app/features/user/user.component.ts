@@ -192,14 +192,6 @@ filteredUsers(): User[] {
   );
 }
 
-  //  // Method to populate the cart with the selected order's items
-  //  editOrder(order: Order) {
-  //   this.cart = [...order.items.map(item => ({ ...item, qty: item.qty || 1 }))]; // Ensure qty is initialized
-  //   // Navigate to the cart page or home page where the cart is displayed
-  //   this.showOrders = false;  // Close the modal after selecting the order
-  // }
-
-  
 
   showDeleteModal = false;
   itemToDeleteIndex: number | null = null;
@@ -235,13 +227,6 @@ filteredUsers(): User[] {
     }
   }
 
-  //  // Method to show confirmation and delete item
-  //  confirmDeleteItem(index: number) {
-  //   const isConfirmed = confirm('Do you really want to remove this item from your cart?');
-  //   if (isConfirmed) {
-  //     this.cart.splice(index, 1);  // Remove the item from the cart array
-  //   }
-  // }
 
    // Method to show the confirmation modal
    confirmDeleteItem(index: number) {
@@ -287,9 +272,6 @@ filteredUsers(): User[] {
   //   return this.cart.reduce((acc, item) => acc + (item.price * (item.qty || 1)), 0);
   // }
 
-  // checkout() {
-  //   console.log('Checking out:', { guestName: this.guestName, cart: this.cart });
-  // }
   // Trigger Checkout Modal
   checkout() {
     this.showCheckoutModal = true;
@@ -376,12 +358,6 @@ filteredUsers(): User[] {
     // Add your logic for viewing profile here
     console.log('Viewing profile');
   }
-
-  // // Logout action
-  // logout() {
-  //   // Add your logic for logging out here
-  //   console.log('Logging out');
-  // }
 
   // Report action
   report() {
