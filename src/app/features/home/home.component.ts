@@ -84,12 +84,7 @@ export class HomeComponent {
   ];
 
   showOrders: boolean = false;  // Control visibility of orders modal
-  // cart: Item[] = [];
-  // orders: Order[] = [
-  //   { id: 1, time: '10:00 AM', status: 'Pending', items: [{ id: 1, name: 'Coffee', price: 2.5 }, { id: 2, name: 'Tea', price: 2.0 }], total: 4.5 },
-  //   { id: 2, time: '11:00 AM', status: 'Completed', items: [{ id: 3, name: 'Soda', price: 3.0 }, { id: 4, name: 'Chips', price: 1.5 }], total: 4.5 },
-  //   // Add more orders as needed
-  // ];
+
   ordersq: Order[] = [
     { 
       id: 1, 
@@ -149,14 +144,6 @@ editOrder(order: Order) {
   this.showOrders = false;
 }
 
-  //  // Method to populate the cart with the selected order's items
-  //  editOrder(order: Order) {
-  //   this.cart = [...order.items.map(item => ({ ...item, qty: item.qty || 1 }))]; // Ensure qty is initialized
-  //   // Navigate to the cart page or home page where the cart is displayed
-  //   this.showOrders = false;  // Close the modal after selecting the order
-  // }
-
-  
 
   showDeleteModal = false;
   itemToDeleteIndex: number | null = null;
@@ -191,14 +178,6 @@ editOrder(order: Order) {
       this.cart.push({ ...item, qty: 1 });
     }
   }
-
-  //  // Method to show confirmation and delete item
-  //  confirmDeleteItem(index: number) {
-  //   const isConfirmed = confirm('Do you really want to remove this item from your cart?');
-  //   if (isConfirmed) {
-  //     this.cart.splice(index, 1);  // Remove the item from the cart array
-  //   }
-  // }
 
    // Method to show the confirmation modal
    confirmDeleteItem(index: number) {
@@ -240,13 +219,7 @@ editOrder(order: Order) {
   selectPaymentType(type: string) {
     this.selectedPaymentType = type;
   }
-  // getTotal(): number {
-  //   return this.cart.reduce((acc, item) => acc + (item.price * (item.qty || 1)), 0);
-  // }
 
-  // checkout() {
-  //   console.log('Checking out:', { guestName: this.guestName, cart: this.cart });
-  // }
   // Trigger Checkout Modal
   checkout() {
     this.showCheckoutModal = true;
@@ -337,12 +310,6 @@ editOrder(order: Order) {
     // Add your logic for viewing profile here
     console.log('Viewing profile');
   }
-
-  // // Logout action
-  // logout() {
-  //   // Add your logic for logging out here
-  //   console.log('Logging out');
-  // }
 
   // Report action
   report() {

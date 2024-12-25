@@ -140,33 +140,6 @@ body {
   .item-card button:hover {
     background-color: #0056b3;
   }
-  
-  /* Adjust Grid Layout */
-//   .items-grid {
-//     display: grid;
-//     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-//     gap: 20px;
-//   }
-  
-//   .items-grid {
-//     display: flex;
-//     flex-wrap: wrap;  /* Allow the items to wrap into the next row */
-//     justify-content: space-between; /* Space out the items evenly */
-//     gap: 20px;  /* Space between items */
-//     padding: 10px;
-//     overflow: hidden;  /* Prevent horizontal scrollbar */
-//   }
-
-  /* Adjust layout of the items container */
-/* Adjust layout of the items container */
-// .items-grid {
-//     display: grid;
-//     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatically adjust column count */
-//     gap: 20px;  /* Fixed space between items (adjust as needed) */
-//     justify-items: center;  /* Center the items horizontally in the available space */
-//     padding: 10px;
-//     overflow: hidden;  /* Prevent horizontal scrollbar */
-//   }
 
  .items-grid {
   display: grid;

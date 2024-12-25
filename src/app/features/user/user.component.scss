@@ -141,32 +141,6 @@ body {
     background-color: #0056b3;
   }
   
-  /* Adjust Grid Layout */
-//   .items-grid {
-//     display: grid;
-//     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-//     gap: 20px;
-//   }
-  
-//   .items-grid {
-//     display: flex;
-//     flex-wrap: wrap;  /* Allow the items to wrap into the next row */
-//     justify-content: space-between; /* Space out the items evenly */
-//     gap: 20px;  /* Space between items */
-//     padding: 10px;
-//     overflow: hidden;  /* Prevent horizontal scrollbar */
-//   }
-
-  /* Adjust layout of the items container */
-/* Adjust layout of the items container */
-// .items-grid {
-//     display: grid;
-//     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatically adjust column count */
-//     gap: 20px;  /* Fixed space between items (adjust as needed) */
-//     justify-items: center;  /* Center the items horizontally in the available space */
-//     padding: 10px;
-//     overflow: hidden;  /* Prevent horizontal scrollbar */
-//   }
 
  .items-grid {
   display: grid;
@@ -239,13 +213,7 @@ body {
     padding: 0; /* Removes any default padding */
     margin: 0; /* Removes any default margin */
   }
-//   .cart-item-details input[type="number"] {
-//     width: 4ch; /* Ensures input field is wide enough for 4 characters */
-//   }
-  
-//   .cart-items li {
-//     margin-bottom: 0px; /* Optional: Adds some spacing between list items */
-//   }
+
   /* Cart Total Section */
   .total {
     font-size: 1.5em;
@@ -505,22 +473,6 @@ i.fas.fa-trash-alt {
         padding: 15px;
     }
 }
-
-// /* On tablet (iPad) view or larger devices */
-// @media screen and (min-width: 601px) and (max-width: 1024px) {
-//     .main-content {
-//         flex-direction: row; /* Keep left and right sections side by side */
-//     }
-
-//     /* Adjust layout on tablets to maintain good spacing */
-//     .left-section {
-//         padding: 20px;
-//     }
-
-//     .right-section {
-//         width: 40%;
-//     }
-// }
 
 /* Avatar section styles */
 .avatar-section {
@@ -806,64 +758,6 @@ i.fas.fa-trash-alt {
   .open-search-btn:hover {
     background-color: #2563EB;
   }
-//   /* Modal Overlay */
-// .modal-overlay {
-//     position: fixed;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-//     bottom: 0;
-//     background: rgba(0, 0, 0, 0.5);
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//   }
-  
-//   /* Modal Content */
-//   .modal-content {
-//     background-color: white;
-//     padding: 20px;
-//     border-radius: 8px;
-//     width: 80%;
-//     max-width: 400px;
-//     text-align: center;
-//   }
-  
-//   /* Profile Item Styling */
-//   .profile-item {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     margin: 10px;
-//     cursor: pointer;
-//     transition: background-color 0.3s ease;
-//   }
-  
-//   /* Hover effect for profile */
-//   .profile-item:hover {
-//     background-color: #f0f0f0;
-//     border-radius: 8px;
-//   }
-  
-//   /* Avatar Styling */
-//   .profile-avatar {
-//     margin-right: 10px;
-//   }
-  
-//   .profile-avatar img {
-//     border-radius: 50%;
-//     width: 50px;
-//     height: 50px;
-//     object-fit: cover;
-//   }
-  
-//   /* Customer Name Styling */
-//   .profile-name {
-//     font-weight: bold;
-//     font-size: 14px;
-//     color: #333;
-//     text-align: center;
-//   }
   
 /* Modal Overlay */
 .modal-overlay {
@@ -932,25 +826,11 @@ i.fas.fa-trash-alt {
     text-align: center;
   }
   
-
-
-
-
-
-
   .cafe-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
   }
-  
-//   .top-bar {
-//     display: flex;
-//     justify-content: space-between;
-//     padding: 10px;
-//     background-color: #3b82f6;
-//     color: white;
-//   }
   
   .top-bar .btn {
     background-color: transparent;
@@ -990,15 +870,6 @@ i.fas.fa-trash-alt {
     padding: 20px;
   }
   
-//   .users-list {
-//     background-color: white;
-//     padding: 10px;
-//     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-//     width: 400px;
-//     height: 400px;
-//     overflow-y: auto;
-//   }
-  
 
 .users-list {
     background-color: white;
@@ -1028,13 +899,6 @@ i.fas.fa-trash-alt {
     gap: 10px;
   }
   
-//   .user {
-//     text-align: center;
-//     width: 80px;
-//     box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1); /* Right shadow */
-//   padding-right: 10px; /* Add some space between the content and the shadow */
-
-//   }
   
 .user {
     text-align: center;
@@ -1088,16 +952,6 @@ i.fas.fa-trash-alt {
     text-align: center;
     word-wrap: break-word; /* Allows content to wrap if too long */
   }
-
-//   hr {
-//     height: 50px; /* Set a specific height for the line */
-//     border: none;
-//     border-left: 2px solid #ccc; /* Vertical line style */
-//     border-bottom: 2px solid #ccc;
-//     margin: 0 10px; /* Space between the line and the user block */
-//     align-self: center; /* Center the vertical line */
-//   }
-
 
 /* Styling the button inside users-btn-container */
 .users-btn-container .btn {
