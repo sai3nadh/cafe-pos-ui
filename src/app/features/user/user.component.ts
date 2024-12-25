@@ -204,6 +204,7 @@ filteredUsers(): User[] {
   partialPayAmount: number = 0;
   isPartialAmountValid = false;
   selectedPaymentType: string = 'cash'; // Default payment type
+  selectedUser: User | null = null;
 
   selectedCategory: Category | null = null;
   cart: Item[] = [];
@@ -364,4 +365,31 @@ filteredUsers(): User[] {
     // Add your logic for reporting here
     console.log('Reporting');
   }
+
+  // Somewhere near other properties
+previousCart: Item[] = [];
+
+// Add a map of user IDs to “historical items” to simulate data (or fetch from API later)
+private userCartHistoryMap: { [userId: number]: Item[] } = {
+  1: [ { id: 100, name: 'Latte (history)', price: 3.0, category: 1, qty: 2 } ],
+  2: [ { id: 101, name: 'Cookies (history)', price: 1.0, category: 2, qty: 5 } ],
+  // etc.
+};
+
+// This method is called when user is clicked in the users list
+selectUser(user: User) {
+  // For clarity, store the selected user if you want
+  this.selectedUser = user;
+
+  // Load the previous cart from your userCartHistoryMap (or from an API)
+  this.previousCart = this.userCartHistoryMap[user.id] || [];
+
+  // Optionally, clear the new cart or do other logic
+  this.cart = [];
+
+  // Hide or keep the users panel open
+  this.showUsers = false; // if you want to auto-close
+   // Automatically set the guestName input value
+   this.guestName = user.name;
+}
 }
