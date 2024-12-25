@@ -37,11 +37,20 @@ interface User {
   name: string;
   avatar: string;
 }
-interface Item {
+// interface Item {
+//   id: number;
+//   name: string;
+//   price: number;
+//   qty?: number;
+// }
+
+interface HistoricalItem {
   id: number;
   name: string;
   price: number;
+  category: number;
   qty?: number;
+  status?: 'Paid' | 'Pending';
 }
 
 interface Order {
@@ -367,14 +376,15 @@ filteredUsers(): User[] {
   }
 
   // Somewhere near other properties
-previousCart: Item[] = [];
+// previousCart: Item[] = [];
+previousCart: HistoricalItem[] = [];
 
-// Add a map of user IDs to “historical items” to simulate data (or fetch from API later)
-private userCartHistoryMap: { [userId: number]: Item[] } = {
-  1: [ { id: 100, name: 'Latte (history)', price: 3.0, category: 1, qty: 2 } ],
-  2: [ { id: 101, name: 'Cookies (history)', price: 1.0, category: 2, qty: 5 } ],
-  // etc.
-};
+// // Add a map of user IDs to “historical items” to simulate data (or fetch from API later)
+// private userCartHistoryMap: { [userId: number]: Item[] } = {
+//   1: [ { id: 100, name: 'Latte (history)', price: 3.0, category: 1, qty: 2 } ],
+//   2: [ { id: 101, name: 'Cookies (history)', price: 1.0, category: 2, qty: 5 } ],
+//   // etc.
+// };
 
 // This method is called when user is clicked in the users list
 selectUser(user: User) {
@@ -392,4 +402,24 @@ selectUser(user: User) {
    // Automatically set the guestName input value
    this.guestName = user.name;
 }
+
+getPendingAmount(): number {
+  // Sum up only the “Pending” items in this.previousCart
+  return this.previousCart
+    .filter(item => item.status === 'Pending')
+    .reduce((acc, item) => acc + (item.price * (item.qty ?? 1)), 0);
+}
+
+
+// If you're storing them in userCartHistoryMap...
+private userCartHistoryMap: { [userId: number]: HistoricalItem[] } = {
+  1: [
+    { id: 100, name: 'Latte (history)', price: 3.0, category: 1, qty: 2, status: 'Pending' },
+    { id: 101, name: 'Croissant (history)', price: 2.0, category: 2, qty: 1, status: 'Paid' },
+  ],
+  2: [
+    { id: 102, name: 'Cookies (history)', price: 1.0, category: 2, qty: 5, status: 'Pending' }
+  ],
+  
+};
 }
