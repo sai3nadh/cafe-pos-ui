@@ -289,7 +289,9 @@
     <div class="users-list" *ngIf="showUsers">
       <div class="search-bar">
         <input [(ngModel)]="searchTerm" placeholder="Search users" />
-        <button class="btn" (click)="toggleUsers()">Close</button>
+            <span class="close-icon" (click)="toggleUsers()">
+            <i class="fa-solid fa-xmark"></i>
+          </span>
       </div>
       <div class="users">
         <!-- Display filtered users -->

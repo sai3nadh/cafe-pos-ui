@@ -246,7 +246,22 @@ body {
   .right-section button:hover {
     background-color: #0056b3;
   }
+
+.close-icon {
+    font-size: 1.2em;
+    padding: 15px 25px;
+    margin: 5px;
+    background-color: #d46458;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
   
+  .close-icon:hover {
+    color: rgb(11, 10, 10);         
+  }
    
   /* Right Section (Cart) */
 .right-section {
@@ -890,7 +905,7 @@ i.fas.fa-trash-alt {
   }
   
   .search-bar input {
-    width: 80%;
+    width: 95%;
   }
   
   .users {
