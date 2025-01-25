@@ -5,16 +5,14 @@ import { LoginService } from './login.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    FormsModule,
-    RouterModule, // Import RouterModule here
-    HttpClientModule,  // <-- Add this to your imports array
-
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [
+        FormsModule,
+        RouterModule, // Import RouterModule here
+        HttpClientModule, // <-- Add this to your imports array
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent {
 

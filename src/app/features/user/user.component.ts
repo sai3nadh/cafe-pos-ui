@@ -61,15 +61,14 @@ interface Order {
   total: number;
 }
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    FormsModule,  // To enable ngModel for form binding
-    RouterModule, // To enable routerLink
-    CommonModule, // Add CommonModule here to make ngFor and ngIf work
-  ],
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+    selector: 'app-home',
+    imports: [
+        FormsModule, // To enable ngModel for form binding
+        RouterModule, // To enable routerLink
+        CommonModule, // Add CommonModule here to make ngFor and ngIf work
+    ],
+    templateUrl: './user.component.html',
+    styleUrls: ['./user.component.scss']
 })
 export class UserComponent {
   constructor(private router: Router) {}
