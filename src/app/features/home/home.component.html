@@ -14,42 +14,13 @@
         <button (click)="goToPrevOrders()">Prev Orders</button>
         <button (click)="goToAllOrders()">All Orders</button> -->
       </div>
-      <!-- <div class="avatar-section">
-        <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" />
-        <button (click)="logout()">Logout</button>
-      </div> -->
-      <!-- Avatar Section with Dropdown -->
-      <!-- Avatar Section with Dropdown -->
-<!-- <div class="avatar-section">
-    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
     
-    <!- - Dropdown Menu (Initially Hidden) - ->
-    <div *ngIf="dropdownVisible" class="dropdown-menu">
-      <button (click)="viewProfile()">View Profile</button>
-      <button (click)="logout()">Logout</button>
-      <button (click)="report()">Report</button>
-    </div>
-  </div>
-   -->
-  <!-- Avatar Section with Dropdown -->
-<!-- <div class="avatar-section">
-    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
-    
-    <!- - Dropdown Menu (Initially Hidden) -- >
-    <div *ngIf="dropdownVisible" class="dropdown-menu">
-      <button (click)="viewProfile()">View Profile</button>
-      <button (click)="logout()">Logout</button>
-      <button (click)="report()">Report</button>
-    </div>
-  </div> -->
   <!-- Avatar Section with Dropdown -->
 <div class="avatar-section">
     <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
     
     <!-- Dropdown Menu (Initially Hidden) -->
     <div *ngIf="dropdownVisible" class="dropdown-menu">
-        <!-- <button (click)="viewOrders()">View Orders</button>
-        <button (click)="viewReports()">View Reports</button> -->
         <button >View Orders</button>
         <button >View Reports</button>
           <hr />
@@ -96,22 +67,7 @@
   
         <!-- <h2>Cart</h2> -->
         <div class="cart-items">
-          <!-- Loop through cart items -->
-          <!-- <ul>
-            <li *ngFor="let item of cart; let i = index">
-                <hr>
-              <div class="cart-item" style="font-size: xx-large;">
-                <h3 style="font-size: xx-large; padding: 0; margin-bottom: 0; margin-top: 1; ">{{ item.name }}</h3>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-                <i class="fas fa-trash-alt" (click)="confirmDeleteItem(i)" style="cursor: pointer; font-size: 20px; color: rgb(10, 10, 10); margin-left: 10px;"></i>
-                <div class="cart-item-details" style="font-size: xx-large;">
-                  <label>Qty:</label>
-                  <input type="number" [(ngModel)]="item.qty" (change)="updateCartItem(item)" size="4"/>
-                  <span> x ${{ item.price?.toFixed(2) }} = ${{ (item.price ?? 0) * (item.qty ?? 0) | number: '1.2-2' }}</span>
-                </div>
-              </div>
-            </li>
-          </ul> -->
+          
           <ul>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
             <li *ngFor="let item of cart; let i = index">
@@ -141,32 +97,10 @@
         <button (click)="checkout()">Checkout</button>
     </div>
     
-      <!-- Right Section (Cart) -->
-      <!-- <div class="right-section">
-        <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" />
-  
-        <h2>Cart</h2>
-        <ul>
-          <li *ngFor="let cartItem of cart">
-            <div class="cart-item">
-              <h3>{{ cartItem.name }}</h3>
-              <div class="cart-item-details">
-                <label>Qty:</label>
-                <input type="number" [(ngModel)]="cartItem.qty" (change)="updateCartItem(cartItem)" />
-                <span> x ${{ (cartItem.price * (cartItem.qty || 1)).toFixed(2) }} = ${{ (cartItem.price * (cartItem.qty || 1)).toFixed(2) }}</span>
-              </div>
-            </div>
-          </li>
-        </ul>
-  
-        <p class="total">Total: ${{ getTotal().toFixed(2) }}</p>
-        <button (click)="checkout()">Checkout</button>
-      </div> -->
+   
     </div>
   </div>
-  <!-- Confirmation Modal -->
-<!-- Confirmation Modal -->
-
+  
   <!-- Confirmation Modal -->
 <div *ngIf="showDeleteModal" class="modal-overlay" (click)="cancelDelete()">
     <div class="modal" (click)="$event.stopPropagation()"> <!-- Prevent modal from closing when clicking inside -->
@@ -217,68 +151,6 @@
     </div>
   </div>
   
-  <!-- Checkout Confirmation Modal -->
-<!-- <div *ngIf="showCheckoutModal" class="modal-overlay" (click)="closeCheckoutModal()">
-    <div class="modal" (click)="$event.stopPropagation()">
-      <h3>Confirm Payment</h3>
-      <p>Amount: ${{ getTotal()?.toFixed(2) }}</p>
-      <label>
-        Payment Type:
-        <select [(ngModel)]="selectedPaymentType">
-          <option value="cash">Cash</option>
-          <option value="upi">UPI</option>
-        </select>
-      </label>
-      <div class="modal-buttons">
-        <button (click)="confirmFullPay()">Full Pay</button>
-        <button (click)="confirmPartialPay()">Partial Pay</button>
-        <button (click)="closeCheckoutModal()">Cancel</button>
-      </div>
-  
-      <! -- Partial Pay Input - ->
-      <div *ngIf="partialPayMode" class="partial-pay">
-        <label>
-          Enter Partial Amount:
-          <input type="number" [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
-        </label>
-        <button [disabled]="!isPartialAmountValid" (click)="submitPartialPay()">Submit</button>
-      </div>
-    </div>
-  </div>
-   -->
-<!-- Orders Button
-<button (click)="showOrders = !showOrders" class="bg-blue-500 text-white px-4 py-2 rounded">
-    Orders
-  </button> -->
-  
-  <!-- Orders List Modal (when clicking on Orders) -->
-  <!-- <div *ngIf="showOrders" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-xl w-3/4 md:w-2/3 lg:w-1/2">
-      <h3 class="text-2xl font-semibold mb-4">Orders</h3>
-      <table class="w-full table-auto">
-        <thead>
-          <tr>
-            <th class="p-2 text-left">Order ID</th>
-            <th class="p-2 text-left">Time</th>
-            <th class="p-2 text-left">Status</th>
-            <th class="p-2 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of orders" class="border-t hover:bg-gray-100">
-            <td class="p-2">{{ order.id }}</td>
-            <td class="p-2">{{ order.time }}</td>
-            <td class="p-2">{{ order.status }}</td>
-            <td class="p-2 text-center">
-              <button (click)="editOrder(order)" class="text-blue-500 hover:text-blue-700">Edit</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button (click)="showOrders = false" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
-    </div>
-  </div>
-   -->
 
    <div *ngIf="showOrders" class="modal-overlay">
     <div class="modal-content">
