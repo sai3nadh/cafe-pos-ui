@@ -28,6 +28,10 @@
 
         <label for="password">Password</label>
         <input id="password" type="password" [(ngModel)]="password" placeholder="Enter your password" />
+        <!-- Show login error message here if it exists -->
+        <div *ngIf="loginError" class="error-message">
+          {{ loginError }}
+        </div>
       </div>
       <div class="card-footer">
         <button (click)="handleLogin()">Login</button>

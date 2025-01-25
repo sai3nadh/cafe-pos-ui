@@ -111,4 +111,10 @@
   .toggle-text a:hover {
     text-decoration: underline;
   }
-  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    font-weight: bold;
+    background-color: yellow;  /* For debugging */
+    padding: 5px;
+  }
