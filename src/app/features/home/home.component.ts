@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
+import { OrderService } from './order.service'; // Import the service
 
 interface Category {
   id: number;
@@ -42,7 +43,7 @@ interface Order {
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private orderService: OrderService) {}
   ngOnInit() {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
@@ -234,12 +235,12 @@ editOrder(order: Order) {
   }
 
   // Handle Full Pay
-  confirmFullPay() {
-    const totalAmount = this.getTotal();
-    console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
-    this.closeCheckoutModal();
-    // Add your payment processing logic here
-  }
+  // confirmFullPay() {
+  //   const totalAmount = this.getTotal();
+  //   console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
+  //   this.closeCheckoutModal();
+  //   // Add your payment processing logic here
+  // }
 
   // Handle Partial Pay
   confirmPartialPay() {
@@ -315,4 +316,40 @@ editOrder(order: Order) {
     // Add your logic for reporting here
     console.log('Reporting');
   }
+
+
+
+  // Handle Full Pay
+  confirmFullPay() {
+    const totalAmount = this.getTotal();
+    console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
+    this.closeCheckoutModal();
+   
+    // Create the order object with the required format
+    const orderData = {
+      userId: null, // You'll need to replace this with the logged-in user's ID if applicable
+      status: 'Pending', // Status can be adjusted based on your system's logic
+      total: totalAmount,
+      customerId: null, // Replace with customer ID, if applicable
+      orderItems: this.cart.map(item => ({
+        orderId: 0, // Set to the appropriate order ID if needed
+        menuItemId: item.id,
+        quantity: item.qty || 1,
+        price: item.price
+      }))
+    };
+
+    // Call the service to create the order
+    this.orderService.createOrder(orderData).subscribe(
+      response => {
+        console.log('Order created successfully:', response);
+        this.closeCheckoutModal();
+        this.cart = []; // Clear the cart after order creation
+      },
+      error => {
+        console.error('Error creating order:', error);
+      }
+    );
+  }
+
 }
