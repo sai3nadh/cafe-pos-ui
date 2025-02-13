@@ -4,13 +4,12 @@
     <div class="top-bar">
       <div class="nav-buttons">
         <button (click)="goToHome()">Cafe-ABCD</button>
-        <!-- Orders Button -->
-    <!-- <button (click)="showOrders = !showOrders; closeDropdown()" class="bg-blue-500 text-white px-4 py-2 rounded">
-        Orders
-      </button> -->
-        <!-- <button (click)="goToDrafts()">Drafts</button>
-        <button (click)="goToPrevOrders()">Prev Orders</button>
-        <button (click)="goToAllOrders()">All Orders</button> -->
+         <!-- Orders Button -->
+         <button (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Orders</button>
+      <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Users
+        </button>
       </div>
     
   <!-- Avatar Section with Dropdown -->
@@ -54,7 +53,7 @@
       (click)="addToCart(item)">
             <!-- <div class="item-card" *ngFor="let item of getItemsByCategory(selectedCategory.id)"> -->
               <h3>{{ item.name }}</h3>
-              <p>${{ item.price.toFixed(2) }}</p>
+              <p>₹{{ item.price.toFixed(2) }}</p>
               <button>Add</button>
               <!-- <button (click)="addToCart(item)">Add</button> -->
             </div>
@@ -65,32 +64,6 @@
 
         <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" />
   
-        <!-- <h2>Cart</h2> -->
-        <!-- <div class="cart-items">
-          
-          <ul>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-            <li *ngFor="let item of cart; let i = index">
-              <div class="cart-item">
-                <!- - Item Name and Delete Button on the same row - ->
-                <div class="cart-item-header">
-                  <h3>{{ item.name }}</h3>
-                  <i class="fas fa-trash-alt" (click)="confirmDeleteItem(i)"></i>
-                </div>
-          
-                <!- - Cart Item Details (Quantity, Price) in the next row - ->
-                <div class="cart-item-details">
-                  <label>Qty:</label>
-                  <input type="number" [(ngModel)]="item.qty" (change)="updateCartItem(item)" size="4" />
-                  <!- - <span> x ${{ item.price.toFixed(2) }} = ${{ (item.price ) * (item.qty ) | number: '1.2-2' }}</span> - ->
-                  <span> x ${{ (item.price ?? 0).toFixed(2) }} = ${{ (item.price ?? 0) * (item.qty ?? 0) | number: '1.2-2' }}</span>
-
-                </div>
-              </div>
-              <hr />
-            </li>
-          </ul>         
-        </div> -->
             <!-- Cart Section -->
             <div class="cart-items" hidden>
 
@@ -101,7 +74,7 @@
                     <!-- Simple display of items: name, qty, price -->
                     <li *ngFor="let item of previousCart">
                       {{ item.name }} (x{{ item.qty ?? 1 }})
-                      - ${{ (item.price * (item.qty ?? 1)) | number:'1.2-2' }}
+                      - ₹{{ (item.price * (item.qty ?? 1)) | number:'1.2-2' }}
                     </li>
                   </ul>
                   <hr />
@@ -122,7 +95,7 @@
                              (change)="updateCartItem(item)"
                              size="4" />
                       <span> x ${{ (item.price ?? 0).toFixed(2) }} =
-                            ${{ (item.price ?? 0) * (item.qty ?? 0) | number:'1.2-2' }}
+                            ${{ (item.price ?? 0) * (item.qty ?? 1) | number:'1.2-2' }}
                       </span>
                     </div>
                     <hr />
@@ -159,6 +132,7 @@
                             = 
                             ${{ (item.price ?? 0) * (item.qty ?? 0) | number:'1.2-2' }}
                             </span>
+
                         </div>
                         </div>
                         <hr />
@@ -191,7 +165,7 @@
               
               
         <div class="total">
-          Total: ${{ getTotal().toFixed(2) }}
+          Total: ₹{{ getTotal().toFixed(2) }}
         </div>
     
         <button (click)="checkout()">Checkout</button>
@@ -217,7 +191,7 @@
   <div *ngIf="showCheckoutModal" class="modal-overlay" (click)="closeCheckoutModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <h3>Confirm Payment</h3>
-      <p>Amount: ${{ getTotal().toFixed(2) }}</p>
+      <p>Amount: ₹{{ getTotal().toFixed(2) }}</p>
   
       <!-- Toggle Buttons for Payment Type -->
       <div class="payment-toggle">
@@ -254,7 +228,7 @@
   </div>
   
 
-   <div *ngIf="showOrders" class="modal-overlay">
+   <!-- <div *ngIf="showOrders" class="modal-overlay">
     <div class="modal-content">
       <h3 class="modal-title">Orders</h3>
       <table class="orders-table">
@@ -279,7 +253,45 @@
       </table>
       <button (click)="showOrders = false" class="close-btn">Close</button>
     </div>
+  </div> -->
+  <div *ngIf="showOrders" class="modal-overlay">
+    <div class="modal-content">
+      <h3 class="modal-title">Orders</h3>
+      
+      <!-- Filter buttons -->
+      <div class="filter-buttons">
+        <button (click)="filterOrders('Pending')" class="filter-btn" [class.active]="selectedStatus === 'Pending'">Pending</button>
+        <button (click)="filterOrders('Completed')" class="filter-btn" [class.active]="selectedStatus === 'Completed'">Completed</button>
+        <button (click)="filterOrders('Draft')" class="filter-btn" [class.active]="selectedStatus === 'Draft'">Draft</button>
+      </div>
+  
+      <!-- Orders Table -->
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th class="table-cell">Order ID</th>
+            <th class="table-cell">Time</th>
+            <th class="table-cell">Status</th>
+            <th class="table-cell actions-cell">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders" class="order-row">
+            <td class="table-cell">{{ order.id }}</td>
+            <td class="table-cell">{{ order.time }}</td>
+            <td class="table-cell">{{ order.status }}</td>
+            <td class="table-cell actions-cell">
+              <button (click)="editOrder(order)" class="edit-btn">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <!-- Close button -->
+      <button (click)="showOrders = false" class="close-btn">Close</button>
+    </div>
   </div>
+  
 
   <div class="users-btn-container">
     <!-- Button to toggle user list visibility -->
@@ -294,14 +306,6 @@
           </span>
       </div>
       <div class="users">
-        <!-- Display filtered users -->
-        <!-- <div class="user" *ngFor="let user of filteredUsers()"> -->
-       
-            <!-- <img [src]="user.avatar" alt="Avatar" class="user-avatar" /> -->
-            
-          <!-- <p>{{ user.name }}</p> -->
-          <!-- <hr> -->
-        <!-- </div> -->
         
       <div class="user" 
             *ngFor="let user of filteredUsers()" 

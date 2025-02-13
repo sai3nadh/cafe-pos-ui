@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { RegisterService } from './register.service';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
     selector: 'app-register',
@@ -20,7 +21,9 @@ export class RegisterComponent {
   confirmPassword: string = '';
   roleId: number = 1;  // Example roleId, you might want to map it based on your UI
 
-  constructor(private router: Router, private registerService: RegisterService) {}
+  constructor(private router: Router, private registerService: RegisterService
+    , private storageService: StorageService
+  ) {}
 
   handleRegister(): void {
     if (this.name && this.email && this.password && this.confirmPassword) {
@@ -32,6 +35,10 @@ export class RegisterComponent {
           (response) => {
             console.log('Registration successful:', response);
             alert('Registration successful!');
+            this.storageService.setLocalVariable('userId', response.userId);
+            this.storageService.setLocalVariable('username', response.username);
+            this.storageService.setLocalVariable('firstName', response.role);
+           
             this.router.navigate(['/login']);  // Navigate to the login page after successful registration
           },
           (error) => {

@@ -793,7 +793,7 @@ i.fas.fa-trash-alt {
     padding: 20px;
     border-radius: 8px;
     width: 80%;
-    max-width: 500px;
+    max-width: 80%;
     text-align: center;
     resize: both;
     overflow: auto;
@@ -994,3 +994,34 @@ i.fas.fa-trash-alt {
   .users-btn-container .btn:first-child:hover {
     background-color: #564a87; /* Darker yellow when hovered */
   }
+
+  .filter-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .filter-buttons .filter-btn {
+    all: unset;
+    display: inline-block;
+    text-align: center;
+    background-color: #5b5d70 !important;
+    color: #ffffff !important;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.4rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  
+    &:hover {
+      background-color: #4a4e70 !important;
+    }
+  
+    &.active {
+      background-color: #e03131 !important;
+      color: #ffffff !important;
+    }
+  }
+
+  

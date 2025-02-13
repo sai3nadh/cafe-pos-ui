@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
 import { OrderService } from './order.service'; // Import the service
+import { StorageService } from '../services/storage.service';
 
 interface Category {
   id: number;
@@ -43,7 +44,9 @@ interface Order {
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  constructor(private router: Router, private orderService: OrderService) {}
+  constructor(private router: Router, private orderService: OrderService
+    , private storageService: StorageService
+  ) {}
   ngOnInit() {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
@@ -266,6 +269,8 @@ editOrder(order: Order) {
   }
 
   logout() {
+    // Clear all session data from storage
+    this.storageService.clearAllLocalVariables();
     this.router.navigate(['/login']);
     console.log('Logging out...');
   }

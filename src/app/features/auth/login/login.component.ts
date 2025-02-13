@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { LoginService } from './login.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
     selector: 'app-login',
@@ -23,9 +24,21 @@ export class LoginComponent {
 
   constructor(private router: Router, private loginService: LoginService,
      private cd: ChangeDetectorRef
-    
+    , private storageService: StorageService
   ) {  }
 
+   // Implement ngOnInit lifecycle hook
+   ngOnInit(): void {
+    // Check if user is already logged in by checking stored session variables
+    const userId = this.storageService.getLocalVariable('userId');
+    const username = this.storageService.getLocalVariable('username');
+
+    if (userId && username) {
+      // If user data exists, redirect to home
+      this.router.navigate(['/home']);
+    }
+  }
+  
   handleLogin() {
     if (this.username && this.password) {
       // Call the login service to authenticate
@@ -33,7 +46,15 @@ export class LoginComponent {
         (response) => {
           // Handle successful login response
           this.loggedIn = true;
+          this.storageService.setLocalVariable('userId', response.userId);
+          // this.storageService.setLocalVariable('email', response.email);
+          this.storageService.setLocalVariable('username', response.username);
+          this.storageService.setLocalVariable('firstName', response.role);
+          // this.storageService.setLocalVariable('lastName', response.lastName);
+          
           this.router.navigate(['/home']); // Navigate to home
+          // const storedUserId = this.storageService.getLocalVariable('userId');
+
         },
         (error) => {
           // Handle error if login fails

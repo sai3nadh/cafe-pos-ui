@@ -17,6 +17,9 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
+import { OrderDto, OrderService } from '../home/order.service'; // Import the service
+import { CategoryService } from '../home/category.service'; // Import the service
+import { StorageService } from '../services/storage.service';
 
 interface Category {
   id: number;
@@ -53,6 +56,14 @@ interface HistoricalItem {
   status?: 'Paid' | 'Pending';
 }
 
+// Define an interface that represents the category data from your API.
+export interface ApiCategory {
+  categoryId: number;
+  name: string;
+  version: number;
+  menuItems: any[]; // You can create a more specific interface if needed
+}
+
 interface Order {
   id: number;
   time: string;
@@ -71,45 +82,70 @@ interface Order {
     styleUrls: ['./user.component.scss']
 })
 export class UserComponent {
-  constructor(private router: Router) {}
+  categories: Category[] = [];
+  constructor(private router: Router, private orderService: OrderService
+    , private storageService: StorageService, private categoryService : CategoryService
+  ) {}
   ngOnInit() {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
+    this.userId = this.storageService.getLocalVariable("userId");
      // Find the category with the name "Beverages"
-  const selectedCategory = this.categories.find(category => category.name === "Beverages");
+  // const selectedCategory = this.categories.find(category => category.name === "Beverages");
   
   // If the category is found, select it
-  if (selectedCategory) {
-    this.selectCategory(selectedCategory);
+  // if (selectedCategory) {
+  //   this.selectCategory(selectedCategory);
+  // }
+
+  this.loadCat();
   }
+    
+  loadCat() {
+    this.categoryService.loadCategories().subscribe(
+      (data: ApiCategory[]) => {
+        this.categories = data.map(cat => ({
+          id: cat.categoryId, // ✅ Map API field to `id`
+          name: cat.name
+        }));
+
+        console.log('Categories loaded:', this.categories);
+
+
+        // ✅ Step 2: Extract and Store Items from API
+        this.items = data.flatMap(cat =>
+          cat.menuItems.map(item => ({
+            id: item.menuItemId,
+            name: item.name,
+            category: cat.categoryId, // Assign the correct category
+            price: item.price
+          }))
+        );
+
+        console.log('Items loaded:', this.items);
+        
+        // Select default category if necessary
+        // const selectedCategory = this.categories.find(cat => cat.name === 'Beverages');
+        if (this.categories.length>0) {
+          this.selectCategory(this.categories[0]);
+        }
+      },
+      error => {
+        console.error('Error loading categories', error);
+      }
+    );
+  }
+
+  
+  // Example method to handle category selection
+  selectCategory(category: Category) {
+    this.selectedCategory = category;
+
+    console.log('Selected category:', this.selectedCategory);
   }
   
-  categories: Category[] = [
-    { id: 1, name: 'Beverages' },
-    { id: 2, name: 'Snacks' },
-    { id: 3, name: 'Meals' },
-    { id: 4, name: 'Desserts' },
-    { id: 5, name: 'Drinks' },
-    { id: 6, name: 'Fruits' },
-    { id: 7, name: 'Vegetables' },
-  ];
+  items: Item[] = [];
 
-  items: Item[] = [
-
-    { id: 1, name: 'Coffee', category: 1, price: 2.50 },
-    { id: 2, name: 'Tea', category: 1, price: 2.00 },
-    { id: 3, name: 'Soda', category: 1, price: 3.00 },
-    { id: 4, name: 'Chips', category: 2, price: 1.50 },
-    { id: 5, name: 'Popcorn', category: 2, price: 2.00 },
-    { id: 6, name: 'Burger', category: 3, price: 5.00 },
-    { id: 7, name: 'Sandwich', category: 3, price: 4.50 },
-    { id: 8, name: 'Iced Coffee', category: 1, price: 2.50 },
-    { id: 9, name: 'Green Tea', category: 1, price: 2.00 },
-    { id: 10, name: 'Lemonade', category: 1, price: 2.50 },
-    { id: 11, name: 'Hot Chocolate', category: 1, price: 3.00 },
-    { id: 12, name: 'Fruit Punch', category: 1, price: 2.50 },
-    { id: 13, name: 'Sparkling Water', category: 1, price: 3.00 }
-  ];
  // Define showUsers to control the visibility of user list
  showUsers: boolean = false;
  searchTerm: string = '';
@@ -121,51 +157,29 @@ export class UserComponent {
   //   { id: 2, time: '11:00 AM', status: 'Completed', items: [{ id: 3, name: 'Soda', price: 3.0 }, { id: 4, name: 'Chips', price: 1.5 }], total: 4.5 },
   //   // Add more orders as needed
   // ];
-  ordersq: Order[] = [
-    { 
-      id: 1, 
-      time: '10:00 AM', 
-      status: 'Pending', 
-      items: [
-        { id: 1, name: 'Coffee', price: 2.5, category: 1 },  // Add the category
-        { id: 2, name: 'Tea', price: 2.0, category: 1 }     // Add the category
-      ], 
-      total: 4.5 
-    },
-    { 
-      id: 2, 
-      time: '11:00 AM', 
-      status: 'Completed', 
-      items: [
-        { id: 3, name: 'Soda', price: 3.0, category: 1 },
-        { id: 4, name: 'Chips', price: 1.5, category: 2 }
-      ], 
-      total: 4.5 
-    },
-    // Add more orders as needed
-  ];
-  orders: Order[] = [
-    { 
-      id: 1, 
-      time: '10:00 AM', 
-      status: 'Pending', 
-      items: [
-        { id: 1, name: 'Coffee', price: 2.5, category: 1, qty: 2 },  // Coffee with qty 2
-        { id: 2, name: 'Tea', price: 2.0, category: 1, qty: 3 }     // Tea with qty 3
-      ], 
-      total: 13.0  // total = (2 * 2.5) + (3 * 2.0)
-    },
-    { 
-      id: 2, 
-      time: '11:00 AM', 
-      status: 'Completed', 
-      items: [
-        { id: 3, name: 'Soda', price: 3.0, category: 1, qty: 1 }, // Soda with qty 1
-        { id: 4, name: 'Chips', price: 1.5, category: 2, qty: 5 }  // Chips with qty 5
-      ], 
-      total: 10.5  // total = (1 * 3.0) + (5 * 1.5)
-    }
-  ];
+  
+  orders: Order[] = [];
+  //   { 
+  //     id: 1, 
+  //     time: '10:00 AM', 
+  //     status: 'Pending', 
+  //     items: [
+  //       { id: 1, name: 'Coffee', price: 2.5, category: 1, qty: 2 },  // Coffee with qty 2
+  //       { id: 2, name: 'Tea', price: 2.0, category: 1, qty: 3 }     // Tea with qty 3
+  //     ], 
+  //     total: 13.0  // total = (2 * 2.5) + (3 * 2.0)
+  //   },
+  //   { 
+  //     id: 2, 
+  //     time: '11:00 AM', 
+  //     status: 'Completed', 
+  //     items: [
+  //       { id: 3, name: 'Soda', price: 3.0, category: 1, qty: 1 }, // Soda with qty 1
+  //       { id: 4, name: 'Chips', price: 1.5, category: 2, qty: 5 }  // Chips with qty 5
+  //     ], 
+  //     total: 10.5  // total = (1 * 3.0) + (5 * 1.5)
+  //   }
+  // ];
   
    // Define an array of users
    users: User[] = [
@@ -177,7 +191,36 @@ export class UserComponent {
     { id: 6, name: 'Emily Davis', avatar: 'https://github.com/nutlope.png' },
     { id: 7, name: 'David Lee', avatar: 'https://github.com/nutlope.png' },
   ];
+  // All orders fetched from the API
+  allOrders: OrderDto[] = [];
+  // Orders to display after filtering
+  filteredOrders: OrderDto[] = [];
+  // Current filter status
+  selectedStatus: string = 'Pending';
+  // Whether modal is open
+  // showOrders: boolean = false;
+  // You might have a logged-in user id
+  userId: number = -1; // example user id
   
+  // Call this method when you want to open the modal
+  openModal(): void {
+    this.showOrders = true;
+    // Load orders only if they haven't been loaded before
+    // if (this.allOrders.length === 0) {
+      this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
+        this.allOrders = orders;
+        // Apply default filter (for example, "Pending")
+        this.filterOrders(this.selectedStatus);
+      });
+    // }
+  }
+
+  // Filter the already fetched orders based on the selected status
+  filterOrders(status: string): void {
+    this.selectedStatus = status;
+    this.filteredOrders = this.allOrders.filter(order => order.status === status);
+  }
+
 // Method to populate the cart with the selected order's items
 editOrder(order: Order) {
   this.cart = order.items.map(item => ({
@@ -188,6 +231,10 @@ editOrder(order: Order) {
 
   // Close the modal after selecting the order
   this.showOrders = false;
+}
+usersmenu() {
+  this.router.navigate(['/user']);
+  console.log('Users page...');
 }
 // Method to toggle user list visibility
 toggleUsers() {
@@ -217,10 +264,13 @@ filteredUsers(): User[] {
   selectedCategory: Category | null = null;
   cart: Item[] = [];
   guestName: string = '';
+  // Somewhere near other properties
+  // previousCart: Item[] = [];
+  previousCart: HistoricalItem[] = [];
 
-  selectCategory(category: Category) {
-    this.selectedCategory = category;
-  }
+  // selectCategory(category: Category) {
+  //   this.selectedCategory = category;
+  // }
 
   getItemsByCategory(categoryId: number): Item[] {
     return this.items.filter(item => item.category === categoryId);
@@ -295,12 +345,47 @@ filteredUsers(): User[] {
     this.isPartialAmountValid = false;
   }
 
+  // // Handle Full Pay
+  // confirmFullPay() {
+  //   const totalAmount = this.getTotal();
+  //   console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
+  //   this.closeCheckoutModal();
+  //   // Add your payment processing logic here
+  // }
+
+  
   // Handle Full Pay
   confirmFullPay() {
     const totalAmount = this.getTotal();
     console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
     this.closeCheckoutModal();
-    // Add your payment processing logic here
+   
+    // Create the order object with the required format
+    const orderData = {
+      userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
+      status: 'Pending', // Status can be adjusted based on your system's logic
+      total: totalAmount,
+      customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
+      orderItems: this.cart.map(item => ({
+        orderId: 0, // Set to the appropriate order ID if needed
+        menuItemId: item.id,
+        quantity: item.qty || 1,
+        price: item.price
+      }))
+    };
+
+    // Call the service to create the order
+    this.orderService.createOrder(orderData).subscribe(
+      response => {
+        console.log('Order created successfully:', response);
+        this.closeCheckoutModal();
+        this.cart = []; // Clear the cart after order creation
+        this.previousCart = [];
+      },
+      error => {
+        console.error('Error creating order:', error);
+      }
+    );
   }
 
   // Handle Partial Pay
@@ -327,6 +412,9 @@ filteredUsers(): User[] {
   }
 
   logout() {
+    
+    // Clear all session data from storage
+    this.storageService.clearAllLocalVariables();
     this.router.navigate(['/login']);
     console.log('Logging out...');
   }
@@ -374,10 +462,7 @@ filteredUsers(): User[] {
     console.log('Reporting');
   }
 
-  // Somewhere near other properties
-// previousCart: Item[] = [];
-previousCart: HistoricalItem[] = [];
-
+  
 // // Add a map of user IDs to “historical items” to simulate data (or fetch from API later)
 // private userCartHistoryMap: { [userId: number]: Item[] } = {
 //   1: [ { id: 100, name: 'Latte (history)', price: 3.0, category: 1, qty: 2 } ],

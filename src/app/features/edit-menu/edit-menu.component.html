@@ -1,0 +1,70 @@
+<div class="container">
+  <!-- Categories Sidebar -->
+  <div class="left-panel">
+    <h2>Categories</h2>
+    <button (click)="openCategoryModal()">+ Add Category</button>
+    <ul>
+      <li *ngFor="let category of categories">
+        <span (click)="selectCategory(category)">{{ category.name }}</span>
+        <div class="actions">
+          <button (click)="openCategoryEditModal(category)">✏️</button>
+          <button (click)="confirmDeleteCategory(category)">🗑️</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Right Panel for Menu Items -->
+  <div class="right-panel" *ngIf="selectedCategory">
+    <h2>Menu Items for {{ selectedCategory.name }}</h2>
+    <button (click)="openItemModal(selectedCategory)">+ Add Menu Item</button>
+    <ul>
+      <li *ngFor="let item of selectedCategory.menuItems">
+        {{ item.name }} - ${{ item.price }}
+        <div class="actions">
+          <button (click)="openItemEditModal(item)">✏️</button>
+          <button (click)="confirmDeleteItem(item)">🗑️</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Modals for Adding/Editing Categories -->
+  <div *ngIf="categoryModalVisible" class="modal-overlay">
+    <div class="modal-content">
+      <h3>{{ categoryToEdit ? 'Edit' : 'Add' }} Category</h3>
+      <input [(ngModel)]="categoryToEdit.name" placeholder="Category Name" />
+      <button (click)="saveCategory()">Save</button>
+      <button (click)="closeCategoryModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Modals for Adding/Editing Menu Items -->
+  <div *ngIf="itemModalVisible" class="modal-overlay">
+    <div class="modal-content">
+      <h3>{{ itemToEdit ? 'Edit' : 'Add' }} Menu Item</h3>
+      <input [(ngModel)]="itemToEdit.name" placeholder="Item Name" />
+      <input [(ngModel)]="itemToEdit.price" placeholder="Item Price" type="number" />
+      <button (click)="saveItem()">Save</button>
+      <button (click)="closeItemModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Confirmation Modals for Deleting Categories -->
+  <div *ngIf="showDeleteCategoryModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Are you sure you want to delete this category?</h3>
+      <button (click)="deleteCategory()">Yes</button>
+      <button (click)="cancelDeleteCategory()">No</button>
+    </div>
+  </div>
+
+  <!-- Confirmation Modals for Deleting Menu Items -->
+  <div *ngIf="showDeleteItemModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Are you sure you want to delete this item?</h3>
+      <button (click)="deleteItem()">Yes</button>
+      <button (click)="cancelDeleteItem()">No</button>
+    </div>
+  </div>
+</div>

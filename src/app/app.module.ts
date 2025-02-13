@@ -11,13 +11,15 @@ import { HomeComponent } from './features/home/home.component';
 import { routes } from './app.routes'; // Import the routes
 // import { HttpClientModule } from '@angular/common/http';  // <-- Add this import
 import { provideHttpClient } from '@angular/common/http'; // <-- Use provideHttpClient() instead
+import { EditMenuComponent } from './features/edit-menu/edit-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    EditMenuComponent
   ],
   imports: [
     BrowserModule,
