@@ -153,6 +153,7 @@ export class UserComponent {
 
   showOrders: boolean = false;  // Control visibility of orders modal
   showOrdersIcon: boolean = false;  // Control visibility of orders modal
+  editOrderId: number = -1;
   // cart: Item[] = [];
   // orders: Order[] = [
   //   { id: 1, time: '10:00 AM', status: 'Pending', items: [{ id: 1, name: 'Coffee', price: 2.5 }, { id: 2, name: 'Tea', price: 2.0 }], total: 4.5 },
@@ -279,6 +280,7 @@ export class UserComponent {
     emptyCart(){
       this.cart=[];
       this.guestName="";
+      this.editOrderId=-1;
     }
 
   // Filter the already fetched orders based on the selected status
@@ -301,6 +303,7 @@ editOrder(order: Order) {
     category: item.category,  // Ensure category is included
   }));
 this.guestName="edit Order - #"+order.orderNumber.slice(-3);
+this.editOrderId=order.id;
 
   // Close the modal after selecting the order
   this.showOrders = false;
@@ -433,6 +436,36 @@ filteredUsers(): User[] {
     console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
     this.closeCheckoutModal();
    
+    if(this.editOrderId != -1){
+
+        // Create the order object with the required format
+      const editOrderData = {
+        orderId:this.editOrderId,
+        userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
+        status: 'Pending', // Status can be adjusted based on your system's logic
+        total: totalAmount,
+        customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
+        orderItems: this.cart.map(item => ({
+          orderId: this.editOrderId, // Set to the appropriate order ID if needed
+          menuItemId: item.id,
+          quantity: item.qty || 1,
+          price: item.price
+        }))
+      };
+
+      // Call the service to create the order
+      this.orderService.editOrder(editOrderData).subscribe(
+        response => {
+          console.log('Order created successfully:', response);
+          this.closeCheckoutModal();
+          this.cart = []; // Clear the cart after order creation
+          this.previousCart = [];
+        },
+        error => {
+          console.error('Error creating order:', error);
+        }
+      );
+    }else{
     // Create the order object with the required format
     const orderData = {
       userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
@@ -459,6 +492,7 @@ filteredUsers(): User[] {
         console.error('Error creating order:', error);
       }
     );
+  }
   }
 
   // Handle Partial Pay
