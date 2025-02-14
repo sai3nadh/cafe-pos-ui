@@ -151,6 +151,7 @@ export class UserComponent {
  searchTerm: string = '';
 
   showOrders: boolean = false;  // Control visibility of orders modal
+  showOrdersIcon: boolean = false;  // Control visibility of orders modal
   // cart: Item[] = [];
   // orders: Order[] = [
   //   { id: 1, time: '10:00 AM', status: 'Pending', items: [{ id: 1, name: 'Coffee', price: 2.5 }, { id: 2, name: 'Tea', price: 2.0 }], total: 4.5 },
@@ -196,7 +197,8 @@ export class UserComponent {
   // Orders to display after filtering
   filteredOrders: OrderDto[] = [];
   // Current filter status
-  selectedStatus: string = 'Pending';
+  selectedStatus: string = 'All';
+  selectedOrder: any = null;
   // Whether modal is open
   // showOrders: boolean = false;
   // You might have a logged-in user id
@@ -215,12 +217,81 @@ export class UserComponent {
     // }
   }
 
-  // Filter the already fetched orders based on the selected status
-  filterOrders(status: string): void {
+
+  // Call this method when you want to open the modal
+  toggleOrdersModal(): void {
+    // this.showOrdersIcon = !this.showOrdersIcon;
+    // Load orders only if they haven't been loaded before
+    // if (this.allOrders.length === 0) {
+      this.selectedStatus= "Pending";
+      this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
+        this.allOrders = orders;
+        // Apply default filter (for example, "Pending")
+        // this.filterOrders(this.selectedStatus);
+        this.handleFilterChange(this.selectedStatus);
+      });
+      console.log("all orders - test");
+      console.log(this.allOrders);
+    // }
+  }
+  toggleOrdersModalClose(){
+    this.showOrdersIcon = false;
+  }
+  handleFilterChange(status: string): void {
     this.selectedStatus = status;
-    this.filteredOrders = this.allOrders.filter(order => order.status === status);
+    
+    if (status === 'All') {
+      this.filteredOrders = this.allOrders;
+    } else {
+      this.filteredOrders = this.allOrders.filter(order => order.status === status);
+    }
   }
 
+  finishOrder(selectedOrder: Order){
+    // alert("se"+selectedOrder);
+    // console.log("seee--",selectedOrder);
+      // Assuming selectedOrder is the ID of the order to complete
+  this.orderService.completeOrder(selectedOrder.id).subscribe(
+    response => {
+      console.log('Order completed successfully', response);
+      // Optionally, you can update the orders or handle UI changes here
+      this.toggleOrdersModal();
+      this.filterOrders(this.selectedStatus); // To reapply any filters you have
+      // this.toggleOrdersModal();
+    },
+    error => {
+      console.error('Error completing the order', error);
+      // You can display a message or handle the error accordingly
+    }
+  );
+  }
+  
+    // Function to handle the order click and show details
+    showOrderDetails(order: any): void {
+      if (this.selectedOrder === order) {
+        this.selectedOrder = null;  // Close the order details if clicked again
+      } else {
+        this.selectedOrder = order;  // Show the order details
+      }
+    }
+
+    emptyCart(){
+      this.cart=[];
+      
+    }
+
+  // Filter the already fetched orders based on the selected status
+  // filterOrders(status: string): void {
+  //   this.selectedStatus = status;
+  //   this.filteredOrders = this.allOrders.filter(order => order.status === status);
+  // }
+
+  filterOrders(status: string): void {
+    this.selectedStatus = status;
+    this.filteredOrders = this.allOrders.filter(order =>
+      order.status.toLowerCase() === status.toLowerCase()
+    );
+  }
 // Method to populate the cart with the selected order's items
 editOrder(order: Order) {
   this.cart = order.items.map(item => ({

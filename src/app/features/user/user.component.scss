@@ -675,7 +675,7 @@ i.fas.fa-trash-alt {
     overflow-y: auto; /* Allow vertical scrolling if content overflows */
     
     /* Move the modal down slightly to place it between top and center */
-    transform: translateY(-50%); /* Adjust this value to control the vertical offset */
+    transform: translateY(-5%); /* Adjust this value to control the vertical offset */
 }
 
 .edit-btn{
@@ -1025,3 +1025,321 @@ i.fas.fa-trash-alt {
   }
 
   
+
+.btn-orders {
+  background-color: #3B82F6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.btn-users {
+  background-color: #3B82F6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  padding-top: 50px;
+}
+
+
+
+.modal-content-icon {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  width: 60%; /* Adjust as needed */
+  max-height: 80%; /* Prevent overflow on tall content */
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+
+
+.modal-content {
+  background-color: white;
+  width: 75%;
+  height: 75%;
+  border-radius: 1rem;
+
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.5rem;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-icon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.order-number {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  background-color: #EF4444;
+  color: white;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.order-circle {
+  width: 8rem;
+  height: 8rem;
+  background: linear-gradient(to right, #1c016d, #042f74);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.order-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.order-status {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+.btn-filter {
+  all: unset;
+  display: inline-block;
+  text-align: center;
+  background-color: #5b5d70 !important;
+  color: #ffffff !important;
+  padding: 0.6rem 1.2rem;
+  font-size: 2.0rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-right: 10px;
+}
+
+.btn-filter:hover {
+  background-color: #4a4e70 !important;
+}
+
+.btn-filter.active {
+  background-color: #e03131 !important;
+  color: #ffffff !important;
+}
+
+
+
+
+.order-left {
+  width: 70%;
+  cursor: pointer;
+}
+
+
+.order-status {
+  font-size: 0.8rem;
+}
+
+.order-right {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 10px;
+}
+
+.order-items {
+  display: none;
+}
+
+.order-right.active {
+  display: block;
+}
+
+.order-items h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.order-items ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.order-items li {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+
+.order-list {
+  width: 70%;  /* Left section takes up 70% of the container */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+
+.order-details {
+  width: 30%;  /* Right section takes up 30% */
+  position: fixed;  /* Keep the right block fixed */
+  top: 20px;
+  right: 20px;
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;  /* Allow scrolling if the content exceeds the height */
+}
+
+
+.order-layout {
+  display: flex;
+  gap: 2rem;
+}
+
+.order-grid-responsive {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.order-item-responsive {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.selected-order {
+  border: 3px solid #e03131;
+  border-radius: 50%;
+}
+
+.order-circle {
+  width: 6rem;
+  height: 6rem;
+  background: linear-gradient(to right, #1c016d, #042f74);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.order-circle:hover {
+  transform: scale(1.1);
+}
+
+.order-text {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.order-status {
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.order-bottom-section {
+  display: flex;
+  margin-top: 2rem;
+  gap: 2rem;
+}
+
+// .bottom-left, .bottom-right {
+//   flex: 1;
+//   background-color: #f3f4f6;
+//   border: 1px solid #ccc;
+//   border-radius: 10px;
+//   padding: 15px;
+//   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+// }
+
+.bottom-left {
+  flex: 1; /* Flexible to take remaining space */
+  min-width: 60%; /* Ensures it doesn't become too narrow */
+  background-color: #f3f4f6;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.bottom-right {
+  flex-shrink: 0; /* Prevent shrinking */
+  width: 300px; /* Fixed width */
+  background-color: #f3f4f6;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-details-fixed {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  width: 100%;
+  text-align: right;
+}
+
+.item-name {
+  flex-grow: 1; /* This will make the item name take up available space */
+  margin-right: 10px; /* Add space between the name and quantity */
+}
+
+.item-qty {
+  min-width: 40px; /* Ensure the quantity has a consistent width */
+  text-align: right; /* Align the quantity to the right */
+}

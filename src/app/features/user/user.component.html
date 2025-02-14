@@ -10,6 +10,7 @@
       <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded">
           Users
         </button>
+        <button (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();">Orders-Icon</button>
       </div>
     
   <!-- Avatar Section with Dropdown -->
@@ -292,10 +293,63 @@
     </div>
   </div>
   
+<!-- Orders Modal -->
+
+<!-- Orders Modal -->
+<div *ngIf="showOrdersIcon" class="custom-modal-overlay">
+  <div class="modal-content-icon">
+    <!-- Close Button -->
+    <button (click)="toggleOrdersModalClose()" class="close-btn">X</button>
+  
+    <h2 class="text-lg font-bold mb-4">Orders</h2>
+    <div class="flex justify-center mb-4 space-x-4">
+      <button class="btn-filter" [class.active]="selectedStatus === 'All'" (click)="handleFilterChange('All')">All</button>
+      <button class="btn-filter" [class.active]="selectedStatus === 'Pending'" (click)="handleFilterChange('Pending')">Pending</button>
+      <button class="btn-filter" [class.active]="selectedStatus === 'Completed'" (click)="handleFilterChange('Completed')">Completed</button>
+    </div>
+  
+    <div class="order-bottom-section">
+      <div class="bottom-left">
+        <div class="order-grid-responsive">
+          <div *ngFor="let order of filteredOrders" class="order-item-responsive" (click)="showOrderDetails(order)" [ngClass]="{'selected-order': selectedOrder?.orderNumber === order.orderNumber}">
+            <div class="order-circle" [ngClass]="{'text-red-500': order.status === 'Pending', 'text-green-500': order.status === 'Completed'}">
+              <div class="order-text">
+                <span>{{ order.orderNumber | slice: -3 }}</span>
+                <span class="order-status">{{ order.status }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-right">
+        <div class="order-details-fixed" *ngIf="selectedOrder">
+          <h3>Order Items - #{{ selectedOrder.orderNumber | slice: -3}}</h3>
+          <!-- <ul>
+            <li *ngFor="let item of selectedOrder.items">
+              {{ item.name }} - {{ item.qty }}
+            </li>
+          </ul> -->
+          <div *ngFor="let item of selectedOrder.items" class="item-row">
+            <span class="item-name">{{ item.name }}</span>
+            <span class="item-qty"> - {{ item.qty }}</span>
+          </div>
+          <div class="button-section">
+            <button class="btn-edit" (click)="editOrder(selectedOrder);toggleOrdersModalClose();">Edit</button>
+            <button class="btn-finish" *ngIf="selectedOrder.status === 'Pending'" (click)="finishOrder(selectedOrder)">Finish</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
 
   <div class="users-btn-container">
     <!-- Button to toggle user list visibility -->
     <button class="btn" (click)="toggleUsers()">Users</button>
+  <!-- Button to toggle user list visibility -->
+  <button class="btn" (click)="emptyCart()">clearCart</button>
   
     <!-- User list with search functionality -->
     <div class="users-list" *ngIf="showUsers">
