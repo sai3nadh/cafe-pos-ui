@@ -70,6 +70,7 @@ interface Order {
   status: string;
   items: Item[];
   total: number;
+  orderNumber: string;      // Order number (e.g., "110220251001")
 }
 @Component({
     selector: 'app-home',
@@ -277,7 +278,7 @@ export class UserComponent {
 
     emptyCart(){
       this.cart=[];
-      
+      this.guestName="";
     }
 
   // Filter the already fetched orders based on the selected status
@@ -299,6 +300,7 @@ editOrder(order: Order) {
     qty: item.qty || 1,      // Set default qty to 1 if not defined
     category: item.category,  // Ensure category is included
   }));
+this.guestName="edit Order - #"+order.orderNumber.slice(-3);
 
   // Close the modal after selecting the order
   this.showOrders = false;

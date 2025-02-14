@@ -26,6 +26,7 @@ export class OrderService {
 
 
   private apiUrlCreate = `${environment.apiUrl}/orders/createOrderWithItems`;
+  private apiUrlEdit = `${environment.apiUrl}/orders/editOrderWithItems`;
   private apiUrlGet = `${environment.apiUrl}/orders/orders/user/`;
   private apiUrlCompleteOrder = `${environment.apiUrl}/orders`;  // Base URL for complete order endpoint
 
@@ -34,6 +35,11 @@ export class OrderService {
   // Method to create an order with items
   createOrder(orderData: any): Observable<any> {
     return this.http.post(this.apiUrlCreate, orderData);
+  }
+
+  // Method to create an order with items
+  editOrder(orderData: any): Observable<any> {
+    return this.http.post(this.apiUrlEdit, orderData);
   }
 
   getOrdersForUserToday(userId: number): Observable<OrderDto[]> {

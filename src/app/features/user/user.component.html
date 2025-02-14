@@ -63,7 +63,7 @@
       </div>
       <div class="right-section">
 
-        <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" />
+        <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" [disabled]="guestName.startsWith('edit Order - #')"/>
   
             <!-- Cart Section -->
             <div class="cart-items" hidden>
@@ -95,8 +95,8 @@
                              [(ngModel)]="item.qty"
                              (change)="updateCartItem(item)"
                              size="4" />
-                      <span> x ${{ (item.price ?? 0).toFixed(2) }} =
-                            ${{ (item.price ?? 0) * (item.qty ?? 1) | number:'1.2-2' }}
+                      <span> x ₹{{ (item.price ?? 0).toFixed(2) }} =
+                            ₹{{ (item.price ?? 0) * (item.qty ?? 1) | number:'1.2-2' }}
                       </span>
                     </div>
                     <hr />
@@ -129,9 +129,9 @@
                             size="4" 
                             />
                             <span>
-                            x ${{ item.price?.toFixed(2) }} 
+                            x ₹{{ item.price?.toFixed(2) }} 
                             = 
-                            ${{ (item.price ?? 0) * (item.qty ?? 0) | number:'1.2-2' }}
+                            ₹{{ (item.price ?? 0) * (item.qty ?? 0) | number:'1.2-2' }}
                             </span>
 
                         </div>
@@ -148,7 +148,7 @@
                   <h3>Previous Items for {{ guestName }}</h3>
                   <!-- Show total pending amount above the items -->
                   <p *ngIf="getPendingAmount() > 0">
-                    <strong>Pending Amount: ${{ getPendingAmount() | number:'1.2-2' }}</strong>
+                    <strong>Pending Amount: ₹{{ getPendingAmount() | number:'1.2-2' }}</strong>
                   </p>
               
                   <ul>
@@ -156,7 +156,7 @@
                       <!-- Show the status and price/qty -->
                       {{ item.name }} 
                       (x{{ item.qty ?? 1 }}, {{ item.status }}) 
-                      = ${{ (item.price * (item.qty ?? 1)) | number:'1.2-2' }}
+                      = ₹{{ (item.price * (item.qty ?? 1)) | number:'1.2-2' }}
                     </li>
                   </ul>
                 </div>
