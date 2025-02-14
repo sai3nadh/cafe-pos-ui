@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { RouterModule } from '@angular/router';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './features/auth/login/login.component';
@@ -12,6 +13,7 @@ import { routes } from './app.routes'; // Import the routes
 // import { HttpClientModule } from '@angular/common/http';  // <-- Add this import
 import { provideHttpClient } from '@angular/common/http'; // <-- Use provideHttpClient() instead
 import { EditMenuComponent } from './features/edit-menu/edit-menu.component';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,10 @@ import { EditMenuComponent } from './features/edit-menu/edit-menu.component';
     FormsModule,
     RouterModule.forRoot(routes), // Register the routes here
     // HttpClientModule,  // <-- Add HttpClientModule to imports
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:3000'
+    })
 
   ],
   providers: [    
