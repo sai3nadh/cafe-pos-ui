@@ -53,9 +53,26 @@
       *ngFor="let item of getItemsByCategory(selectedCategory.id)" 
       (click)="addToCart(item)">
             <!-- <div class="item-card" *ngFor="let item of getItemsByCategory(selectedCategory.id)"> -->
-              <h3>{{ item.name }}</h3>
-              <p>₹{{ item.price.toFixed(2) }}</p>
-              <button>Add</button>
+              <h3>{{ item.name }} </h3>
+              <!-- <p>₹{{ item.price.toFixed(2) }}</p> -->
+              <!-- <img class="item-icons" src="../../../assets/icons/tea1.png" alt="Avatar" (click)="toggleDropdown()" /> -->
+              <img class="item-icons" [src]="'../../../assets/icons/' + item.id + '.png'" alt="item.name" (click)="toggleDropdown()" />
+
+              <!-- <img class="item-icons" src="../../../assets/icons/i.png https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" /> -->
+
+              <div class="button-container">
+                <button (click)="remove(item); $event.stopPropagation()"
+                style="background-color: rgb(202, 46, 34); color: white;">---</button>
+                <button (click)="addToCart(item); $event.stopPropagation()" 
+                style="background-color: rgb(14, 97, 14); color: white;">+++</button>
+              </div>
+              <!-- <div class="button-container">
+                <button (click)="remove(item)" >---</button>
+                <button (click)="addToCart(item)">+++</button>
+              </div>
+               -->
+                <!-- <button>Add</button>
+                <button>Add</button> -->
               <!-- <button (click)="addToCart(item)">Add</button> -->
             </div>
           </div>

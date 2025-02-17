@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';  // Add this import
 import { OrderDto, OrderService } from '../home/order.service'; // Import the service
 import { CategoryService } from '../home/category.service'; // Import the service
 import { StorageService } from '../services/storage.service';
+import { ElementRef, HostListener } from '@angular/core';
 
 interface Category {
   id: number;
@@ -86,11 +87,13 @@ export class UserComponent {
   categories: Category[] = [];
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
+    ,private elRef: ElementRef
   ) {}
   ngOnInit() {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
+    this.editOrderId=-1;
      // Find the category with the name "Beverages"
   // const selectedCategory = this.categories.find(category => category.name === "Beverages");
   
@@ -249,6 +252,7 @@ export class UserComponent {
     }
   }
 
+  //move order to the finished state
   finishOrder(selectedOrder: Order){
     // alert("se"+selectedOrder);
     // console.log("seee--",selectedOrder);
@@ -360,6 +364,53 @@ filteredUsers(): User[] {
     } else {
       this.cart.push({ ...item, qty: 1 });
     }
+  }
+
+   // Close dropdown when clicked outside
+   @HostListener('document:click', ['$event'])
+   onClick(event: MouseEvent) {
+     const dropdownElement = this.elRef.nativeElement.querySelector('.dropdown-menu');
+     if (this.dropdownVisible && dropdownElement && !dropdownElement.contains(event.target as Node)) {
+       this.dropdownVisible = false; // Close the dropdown
+     }
+   }
+ 
+   // Close dropdown when Esc key is pressed
+   @HostListener('document:keydown', ['$event'])
+   onKeydown(event: KeyboardEvent) {
+     if (event.key === 'Escape' && this.dropdownVisible) {
+      //  this.dropdownVisible = false; // Close the dropdown
+       this.closeAllModals();
+
+     }
+   }
+
+   // Close all modals and dropdowns
+  closeAllModals() {
+    this.dropdownVisible = false;
+    this.showOrders = false;
+    this.showOrdersIcon = false;
+    this.showUsers = false;
+    this.showDeleteModal = false;
+    this.showCheckoutModal = false;
+  }
+
+  remove(item: Item) {
+    
+    // remove(item: Item) {
+      this.closeDropdown();
+      this.cart = this.cart.filter(i => i.id !== item.id);
+    // }
+    
+    // this.closeDropdown();
+    // const existingItem = this.cart.find(i => i.id === item.id);
+    // if (existingItem) {
+    //   this.cart.pop({...item, qty :0});
+    //   // existingItem.qty = (existingItem.qty || 1) - 1;
+    // } 
+    // else {
+    //   this.cart.push({ ...item, qty: 1 });
+    // }
   }
 
 

@@ -137,6 +137,11 @@ body {
     cursor: pointer;
   }
   
+.button-container {
+  display: flex;
+  gap: 0px; /* Adds space between buttons */
+  margin-top: 10px;
+}
   .item-card button:hover {
     background-color: #0056b3;
   }
@@ -504,6 +509,13 @@ i.fas.fa-trash-alt {
     margin-right: 15px;
   }
   
+     .item-icons {
+    width: 130px;
+    height: 130px;
+    border-radius: 5%;
+    cursor: pointer;
+    margin-right: 15px;
+  }
   /* Dropdown menu styling */
   .dropdown-menu {
     position: absolute;
