@@ -8,10 +8,6 @@
     ],
     "rewrites": [
       {
-        "source": "/api/**", 
-        "destination": "http://34.41.30.134:8083/api/**"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
