@@ -7,8 +7,8 @@ export const environment = {
     // apiUrl: 'http://192.168.1.9:8083/api'
     // apiUrl: 'http://192.168.0.4:8083/api'
     // apiUrl: '/api'  // Firebase Hosting will forward this to the GCP VM API
-    apiUrl: 'http://34.41.30.734:8083/api'  // For local or dev GCP VM
-
+    // apiUrl: 'http://34.41.30.734:8083/api'  // For local or dev GCP VM
+    apiUrl: 'https://34.41.30.134/api'  // For local or dev GCP VM
     // apiUrl: 'http://34.41.30.134:8083/api'
   };
   
