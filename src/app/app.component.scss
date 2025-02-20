@@ -18,9 +18,29 @@ html, body {
     margin: 10px;
   }
   
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-    }
+    @media screen and (max-width: 768px) and (orientation: portrait) {
+      .container {
+          flex-direction: column;
+      }
   }
+  
+  @media screen and (max-width: 768px) and (orientation: portrait) {
+    .container {
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .container {
+        flex-direction: row;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .container {
+        flex-direction: row;
+    }
+}
+
+  
   

@@ -94,6 +94,10 @@ export class UserComponent {
     console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
     this.editOrderId=-1;
+    if(localStorage.getItem('zoomLevel')!=null){
+      alert("set zoom level");
+    document.body.style.zoom = `${Number(localStorage.getItem('zoomLevel')) * 100}%`;
+  }
      // Find the category with the name "Beverages"
   // const selectedCategory = this.categories.find(category => category.name === "Beverages");
   
@@ -696,13 +700,19 @@ adjustZoom(event: any) {
 
 changeZoom(delta: number) {
   this.zoomLevel = Math.min(2, Math.max(0.5, this.zoomLevel + delta));
-  this.applyZoom();
+  // this.applyZoom();
+  this.saveAndApplyZoom();
+
 }
 
 
 applyZoom() {
   // Adjust the zoom level in your application as needed
   document.body.style.zoom = `${this.zoomLevel * 100}%`;
+}
+saveAndApplyZoom(): void {
+  localStorage.setItem('zoomLevel', this.zoomLevel.toString()); // Save zoom level
+  this.applyZoom();
 }
 
 // applyZoom() {
