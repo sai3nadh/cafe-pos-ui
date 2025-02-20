@@ -24,13 +24,42 @@
         <button (click)="viewReports()">View Reports</button> -->
         <button >View Orders</button>
         <button >View Reports</button>
+           <!-- Zoom Settings Button -->
+           <button (click)="openZoomSettings()" class="bg-green-500 text-white px-4 py-2 rounded">Zoom Settings</button>
+ 
           <hr />
       <button (click)="logout()">Logout</button>
     </div>
   </div>
   
     </div>
-  
+  <!-- Zoom Modal (Initially Hidden) -->
+<div *ngIf="zoomModalVisible" class="zoom-modal-overlay">
+  <div class="zoom-modal">
+    <h3>Set Zoom Level</h3>
+    <label for="zoomSlider">Zoom Level: </label>
+    
+    <!-- Left and Right Buttons -->
+    <div class="zoom-buttons">
+      <button (click)="changeZoom(-0.05)">-</button>
+      <input
+        id="zoomSlider"
+        type="range"
+        min="0.5"
+        max="2"
+        step="0.05"
+        [(ngModel)]="zoomLevel"
+        (input)="adjustZoom($event)"
+      />
+      <button (click)="changeZoom(0.05)">+</button>
+    </div>
+    
+    <span>{{ (zoomLevel * 100).toFixed(0) }}%</span>
+    
+    <button (click)="closeZoomSettings()">Close</button>
+  </div>
+</div>
+
     <!-- Main Content Section -->
     <div class="main-content">
       <!-- Left Section (Categories and Items) -->

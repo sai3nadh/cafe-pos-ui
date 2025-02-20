@@ -666,4 +666,50 @@ private userCartHistoryMap: { [userId: number]: HistoricalItem[] } = {
   ],
   
 };
+
+
+// // zoomLevel: number = 1; // Default zoom level (100%)
+// // zoomModalVisible: boolean = false; // To track modal visibility
+
+// // // Show Zoom Settings Modal
+openZoomSettings(): void {
+  this.zoomModalVisible = true;
+}
+
+// // // Close Zoom Settings Modal
+closeZoomSettings(): void {
+  this.zoomModalVisible = false;
+}
+
+// // Adjust Zoom Level (Triggered by slider)
+// adjustZoom(event: any): void {
+//   document.body.style.zoom = event.target.value; // Apply zoom to the body content
+// }
+zoomLevel = 1; // Default zoom level
+
+zoomModalVisible = false; // Control visibility of the zoom modal
+
+adjustZoom(event: any) {
+  this.zoomLevel = event.target.value;
+  this.applyZoom();
+}
+
+changeZoom(delta: number) {
+  this.zoomLevel = Math.min(2, Math.max(0.5, this.zoomLevel + delta));
+  this.applyZoom();
+}
+
+
+applyZoom() {
+  // Adjust the zoom level in your application as needed
+  document.body.style.zoom = `${this.zoomLevel * 100}%`;
+}
+
+// applyZoom() {
+//   // Adjust the zoom level in your application as needed
+//   document.body.style.zoom = this.zoomLevel;
+//     // document.body.style.zoom = event.target.value; // Apply zoom to the body content
+
+// }
+
 }
