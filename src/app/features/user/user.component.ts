@@ -516,6 +516,8 @@ filteredUsers(): User[] {
           console.error('Error creating order:', error);
         }
       );
+      this.cart = []; // Clear the cart after order creation
+          this.previousCart = [];
     }else{
     // Create the order object with the required format
     const orderData = {

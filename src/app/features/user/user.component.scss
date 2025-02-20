@@ -1072,7 +1072,7 @@ i.fas.fa-trash-alt {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  width: 60%; /* Adjust as needed */
+  width: 75%; /* Adjust as  needed */
   max-height: 80%; /* Prevent overflow on tall content */
   overflow-y: auto;
   padding: 20px;
@@ -1254,6 +1254,7 @@ i.fas.fa-trash-alt {
 .order-grid-responsive {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 1rem;
 }
@@ -1322,12 +1323,22 @@ i.fas.fa-trash-alt {
 }
 .bottom-right {
   flex-shrink: 0; /* Prevent shrinking */
-  width: 300px; /* Fixed width */
+  // width: 300px; /* Fixed width */
   background-color: #f3f4f6;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: xx-large; /* Set text size to xx-large */
+  overflow-y: auto; /* In case the content overflows */
+
+}
+.btn-edit, .btn-finish{
+  // padding-top: 10px;
+  font-size: xx-large; /* Set text size to xx-large */
+}
+.button-section{
+  padding-top: 25px;
 }
 
 .order-details-fixed {
