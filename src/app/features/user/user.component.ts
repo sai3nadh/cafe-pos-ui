@@ -116,8 +116,22 @@ export class UserComponent {
   // this.testPrint();
   this.loadCat();
 // //below to connect rabbit
-//   this.wsService.connect(); // ✅ Ensure WebSocket connects on init
-//   this.sendOrder();
+  this.wsService.connect(); // ✅ Ensure WebSocket connects on init
+  // this.sendOrder();
+  // console.log("subb ordddd");
+ 
+  // this.wsService.sendAndPublishOrder(JSON.stringify({
+  //   orderId: 123,
+  //   item: "Coffee",
+  //   quantity: 2
+  // }));
+  this.wsService.sendAndPublishOrder(JSON.stringify({
+    orderId: 123,
+    item: "Coffee",
+    quantity: 2
+  }));
+
+  // this.wsService.subscribeToOrders();
 
 // Call this function to test the printer
 // this.testPrint();
@@ -125,10 +139,12 @@ export class UserComponent {
  
   order: string = "Order#123"; // Example order
 
-  sendOrder() {
-    console.log("🔍 Sending Order:", this.order);
-    this.wsService.sendMessage(this.order);
-  }
+  // sendOrder() {
+  //   console.log("🔍 Sending Order:", this.order);
+  //   this.wsService.sendMessage(JSON.stringify({ orderId: 101, item: "Teaaa", quantity: 10 }));
+
+  //   this.wsService.sendMessage(this.order);
+  // }
 
 //    testPrint() {
 // alert("call test method");
