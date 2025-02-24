@@ -608,7 +608,7 @@ filteredUsers(): User[] {
         console.log('Order created successfully:', response);
         // Fire and forget the print request
         // Fire and forget the print order request
-        this.orderService.printOrder(response.id).subscribe();
+        this.orderService.printOrder(response.orderId).subscribe();
         // console.log('Order created successfully:-- id', response.id);
         // const createdOrder = {
         //   orderId: response.orderId,

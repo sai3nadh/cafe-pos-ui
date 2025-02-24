@@ -54,6 +54,7 @@ export class OrderService {
   }
   // ✅ New method to print order
   printOrder(orderId: number): Observable<any> {
+    console.log(`${this.apiUrlPrintOrder}/${orderId}`);
     return this.http.post(`${this.apiUrlPrintOrder}/${orderId}`, {});
   }
 }
