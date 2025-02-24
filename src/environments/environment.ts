@@ -1,9 +1,9 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:8083/api' // Local URL for development
+    // apiUrl: 'http://localhost:8083/api' // Local URL for development
     // apiUrl: 'http://192.168.0.6:8083/api'
 
-    // apiUrl: 'https://pnueuamzlb.execute-api.eu-north-1.amazonaws.com/v1/api'
+    apiUrl: 'https://pnueuamzlb.execute-api.eu-north-1.amazonaws.com/v1/api'
     // apiUrl: 'http://192.168.99.83:8083/api' // Local URL for development
       // apiUrl: 'https://103f-106-66-44-9.ngrok-free.app/api' // Local URL for development
   // 192.168.99.83
