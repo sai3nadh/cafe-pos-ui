@@ -29,6 +29,7 @@ export class OrderService {
   private apiUrlEdit = `${environment.apiUrl}/orders/editOrderWithItems`;
   private apiUrlGet = `${environment.apiUrl}/orders/orders/user/`;
   private apiUrlCompleteOrder = `${environment.apiUrl}/orders`;  // Base URL for complete order endpoint
+  private apiUrlPrintOrder = `http://192.168.0.4:8083/orders/printOrder`;  // Base URL for complete order endpoint
 
   constructor(private http: HttpClient) {}
 
@@ -50,5 +51,9 @@ export class OrderService {
    completeOrder(orderId: number): Observable<any> {
     // Make a PUT request to complete the order
     return this.http.put(`${this.apiUrlCompleteOrder}/${orderId}/complete`, {});
+  }
+  // ✅ New method to print order
+  printOrder(orderId: number): Observable<any> {
+    return this.http.post(`${this.apiUrlPrintOrder}/${orderId}`, {});
   }
 }

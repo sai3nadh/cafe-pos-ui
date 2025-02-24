@@ -35,7 +35,7 @@ export class LoginComponent {
 
     if (userId && username) {
       // If user data exists, redirect to home
-      this.router.navigate(['/home']);
+      this.router.navigate(['/user']);
     }
   }
   
@@ -52,7 +52,7 @@ export class LoginComponent {
           this.storageService.setLocalVariable('firstName', response.role);
           // this.storageService.setLocalVariable('lastName', response.lastName);
           
-          this.router.navigate(['/home']); // Navigate to home
+          this.router.navigate(['/user']); // Navigate to home
           // const storedUserId = this.storageService.getLocalVariable('userId');
 
         },

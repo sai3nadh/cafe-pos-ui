@@ -216,7 +216,8 @@
           Total: ₹{{ getTotal().toFixed(2) }}
         </div>
     
-        <button (click)="checkout()">Checkout</button>
+        <!-- <button (click)="checkout()">Checkout</button> -->
+        <button (click)="checkout()" [disabled]="cart.length === 0">Checkout</button>
     </div>
     
 

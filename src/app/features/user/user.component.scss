@@ -92,7 +92,7 @@ body {
   .items-section {
     margin-top: 100px; /* Ensure it starts below the fixed categories */
     overflow-y: auto;
-    max-height: calc(100vh - 150px); /* Limit item section height to fit within viewport */
+    // max-height: calc(100vh - 150px); /* Limit item section height to fit within viewport */
   }
   
   /* Item Cards */
@@ -179,7 +179,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow-y: scroll; /* Make it scrollable if content overflows */
-    max-height: 90vh; /* Ensure the cart content does not exceed the viewport height */
+    // max-height: 90vh; /* Ensure the cart content does not exceed the viewport height */
   }
   
   /* Cart Total Section */
@@ -235,6 +235,12 @@ body {
     text-align: left;  /* Aligns the total to the right */
   }
   
+.right-section  button:disabled {
+    background-color: #ccc;  /* Grey out the button */
+    color: #777;  /* Light grey text */
+    cursor: not-allowed; /* Prevent clicking */
+  }
+ 
   /* Cart Checkout Button */
   .right-section button {
     width: 100%;
@@ -278,7 +284,7 @@ body {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    height: 85vh;
+    height: 90vh; 
     overflow: -moz-scrollbars-none; /* For Firefox */
     overflow: hidden;
     scrollbar-width: none; /* For Firefox */
@@ -1241,7 +1247,7 @@ i.fas.fa-trash-alt {
   border-radius: 8px;
   border: 1px solid #ccc;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  max-height: calc(100vh - 40px);
+  // max-height: calc(100vh - 40px);
   overflow-y: auto;  /* Allow scrolling if the content exceeds the height */
 }
 

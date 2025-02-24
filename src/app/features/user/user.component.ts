@@ -21,6 +21,7 @@ import { OrderDto, OrderService } from '../home/order.service'; // Import the se
 import { CategoryService } from '../home/category.service'; // Import the service
 import { StorageService } from '../services/storage.service';
 import { ElementRef, HostListener } from '@angular/core';
+import { WebSocketService } from '../services/websocket.service';
 
 interface Category {
   id: number;
@@ -88,14 +89,21 @@ export class UserComponent {
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
     ,private elRef: ElementRef
+    ,private wsService: WebSocketService
   ) {}
   ngOnInit() {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
+    const userId = this.storageService.getLocalVariable('userId');
+    const username = this.storageService.getLocalVariable('username');
+
+    if (!(userId && username)) {
+      // If user data exists, redirect to home
+      this.router.navigate(['/login']);
+    }
     this.editOrderId=-1;
     if(localStorage.getItem('zoomLevel')!=null){
-      alert("set zoom level");
     document.body.style.zoom = `${Number(localStorage.getItem('zoomLevel')) * 100}%`;
   }
      // Find the category with the name "Beverages"
@@ -105,10 +113,65 @@ export class UserComponent {
   // if (selectedCategory) {
   //   this.selectCategory(selectedCategory);
   // }
-
+  // this.testPrint();
   this.loadCat();
+// //below to connect rabbit
+//   this.wsService.connect(); // ✅ Ensure WebSocket connects on init
+//   this.sendOrder();
+
+// Call this function to test the printer
+// this.testPrint();
   }
-    
+ 
+  order: string = "Order#123"; // Example order
+
+  sendOrder() {
+    console.log("🔍 Sending Order:", this.order);
+    this.wsService.sendMessage(this.order);
+  }
+
+//    testPrint() {
+// alert("call test method");
+//     const printerIp = "192.168.0.2"; // Replace with your printer's IP
+//     const printerPort = 9100; // Default network printer port
+
+//     const socket = new WebSocket(`http://${printerIp}:${printerPort}`);
+
+//     socket.onopen = function () {
+//         console.log("✅ Connection to printer established!");
+
+//         // ESC/POS Commands (Basic Test Print)
+//         let printData = "\x1B\x40"; // Initialize printer
+//         printData += "\x1B\x21\x30"; // Set large bold font
+//         printData += "CAFE SISILI\n"; // Print a test title
+//         printData += "\x1B\x21\x00"; // Reset font
+//         printData += "Test Print Successful!\n";
+//         printData += "\n\n";
+//         printData += "\x1D\x56\x00"; // Cut paper
+
+//         // Send data as an ArrayBuffer
+//         socket.send(new TextEncoder().encode(printData));
+
+//         setTimeout(() => {
+//             socket.close();
+//             console.log("🔌 Connection closed.");
+//         }, 2000);
+//     };
+
+//     socket.onerror = function (error) {
+//         console.error("❌ Printer connection failed!", error);
+//     };
+
+//     socket.onclose = function () {
+//         console.log("🔌 Connection to printer closed.");
+//     };
+// }
+
+
+
+  ngOnDestroy() {
+    this.wsService.disconnect(); // ✅ Disconnect WebSocket when leaving
+  }
   loadCat() {
     this.categoryService.loadCategories().subscribe(
       (data: ApiCategory[]) => {
@@ -515,6 +578,7 @@ filteredUsers(): User[] {
           this.closeCheckoutModal();
           this.cart = []; // Clear the cart after order creation
           this.previousCart = [];
+          this.guestName = "";
         },
         error => {
           console.error('Error creating order:', error);
@@ -522,6 +586,7 @@ filteredUsers(): User[] {
       );
       this.cart = []; // Clear the cart after order creation
           this.previousCart = [];
+          this.guestName='';
     }else{
     // Create the order object with the required format
     const orderData = {
@@ -539,11 +604,32 @@ filteredUsers(): User[] {
 
     // Call the service to create the order
     this.orderService.createOrder(orderData).subscribe(
-      response => {
+      (response: any) => {
         console.log('Order created successfully:', response);
+        // Fire and forget the print request
+        // Fire and forget the print order request
+        this.orderService.printOrder(response.id).subscribe();
+        // console.log('Order created successfully:-- id', response.id);
+        // const createdOrder = {
+        //   orderId: response.orderId,
+        //   orderNumber: response.orderNumber,
+        //   total: response.total,
+        //   orderItems: response.orderItems.map((item: any) => ({
+        //     name: item.menuItem.name, // Extract item name
+        //     quantity: item.quantity,
+        //     price: item.price
+        //   }))
+        // };
+
+
+        // console.log("abcc");
+        // console.log(createdOrder);
+        // this.printReceiptOld();
+        // this.printReceipt(response);
         this.closeCheckoutModal();
         this.cart = []; // Clear the cart after order creation
         this.previousCart = [];
+
       },
       error => {
         console.error('Error creating order:', error);
@@ -551,6 +637,157 @@ filteredUsers(): User[] {
     );
   }
   }
+
+//   printReceipt(order : Order) {
+//     alert("🖨️ Printing Order: " + order.id);
+
+//     const printerIp = "192.168.0.2"; // Replace with your printer's IP
+//     const printerPort = 9100; // Default network printer port
+
+//     const socket = new WebSocket(`ws://${printerIp}:${printerPort}`);
+
+//     socket.onopen = function () {
+//         console.log("✅ Connection to printer established!");
+
+//         // ESC/POS Commands (Basic Print)
+//         let printData = "\x1B\x40"; // Initialize printer
+//         printData += "\x1B\x21\x30"; // Set large bold font
+//         printData += "CAFE SISILI\n"; // Print cafe name
+//         printData += "\x1B\x21\x00"; // Reset font
+//         printData += `Order ID: ${order.id || "N/A"}\n`;
+//         printData += "--------------------------\n";
+
+//         // Print Order Items
+//         order.items.forEach((item : Item) => {
+//             printData += `${item.id} x${item.qty} - ${item.price}\n`;
+//         });
+
+//         printData += "--------------------------\n";
+//         printData += `Total: ₹${order.total}\n`;
+//         printData += "\n\n";
+//         printData += "\x1D\x56\x00"; // Cut paper
+
+//         // Send data to printer
+//         socket.send(new TextEncoder().encode(printData));
+
+//         setTimeout(() => {
+//             socket.close();
+//             console.log("🔌 Connection closed.");
+//         }, 2000);
+//     };
+
+//     socket.onerror = function (error) {
+//         console.error("❌ Printer connection failed!", error);
+//     };
+
+//     socket.onclose = function () {
+//         console.log("🔌 Connection to printer closed.");
+//     };
+// }
+
+// printReceiptOldd() {
+//   alert("dfadfd");
+//   // 🔹 Mock order data
+//   const order = {
+//     orderId: 999, 
+//     orderNumber: "200225118",
+//     total: 80,
+//     status: "Pending",
+//     items: [
+//       { id: 14, name: "Tea SP", qty: 4, price: 20 }
+//     ]
+//   };
+//   alert("🖨️ Printing Order: " + order.orderId);
+
+//   // 🔹 Replace with your printer's IP and port
+//   const printerIp = "192.168.0.2"; // Change to your actual printer IP
+//   const printerPort = 9100; // Default port for network receipt printers
+
+//   // 🔹 Create a WebSocket connection
+//   // const socket = new WebSocket(`ws://${printerIp}:${printerPort}`);
+//   const socket = new WebSocket(`${printerIp}:${printerPort}`);
+//   console.log("Connection to printer established!22");
+
+//   socket.onopen = function () {
+//       console.log("Connection to printer established!");
+
+//       // 🔹 ESC/POS Print Commands (Format Receipt)
+//       let printData = "\x1B\x40"; // Initialize printer
+//       printData += "\x1B\x21\x30"; // Set large bold font
+//       printData += "CAFE SISILI\n"; // Print cafe name
+//       printData += "\x1B\x21\x00"; // Reset font
+//       printData += `Order ID: ${order.orderNumber.substring(order.orderNumber.length - 3)}\n`;
+//       printData += "--------------------------\n";
+
+//       // 🔹 Print Order Items
+//       order.items.forEach((item: any) => {
+//           printData += `${item.name} x${item.qty} - ₹${item.price * item.qty}\n`;
+//       });
+
+//       printData += "--------------------------\n";
+//       printData += `Total: ₹${order.total}\n`;
+//       printData += "\n\n";
+//       printData += "\x1D\x56\x00"; // Cut paper
+
+//       // 🔹 Send data to printer
+//       socket.send(new TextEncoder().encode(printData));
+
+//       setTimeout(() => {
+//           socket.close();
+//           alert("closeeee");
+//           console.log("🔌 Connection closed.");
+//       }, 2000);
+//   };
+
+//   socket.onerror = function (error) {
+//       console.error("❌ Printer connection failed!", error);
+//       alert("⚠️ Failed to connect to printer. Check the network.");
+//   };
+
+//   socket.onclose = function () {
+//       console.log("🔌 Connection to printer closed.");
+//   };
+// }
+
+//   printReceiptOld() {
+//     alert("🖨️ Simulating Order Print...");
+
+//     // 🔹 Mock order data
+//     const order = {
+//       orderId: 999, 
+//       orderNumber: "200225118",
+//       total: 80,
+//       status: "Pending",
+//       items: [
+//         { id: 14, name: "Tea SP", qty: 4, price: 20 }
+//       ]
+//     };
+
+//     console.log("✅ Printing Order:", order);
+
+//     // 🔹 ESC/POS Formatted Print Data (Simulated)
+//     let printData = "\x1B\x40"; // Initialize printer
+//     printData += "\x1B\x21\x30"; // Set large bold font
+//     printData += "CAFE SISILI\n"; // Print cafe name
+//     printData += "\x1B\x21\x00"; // Reset font
+//     printData += `Order ID: ${order.orderNumber.substring(order.orderNumber.length - 3)}\n`;
+//     printData += "--------------------------\n";
+
+//     // 🔹 Print Order Items
+//     order.items.forEach((item) => {
+//         printData += `${item.name} x${item.qty} - ₹${item.price * item.qty}\n`;
+//     });
+
+//     printData += "--------------------------\n";
+//     printData += `Total: ₹${order.total}\n`;
+//     printData += "\n\n";
+//     printData += "\x1D\x56\x00"; // Cut paper
+
+//     console.log("🖨️ Print Data:", printData);
+
+//     alert("✅ Mock Print Complete!");
+//   }
+
 
   // Handle Partial Pay
   confirmPartialPay() {
@@ -585,8 +822,8 @@ filteredUsers(): User[] {
 
   goToHome() {
     this.cart=[];
-    console.log('Going to Drafts...');
-    this.router.navigate(['/home']);
+    // console.log('Going to Drafts...');
+    this.router.navigate(['/user']);
     this.closeDropdown();
   }
 

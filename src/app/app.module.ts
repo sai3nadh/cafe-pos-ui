@@ -14,6 +14,7 @@ import { routes } from './app.routes'; // Import the routes
 import { provideHttpClient } from '@angular/common/http'; // <-- Use provideHttpClient() instead
 import { EditMenuComponent } from './features/edit-menu/edit-menu.component';
 import { environment } from '../environments/environment';
+import { WebSocketService } from './features/services/websocket.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { environment } from '../environments/environment';
 
   ],
   providers: [    
+    WebSocketService,
     provideHttpClient() // <-- Provide HttpClient here
   ],
   bootstrap: [AppComponent]
