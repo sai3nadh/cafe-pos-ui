@@ -643,7 +643,8 @@ filteredUsers(): User[] {
         menuItemId: item.id,
         quantity: item.qty || 1,
         price: item.price,
-        kitchen:item.kitchen
+        kitchen:item.kitchen,
+        name:item.name
       }))
     };
 
@@ -677,7 +678,7 @@ filteredUsers(): User[] {
 
     if (response && response.orderId) {
       // Create a new variable for orderId
-      const newOrderId = response.orderId;
+      const newOrderId = response.orderNumber.slice(-3);
     
       // Use 'let' to allow modification of orderData
       let updatedOrderData = { 
@@ -689,7 +690,17 @@ filteredUsers(): User[] {
       // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
       //   ...item,
       //   orderId: newOrderId // Assigning the same orderId to all items
+        
       // }));
+
+      // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
+      //   ...item,
+      //   orderId: newOrderId,  // Assign the same orderId to all items
+      //   name: item.name       // Keep the name from the original cart item
+      // }));
+
+      
+      
     
       // Send the updated orderData via WebSocket
       this.wsService.sendAndPublishOrder(JSON.stringify(updatedOrderData));

@@ -6,7 +6,7 @@ import { Client } from '@stomp/stompjs';
 })
 export class WebSocketService {
   private stompClient!: Client;
-  private readonly serverUrl = "ws://34.41.30.134:15674/ws";  // RabbitMQ WebSocket URL
+  private readonly serverUrl = "wss://34.41.30.134:15675/ws";  // RabbitMQ WebSocket URL
   private readonly queueName = "/queue/ordersb";  // ✅ FIXED
 
   constructor() { }
