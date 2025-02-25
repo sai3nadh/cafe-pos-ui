@@ -34,8 +34,18 @@ interface Item {
   category: number;
   price: number;
   qty?: number;
+  kitchen: boolean;
 }
 
+
+// interface ItemKitchen {
+//   id: number;
+//   name: string;
+//   category: number;
+//   price: number;
+//   qty?: number;
+//   kitchen: boolean;
+// }
 
 interface User {
   id: number;
@@ -125,11 +135,11 @@ export class UserComponent {
   //   item: "Coffee",
   //   quantity: 2
   // }));
-  this.wsService.sendAndPublishOrder(JSON.stringify({
-    orderId: 123,
-    item: "Coffee",
-    quantity: 2
-  }));
+  // this.wsService.sendAndPublishOrder(JSON.stringify({
+  //   orderId: 123,
+  //   item: "Coffee",
+  //   quantity: 2
+  // }));
 
   // this.wsService.subscribeToOrders();
 
@@ -205,11 +215,28 @@ export class UserComponent {
             id: item.menuItemId,
             name: item.name,
             category: cat.categoryId, // Assign the correct category
-            price: item.price
+            price: item.price,
+            kitchen: item.kitchenItem
           }))
         );
 
         console.log('Items loaded:', this.items);
+
+        
+        // // ✅ Step 2: Extract and Store Items from API
+        // this.itemsKitchen = data.flatMap(cat =>
+        //   cat.menuItems.map(itemsKitchen => ({
+        //     id: itemsKitchen.menuItemId,
+        //     name: itemsKitchen.name,
+        //     category: cat.categoryId, // Assign the correct category
+        //     price: itemsKitchen.price,
+        //     kitchen: itemsKitchen.kitchenItem
+        //   }))
+        // );
+        // console.log('Items loaded: kitchenn', this.itemsKitchen);
+
+       
+
         
         // Select default category if necessary
         // const selectedCategory = this.categories.find(cat => cat.name === 'Beverages');
@@ -232,6 +259,7 @@ export class UserComponent {
   }
   
   items: Item[] = [];
+  // itemsKitchen: ItemKitchen[] = [];
 
  // Define showUsers to control the visibility of user list
  showUsers: boolean = false;
@@ -614,7 +642,8 @@ filteredUsers(): User[] {
         orderId: 0, // Set to the appropriate order ID if needed
         menuItemId: item.id,
         quantity: item.qty || 1,
-        price: item.price
+        price: item.price,
+        kitchen:item.kitchen
       }))
     };
 
@@ -624,7 +653,7 @@ filteredUsers(): User[] {
         console.log('Order created successfully:', response);
         // Fire and forget the print request
         // Fire and forget the print order request
-        this.orderService.printOrder(response.orderId).subscribe();
+        // this.orderService.printOrder(response.orderId).subscribe();
         // console.log('Order created successfully:-- id', response.id);
         // const createdOrder = {
         //   orderId: response.orderId,
@@ -637,6 +666,50 @@ filteredUsers(): User[] {
         //   }))
         // };
 
+        // Check if the response contains an orderId
+    // if (response && response.orderId) {
+    //   // Update orderData with the received orderId
+    //   orderData.orderItems = orderData.orderItems.map(item => ({
+    //     ...item,
+    //     orderId: response.orderId  // Assigning the received orderId
+    //   }));
+    // }
+
+    if (response && response.orderId) {
+      // Create a new variable for orderId
+      const newOrderId = response.orderId;
+    
+      // Use 'let' to allow modification of orderData
+      let updatedOrderData = { 
+        ...orderData, 
+        orderId: newOrderId // Assign orderId at the top level
+      };
+    
+      // // Assign orderId inside each order item
+      // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
+      //   ...item,
+      //   orderId: newOrderId // Assigning the same orderId to all items
+      // }));
+    
+      // Send the updated orderData via WebSocket
+      this.wsService.sendAndPublishOrder(JSON.stringify(updatedOrderData));
+      console.log('Sent Order Data via WebSocket:', updatedOrderData);
+    }
+    
+    
+    
+    // Send the updated orderData via WebSocket
+    // this.wsService.sendAndPublishOrder(JSON.stringify(orderData));
+    // console.log('Sent Order Data via WebSocket:', orderData);
+    
+
+    
+
+  // Send the whole updated orderData via WebSocket
+  // this.wsService.sendAndPublishOrder(JSON.stringify(orderData));
+  // console.log('Sent Order Data via WebSocket:', orderData);
+
+
 
         // console.log("abcc");
         // console.log(createdOrder);
@@ -648,7 +721,7 @@ filteredUsers(): User[] {
 
       },
       error => {
-        this.orderService.printOrder(66).subscribe();
+        // this.orderService.printOrder(66).subscribe();
      
         console.error('Error creating order:', error);
       }

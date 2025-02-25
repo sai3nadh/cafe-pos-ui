@@ -8,6 +8,7 @@ export interface OrderItemDto {
   price: number;      // Price of the menu item
   category: number;   // Category id or code
   qty: number;        // Quantity ordered
+  kitchen: boolean;
 }
 
 export interface OrderDto {
