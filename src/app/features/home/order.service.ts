@@ -53,9 +53,9 @@ export class OrderService {
     // Make a PUT request to complete the order
     return this.http.put(`${this.apiUrlCompleteOrder}/${orderId}/complete`, {});
   }
-  // ✅ New method to print order
-  printOrder(orderId: number): Observable<any> {
-    console.log(`${this.apiUrlPrintOrder}/${orderId}`);
-    return this.http.post(`${this.apiUrlPrintOrder}/${orderId}`, {});
-  }
+  // // ✅ New method to print order
+  // printOrder(orderId: number): Observable<any> {
+  //   console.log(`${this.apiUrlPrintOrder}/${orderId}`);
+  //   return this.http.post(`${this.apiUrlPrintOrder}/${orderId}`, {});
+  // }
 }

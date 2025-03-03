@@ -637,6 +637,7 @@ filteredUsers(): User[] {
       userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
       status: 'Pending', // Status can be adjusted based on your system's logic
       total: totalAmount,
+      amountPaid:this.partialPayAmount,
       customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
       orderItems: this.cart.map(item => ({
         orderId: 0, // Set to the appropriate order ID if needed
@@ -676,36 +677,38 @@ filteredUsers(): User[] {
     //   }));
     // }
 
-    if (response && response.orderId) {
-      // Create a new variable for orderId
-      const newOrderId = response.orderNumber.slice(-3);
+
+    // below is actually good till 710 line -- this is RabittMQ sending msgs
+    // if (response && response.orderId) {
+    //   // Create a new variable for orderId
+    //   const newOrderId = response.orderNumber.slice(-3);
     
-      // Use 'let' to allow modification of orderData
-      let updatedOrderData = { 
-        ...orderData, 
-        orderId: newOrderId // Assign orderId at the top level
-      };
+    //   // Use 'let' to allow modification of orderData
+    //   let updatedOrderData = { 
+    //     ...orderData, 
+    //     orderId: newOrderId // Assign orderId at the top level
+    //   };
     
-      // // Assign orderId inside each order item
-      // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
-      //   ...item,
-      //   orderId: newOrderId // Assigning the same orderId to all items
+    //   // // Assign orderId inside each order item
+    //   // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
+    //   //   ...item,
+    //   //   orderId: newOrderId // Assigning the same orderId to all items
         
-      // }));
+    //   // }));
 
-      // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
-      //   ...item,
-      //   orderId: newOrderId,  // Assign the same orderId to all items
-      //   name: item.name       // Keep the name from the original cart item
-      // }));
+    //   // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
+    //   //   ...item,
+    //   //   orderId: newOrderId,  // Assign the same orderId to all items
+    //   //   name: item.name       // Keep the name from the original cart item
+    //   // }));
 
       
       
     
-      // Send the updated orderData via WebSocket
-      this.wsService.sendAndPublishOrder(JSON.stringify(updatedOrderData));
-      console.log('Sent Order Data via WebSocket:', updatedOrderData);
-    }
+    //   // Send the updated orderData via WebSocket
+    //   this.wsService.sendAndPublishOrder(JSON.stringify(updatedOrderData));
+    //   console.log('Sent Order Data via WebSocket:', updatedOrderData);
+    // }
     
     
     
