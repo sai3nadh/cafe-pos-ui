@@ -126,7 +126,7 @@ export class UserComponent {
   // this.testPrint();
   this.loadCat();
 // //below to connect rabbit
-  this.wsService.connect(); // ✅ Ensure WebSocket connects on init
+  // this.wsService.connect(); // ✅ Ensure WebSocket connects on init
   // this.sendOrder();
   // console.log("subb ordddd");
  
@@ -196,7 +196,7 @@ export class UserComponent {
 
 
   ngOnDestroy() {
-    this.wsService.disconnect(); // ✅ Disconnect WebSocket when leaving
+    // this.wsService.disconnect(); // ✅ Disconnect WebSocket when leaving
   }
   loadCat() {
     this.categoryService.loadCategories().subscribe(
