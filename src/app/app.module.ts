@@ -18,11 +18,11 @@ import { WebSocketService } from './features/services/websocket.service';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
-    EditMenuComponent
+    // AppComponent,
+    // LoginComponent,
+    // RegisterComponent,
+    // HomeComponent,
+    // EditMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +39,6 @@ import { WebSocketService } from './features/services/websocket.service';
     WebSocketService,
     provideHttpClient() // <-- Provide HttpClient here
   ],
-  bootstrap: [AppComponent]
+  // bootstrap: [AppComponent]
 })
 export class AppModule {}

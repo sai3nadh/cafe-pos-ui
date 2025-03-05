@@ -83,7 +83,7 @@
                 <div class="cart-item-details">
                   <label>Qty:</label>
                   <input type="number" [(ngModel)]="item.qty" (change)="updateCartItem(item)" size="4" />
-                  <span> x ₹{{ item.price?.toFixed(2) }} = ₹{{ (item.price ?? 0) * (item.qty ?? 0) | number: '1.2-2' }}</span>
+                  <span> x ₹{{ item.price.toFixed(2) }} = ₹{{ (item.price) * (item.qty ?? 0) | number: '1.2-2' }}</span>
                 </div>
               </div>
               <hr />

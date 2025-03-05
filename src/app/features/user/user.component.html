@@ -26,6 +26,7 @@
         <button >View Reports</button>
            <!-- Zoom Settings Button -->
            <button (click)="openZoomSettings()" class="bg-green-500 text-white px-4 py-2 rounded">Zoom Settings</button>
+           <button (click)="addCustomer()">Add Customer</button>
  
           <hr />
       <button (click)="logout()">Logout</button>
@@ -176,9 +177,9 @@
                             size="4" 
                             />
                             <span>
-                            x ₹{{ item.price?.toFixed(2) }} 
+                            x ₹{{ item.price.toFixed(2) }} 
                             = 
-                            ₹{{ (item.price ?? 0) * (item.qty ?? 0) | number:'1.2-2' }}
+                            ₹{{ (item.price ) * (item.qty ?? 0) | number:'1.2-2' }}
                             </span>
 
                         </div>

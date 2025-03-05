@@ -84,3 +84,40 @@ body {
     color: #007bff; /* Highlight text on hover */
   }
   
+
+
+  // form css
+  .form-container {
+    width: 50%;
+    font-size: xxx-large;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .form-container input {
+    width: 100%;
+    font-size: xxx-large;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form-container button {
+    background-color: #28a745;
+    margin-top: 50px;
+    font-size: xxx-large;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .form-container button:hover {
+    background-color: #218838;
+  }
+  

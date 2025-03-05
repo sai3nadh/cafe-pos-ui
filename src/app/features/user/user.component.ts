@@ -932,6 +932,14 @@ filteredUsers(): User[] {
     this.closeDropdown();
   }
 
+  
+  addCustomer() {
+
+    // console.log('Going to Drafts...');
+    this.router.navigate(['/add-customer']);
+    this.closeDropdown();
+  }
+
   goToDrafts() {
     this.closeDropdown();
     console.log('Going to Drafts...');
