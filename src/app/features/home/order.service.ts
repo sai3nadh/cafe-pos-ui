@@ -37,6 +37,8 @@ export class OrderService {
   private apiUrlCompleteOrder = `${environment.apiUrl}/orders`;  // Base URL for complete order endpoint
   private apiUrlPrintOrder = `http://192.168.0.4:8083/orders/printOrder`;  // Base URL for complete order endpoint
   private apiUrlGetCustomers = `${environment.apiUrl}/customers`; // Change this to your actual API endpoint
+  private url = `${environment.apiUrl}/orders/printOrder/`;
+
 
   constructor(private http: HttpClient
     , private storageService: StorageService
@@ -80,6 +82,12 @@ export class OrderService {
         }))
       )
     );
+  }
+
+    // Method to reprint an order
+  reprintOrder(orderId: number): Observable<any> {
+    const requestUrl = `${this.url}${orderId}/reprint`;  // Constructing the URL with orderId
+    return this.http.post<any>(requestUrl, {});  // Making the POST request with empty body
   }
 
   checkLogin(): boolean {

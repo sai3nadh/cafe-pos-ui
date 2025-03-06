@@ -384,7 +384,11 @@
           </div>
           <div class="button-section">
             <button class="btn-edit" (click)="editOrder(selectedOrder);toggleOrdersModalClose();">Edit</button>
-            <button class="btn-finish" *ngIf="selectedOrder.status === 'Pending'" (click)="finishOrder(selectedOrder)">Finish</button>
+            <button class="btn-finish" 
+            (click)="finishOrder(selectedOrder)" 
+            [disabled]="selectedOrder.status !== 'Pending'">Finish</button>
+            <br/>
+            <button class="btn-reprint" (click)="reprintOrder(selectedOrder)">Reprint</button>
           </div>
         </div>
       </div>

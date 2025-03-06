@@ -271,6 +271,21 @@ export class UserComponent {
     );
   }
 
+  reprintOrder(order: any): void {
+    console.log("Reprinting order with ID:", order.id);
+  
+    this.orderService.reprintOrder(order.id).subscribe(
+      (response) => {
+        console.log("Reprint successful", response);
+        // Handle success (e.g., show a success message, update the UI, etc.)
+      },
+      (error) => {
+        console.error('Error reprinting order', error);
+        // Handle error (e.g., show an error message to the user)
+      }
+    );
+  }
+  
   // loadCustomersold() {
   //   this.orderService.getCustomers().subscribe(
   //     (data) => {
