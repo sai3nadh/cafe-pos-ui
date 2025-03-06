@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Customer } from '../user/user.component';
 import { map } from 'rxjs/operators';
+import { StorageService } from '../services/storage.service';
+import { Router } from '@angular/router';
 
 export interface OrderItemDto {
   id: number;         // Unique identifier for the menu item
@@ -36,7 +38,10 @@ export class OrderService {
   private apiUrlPrintOrder = `http://192.168.0.4:8083/orders/printOrder`;  // Base URL for complete order endpoint
   private apiUrlGetCustomers = `${environment.apiUrl}/customers`; // Change this to your actual API endpoint
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient
+    , private storageService: StorageService
+    ,private router: Router
+  ) {}
 
   // Method to create an order with items
   createOrder(orderData: any): Observable<any> {
@@ -75,5 +80,17 @@ export class OrderService {
         }))
       )
     );
+  }
+
+  checkLogin(): boolean {
+    const userId = this.storageService.getLocalVariable('userId');
+    const username = this.storageService.getLocalVariable('username');
+
+    if (!(userId && username)) {
+      // If user data does not exist, redirect to login page
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
   }
 }

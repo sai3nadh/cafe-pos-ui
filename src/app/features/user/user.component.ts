@@ -110,16 +110,17 @@ export class UserComponent {
     ,private wsService: WebSocketService
   ) {}
   ngOnInit() {
+    this.orderService.checkLogin();
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
-    const userId = this.storageService.getLocalVariable('userId');
-    const username = this.storageService.getLocalVariable('username');
+    // const userId = this.storageService.getLocalVariable('userId');
+    // const username = this.storageService.getLocalVariable('username');
 
-    if (!(userId && username)) {
-      // If user data exists, redirect to home
-      this.router.navigate(['/login']);
-    }
+    // if (!(userId && username)) {
+    //   // If user data exists, redirect to home
+    //   this.router.navigate(['/login']);
+    // }
     this.editOrderId=-1;
     if(localStorage.getItem('zoomLevel')!=null){
     document.body.style.zoom = `${Number(localStorage.getItem('zoomLevel')) * 100}%`;

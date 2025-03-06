@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { CustomerService } from './add-customer.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxImageCompressService } from 'ngx-image-compress';  // Import the Image Compress Service
+import { OrderService } from '../home/order.service';
 
 @Component({
   selector: 'app-add-customer',
@@ -35,7 +36,7 @@ export class AddCustomerComponent {
     //  private orderService: OrderService
        private storageService: StorageService,
        private imageCompress: NgxImageCompressService  // Inject Image Compress Service
-
+       ,private orderService: OrderService
     //  private categoryService : CategoryService
     //   ,private elRef: ElementRef
     //   ,private wsService: WebSocketService
@@ -51,6 +52,7 @@ export class AddCustomerComponent {
       });
     }
     ngOnInit() {
+      this.orderService.checkLogin();
     }
   // cart: Item[] = [];
 

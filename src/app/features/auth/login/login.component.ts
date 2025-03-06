@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { LoginService } from './login.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-login',
     imports: [
         FormsModule,
         RouterModule, // Import RouterModule here
+        CommonModule
     ],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
@@ -63,8 +65,8 @@ export class LoginComponent {
           // Check for different error status codes
           if (error.status === 401) {
             // Invalid credentials
-            alert("Invalid username or password");
-            this.loginError = 'Invalid username or password';
+            // alert("Invalid username or password");
+            this.loginError = 'Invalid username or password.. Please Try Again!!!';
           } else {
             // Other types of error
             this.loginError = 'An error occurred. Please try again later.';
@@ -75,7 +77,8 @@ export class LoginComponent {
         }
       );
     } else {
-      alert('Please enter a valid username and password!');
+      this.loginError = 'Please enter a valid username and password!';
+      // alert('Please enter a valid username and password!');
     }
   }
   

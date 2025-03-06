@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
 import { EditMenuService } from './edit-menu.service';
+import { OrderService } from '../home/order.service';
 interface MenuItem {
   menuItemId: number;
   name: string;
@@ -41,10 +42,12 @@ export class EditMenuComponent implements OnInit {
 
   constructor(private http: HttpClient,
     private editMenuService : EditMenuService
+   ,private orderService: OrderService
   ) {}
 
   ngOnInit() {
     this.loadCategories();
+    this.orderService.checkLogin();
   }
 
   loadCategories() {
