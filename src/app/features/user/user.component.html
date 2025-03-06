@@ -372,7 +372,8 @@
       </div>
       <div class="bottom-right">
         <div class="order-details-fixed" *ngIf="selectedOrder">
-          <h3>Order Items - #{{ selectedOrder.orderNumber | slice: -3}}</h3>
+          <h3 style="margin-bottom: 10px;">Order Items - #{{ selectedOrder.orderNumber | slice: -3}}</h3>
+          <h5 style="margin-top: 10px; margin-bottom: 5px; text-align: justify;">Time: {{selectedOrder.time}}</h5>
           <!-- <ul>
             <li *ngFor="let item of selectedOrder.items">
               {{ item.name }} - {{ item.qty }}
@@ -381,6 +382,12 @@
           <div *ngFor="let item of selectedOrder.items" class="item-row">
             <span class="item-name">{{ item.name }}</span>
             <span class="item-qty"> - {{ item.qty }}</span>
+          </div>
+
+          <div class="order-summary" style="text-align: right; font-weight: bold;">
+            <hr/>
+          <p><strong>Total:</strong> {{ selectedOrder.total | currency: 'INR' }}</p>
+          <p><strong>Pending Amount:</strong> {{ selectedOrder.total - selectedOrder.paidAmount | currency: 'INR' }}</p>
           </div>
           <div class="button-section">
             <button class="btn-edit" (click)="editOrder(selectedOrder);toggleOrdersModalClose();">Edit</button>

@@ -22,6 +22,7 @@ export interface OrderDto {
   status: string;           // Order status (e.g., "Pending", "Completed", etc.)
   orderNumber: string;      // Order number (e.g., "110220251001")
   total: number;            // Total cost of the order
+  paidAmount : number;
   items: OrderItemDto[];    // List of items in the order
 }
 
@@ -55,8 +56,11 @@ export class OrderService {
     return this.http.post(this.apiUrlEdit, orderData);
   }
 
+  // getOrdersForUserToday(userId: number): Observable<OrderDto[]> {
+  //   return this.http.get<OrderDto[]>(this.apiUrlGet+userId+"/today");
+  // }
   getOrdersForUserToday(userId: number): Observable<OrderDto[]> {
-    return this.http.get<OrderDto[]>(this.apiUrlGet+userId+"/today");
+    return this.http.get<OrderDto[]>(this.apiUrlGet+userId+"/todayPayments");
   }
 
    // Method to complete an order by ID
