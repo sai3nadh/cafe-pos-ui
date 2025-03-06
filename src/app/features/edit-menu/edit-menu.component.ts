@@ -25,7 +25,7 @@ interface Category {
     FormsModule, // To enable ngModel for form binding
     RouterModule, // To enable routerLink
     CommonModule, // Add CommonModule here to make ngFor and ngIf work
-    EditMenuComponent
+    // EditMenuComponent
 ],
   styleUrls: ['./edit-menu.component.css']
 })

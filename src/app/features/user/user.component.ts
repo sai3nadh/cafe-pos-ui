@@ -52,6 +52,13 @@ interface User {
   name: string;
   avatar: string;
 }
+
+export interface Customer {
+  customerId: number;
+  firstName: string;
+  image: string; // Base64 image string
+}
+
 // interface Item {
 //   id: number;
 //   name: string;
@@ -96,6 +103,7 @@ interface Order {
 })
 export class UserComponent {
   categories: Category[] = [];
+  customers: { id: number; name: string; avatar: string }[] = [];
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
     ,private elRef: ElementRef
@@ -125,6 +133,7 @@ export class UserComponent {
   // }
   // this.testPrint();
   this.loadCat();
+  this.loadCustomers() 
 // //below to connect rabbit
   // this.wsService.connect(); // ✅ Ensure WebSocket connects on init
   // this.sendOrder();
@@ -250,6 +259,53 @@ export class UserComponent {
     );
   }
 
+  loadCustomers() {
+    this.orderService.getCustomers().subscribe(
+      (data) => {
+        this.customers = data;
+      },
+      (error) => {
+        console.error('Error fetching customers', error);
+      }
+    );
+  }
+
+  // loadCustomersold() {
+  //   this.orderService.getCustomers().subscribe(
+  //     (data) => {
+  //       // Map over the data to add a fullName field
+  //       this.customers = data.map(customer => ({
+  //         ...customer,
+  //         fullName: `${customer.firstName} ${customer.lastName}`  // Combine firstName and lastName
+  //       }));
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching customers', error);
+  //     }
+  //   );
+  // }
+  // loadCustomers() {
+  //   this.orderService.getCustomers().subscribe(
+  //     (data) => {
+  //       this.customers = data.map(customer => {
+  //         const [firstName, ...lastNameParts] = customer.name.split(' ');
+  //         const lastName = lastNameParts.join(' ');
+          
+  //         return {
+  //           ...customer,
+  //           fullName: customer.name,
+  //           firstName,
+  //           lastName
+  //         };
+  //       });
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching customers', error);
+  //     }
+  //   );
+  // }
+  
+  
   
   // Example method to handle category selection
   selectCategory(category: Category) {
@@ -299,15 +355,15 @@ export class UserComponent {
   // ];
   
    // Define an array of users
-   users: User[] = [
-    { id: 1, name: 'John Doe', avatar: 'https://github.com/nutlope.png' },
-    { id: 2, name: 'Jane Doe', avatar: 'https://github.com/nutlope.png' },
-    { id: 3, name: 'Bob Smith', avatar: 'https://github.com/nutlope.png' },
-    { id: 4, name: 'Alice Johnson', avatar: 'https://github.com/nutlope.png' },
-    { id: 5, name: 'Mike Brown', avatar: 'https://github.com/nutlope.png' },
-    { id: 6, name: 'Emily Davis', avatar: 'https://github.com/nutlope.png' },
-    { id: 7, name: 'David Lee', avatar: 'https://github.com/nutlope.png' },
-  ];
+  //  users: User[] = [
+  //   { id: 1, name: 'John Doe', avatar: 'https://github.com/nutlope.png' },
+  //   { id: 2, name: 'Jane Doe', avatar: 'https://github.com/nutlope.png' },
+  //   { id: 3, name: 'Bob Smith', avatar: 'https://github.com/nutlope.png' },
+  //   { id: 4, name: 'Alice Johnson', avatar: 'https://github.com/nutlope.png' },
+  //   { id: 5, name: 'Mike Brown', avatar: 'https://github.com/nutlope.png' },
+  //   { id: 6, name: 'Emily Davis', avatar: 'https://github.com/nutlope.png' },
+  //   { id: 7, name: 'David Lee', avatar: 'https://github.com/nutlope.png' },
+  // ];
   // All orders fetched from the API
   allOrders: OrderDto[] = [];
   // Orders to display after filtering
@@ -432,9 +488,22 @@ toggleUsers() {
   this.showUsers = !this.showUsers;
 }
 // Method to filter users based on search term
-filteredUsers(): User[] {
-  return this.users.filter(user =>
-    user.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+// filteredUsers(): User[] {
+//   return this.users.filter(user =>
+//     user.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+//   );
+// }
+
+// Method to filter users based on search term
+// filteredUsers(): User[] {
+//   return this.users.filter(user =>
+//     user.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+//   );
+// }
+
+filteredCustomers(): any[] {
+  return this.customers.filter(customer =>
+    customer.name.toLowerCase().includes(this.searchTerm.toLowerCase())
   );
 }
 

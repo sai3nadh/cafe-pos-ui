@@ -143,8 +143,8 @@
                              [(ngModel)]="item.qty"
                              (change)="updateCartItem(item)"
                              size="4" />
-                      <span> x ₹{{ (item.price ?? 0).toFixed(2) }} =
-                            ₹{{ (item.price ?? 0) * (item.qty ?? 1) | number:'1.2-2' }}
+                      <span> x ₹{{ (item.price).toFixed(2) }} =
+                            ₹{{ (item.price ) * (item.qty ?? 1) | number:'1.2-2' }}
                       </span>
                     </div>
                     <hr />
@@ -410,13 +410,17 @@
       </div>
       <div class="users">
         
-      <div class="user" 
+      <!-- <div class="user" 
             *ngFor="let user of filteredUsers()" 
-            (click)="selectUser(user)">  <!-- Call your new method -->
+            (click)="selectUser(user)"> 
             <img [src]="user.avatar" alt="Avatar" class="user-avatar" />
             <p>{{ user.name }}</p>
+        </div> -->
+        <div class="user" *ngFor="let customer of filteredCustomers()"
+        (click)="selectUser(customer)">
+          <img [src]="customer.avatar" alt="{{ customer.name }}" class="user-avatar">
+          <p>{{ customer.name }}</p>
         </div>
-
       </div>
     </div>
   </div>

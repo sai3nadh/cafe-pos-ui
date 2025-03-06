@@ -169,7 +169,7 @@ export class AddCustomerComponent {
   }
 
   compressImage(base64Image: string): void {
-    this.imageCompress.compressFile(base64Image, -1, 10, 10).then((compressedBase64) => {
+    this.imageCompress.compressFile(base64Image, -1, 200, 200).then((compressedBase64) => {
       this.compressedImage = compressedBase64;
       this.compressedBlob = this.dataURItoBlob(compressedBase64);
       

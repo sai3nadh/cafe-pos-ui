@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Customer } from '../user/user.component';
+import { map } from 'rxjs/operators';
+
 export interface OrderItemDto {
   id: number;         // Unique identifier for the menu item
   name: string;       // Name of the menu item (e.g., "Coffee", "Tea")
@@ -31,6 +34,7 @@ export class OrderService {
   private apiUrlGet = `${environment.apiUrl}/orders/orders/user/`;
   private apiUrlCompleteOrder = `${environment.apiUrl}/orders`;  // Base URL for complete order endpoint
   private apiUrlPrintOrder = `http://192.168.0.4:8083/orders/printOrder`;  // Base URL for complete order endpoint
+  private apiUrlGetCustomers = `${environment.apiUrl}/customers`; // Change this to your actual API endpoint
 
   constructor(private http: HttpClient) {}
 
@@ -58,4 +62,18 @@ export class OrderService {
   //   console.log(`${this.apiUrlPrintOrder}/${orderId}`);
   //   return this.http.post(`${this.apiUrlPrintOrder}/${orderId}`, {});
   // }
+
+  getCustomers(): Observable<{
+    id: number; name: string; avatar: string 
+}[]> {
+    return this.http.get<Customer[]>(this.apiUrlGetCustomers).pipe(
+      map(customers =>
+        customers.map(customer => ({
+          id: customer.customerId,
+          name: customer.firstName,
+          avatar: `data:image/png;base64,${customer.image}` // Convert Base64 to Data URL
+        }))
+      )
+    );
+  }
 }
