@@ -91,6 +91,30 @@ interface Order {
   total: number;
   orderNumber: string;      // Order number (e.g., "110220251001")
 }
+
+export interface PurchaseItem {
+  id: number;
+  name: string;
+  price: number;
+  category: number;
+  qty: number;
+}
+
+export interface PurchaseRecord {
+  id: number;
+  time: string;
+  status: string;
+  items: PurchaseItem[];
+  total: number;
+  orderNumber: string;
+  paidAmount: number;
+}
+
+export interface PurchaseHistoryResponse {
+  [userId: number]: PurchaseRecord[];
+}
+
+
 @Component({
     selector: 'app-home',
     imports: [
@@ -104,6 +128,7 @@ interface Order {
 export class UserComponent {
   categories: Category[] = [];
   customers: { id: number; name: string; avatar: string }[] = [];
+  purchaseHistoryData: { [customerId: number]: PurchaseRecord[] } = {};
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
     ,private elRef: ElementRef
@@ -207,6 +232,8 @@ export class UserComponent {
 
   ngOnDestroy() {
     // this.wsService.disconnect(); // ✅ Disconnect WebSocket when leaving
+    this.loadPurchaseHistory();
+
   }
   loadCat() {
     this.categoryService.loadCategories().subscribe(
@@ -260,10 +287,50 @@ export class UserComponent {
     );
   }
 
+  loadPurchaseHistory() {
+    this.orderService.fetchPurchaseHistory().subscribe((data) => {
+      this.purchaseHistoryData = data;
+      console.log('Updated Purchase History:', this.purchaseHistoryData);
+    });
+  }
+
+  loadPurchaseHistorynew(userId: number) {
+    this.previousCart = this.purchaseHistoryData[userId] 
+        ? this.purchaseHistoryData[userId].flatMap(order => order.items) 
+        : [];
+      // this.purchaseCart = this.purchaseHistoryData[userId] 
+      //   ? this.purchaseHistoryData[userId].flatMap(order => order.items) 
+      //   : [];
+      this.purchaseHistory = this.purchaseHistoryData[userId] || [];
+
+    // this.orderService.fetchPurchaseHistory().subscribe((data) => {
+    //   this.purchaseHistoryData = data;
+  
+    //   // Fetch the selected user's purchase history
+    //   this.previousCart = this.purchaseHistoryData[userId] 
+    //     ? this.purchaseHistoryData[userId].flatMap(order => order.items) 
+    //     : [];
+  
+    //   console.log(`Updated Purchase History for User ${userId}:`, this.previousCart);
+    // });
+  }
+
+  getTotalPendingAmount(): number {
+    if (!this.purchaseHistory || this.purchaseHistory.length === 0) {
+      return 0;
+    }
+  
+    return this.purchaseHistory
+      .map(order => order.total - order.paidAmount) // Calculate pending for each order
+      .reduce((acc, pending) => acc + pending, 0); // Sum up all pending amounts
+  }
+  
+  
   loadCustomers() {
     this.orderService.getCustomers().subscribe(
       (data) => {
         this.customers = data;
+        this.loadPurchaseHistory()
       },
       (error) => {
         console.error('Error fetching customers', error);
@@ -468,6 +535,7 @@ export class UserComponent {
       this.cart=[];
       this.guestName="";
       this.editOrderId=-1;
+      this.selectedUser =null;
     }
 
   // Filter the already fetched orders based on the selected status
@@ -501,6 +569,7 @@ usersmenu() {
 }
 // Method to toggle user list visibility
 toggleUsers() {
+  this.loadPurchaseHistory();
   this.showUsers = !this.showUsers;
 }
 // Method to filter users based on search term
@@ -543,6 +612,8 @@ filteredCustomers(): any[] {
   // Somewhere near other properties
   // previousCart: Item[] = [];
   previousCart: HistoricalItem[] = [];
+  purchaseCart: PurchaseItem[] = [];
+  purchaseHistory: PurchaseRecord[] = []; // New variable for storing full orders
 
   // selectCategory(category: Category) {
   //   this.selectedCategory = category;
@@ -691,7 +762,8 @@ filteredCustomers(): any[] {
         userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
         status: 'Pending', // Status can be adjusted based on your system's logic
         total: totalAmount,
-        customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
+        // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
+        customerId: this.selectedUser ? this.selectedUser.id : undefined,
         orderItems: this.cart.map(item => ({
           orderId: this.editOrderId, // Set to the appropriate order ID if needed
           menuItemId: item.id,
@@ -723,7 +795,8 @@ filteredCustomers(): any[] {
       status: 'Pending', // Status can be adjusted based on your system's logic
       total: totalAmount,
       amountPaid:this.partialPayAmount,
-      customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
+      // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
+      customerId: this.selectedUser ? this.selectedUser.id : undefined,
       orderItems: this.cart.map(item => ({
         orderId: 0, // Set to the appropriate order ID if needed
         menuItemId: item.id,
@@ -817,7 +890,7 @@ filteredCustomers(): any[] {
         this.closeCheckoutModal();
         this.cart = []; // Clear the cart after order creation
         this.previousCart = [];
-
+        this.selectedUser =null;
       },
       error => {
         // this.orderService.printOrder(66).subscribe();
@@ -1075,8 +1148,11 @@ selectUser(user: User) {
   this.selectedUser = user;
 
   // Load the previous cart from your userCartHistoryMap (or from an API)
-  this.previousCart = this.userCartHistoryMap[user.id] || [];
+  // this.previousCart = this.userCartHistoryMap[user.id] || [];
 
+  // Load purchase history before setting the cart
+  this.loadPurchaseHistorynew(user.id);
+  
   // Optionally, clear the new cart or do other logic
   this.cart = [];
 

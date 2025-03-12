@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Customer } from '../user/user.component';
+import { Customer, PurchaseHistoryResponse, PurchaseRecord } from '../user/user.component';
 import { map } from 'rxjs/operators';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
@@ -39,7 +39,7 @@ export class OrderService {
   private apiUrlPrintOrder = `http://192.168.0.4:8083/orders/printOrder`;  // Base URL for complete order endpoint
   private apiUrlGetCustomers = `${environment.apiUrl}/customers`; // Change this to your actual API endpoint
   private url = `${environment.apiUrl}/orders/printOrder/`;
-
+  private undpaidOrders = `${environment.apiUrl}/orders/orders/unpaid-grouped-by-customer`;
 
   constructor(private http: HttpClient
     , private storageService: StorageService
@@ -104,5 +104,14 @@ export class OrderService {
       return false;
     }
     return true;
+  }
+
+     // Fetch purchase history from the API
+  fetchPurchaseHistory(): Observable<{ [userId: number]: PurchaseRecord[] }> {
+    return this.http.get<PurchaseHistoryResponse>(this.undpaidOrders).pipe(
+      map((response) => {
+        return response; // No transformation needed
+      })
+    );
   }
 }

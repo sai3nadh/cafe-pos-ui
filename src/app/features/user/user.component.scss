@@ -1436,6 +1436,12 @@ i.fas.fa-trash-alt {
   gap: 10px;
 }
 
+/* Container holding both left and right sections */
+.container {
+  display: flex;
+  height: 90vh; /* Make the entire container 90% of the viewport height */
+}
+
 .zoom-buttons button {
   font-size: 20px;
   padding: 10px;

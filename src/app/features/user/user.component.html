@@ -192,7 +192,7 @@
                 <hr />
               
                 <!-- PART 2: Previous Items (BELOW) -->
-                <div *ngIf="previousCart && previousCart.length > 0">
+                <div *ngIf="previousCart && previousCart.length > 0" hidden>
                   <h3>Previous Items for {{ guestName }}</h3>
                   <!-- Show total pending amount above the items -->
                   <p *ngIf="getPendingAmount() > 0">
@@ -208,7 +208,33 @@
                     </li>
                   </ul>
                 </div>
-              
+               <!-- Show total pending amount above the orders -->
+  <p *ngIf="getTotalPendingAmount() > 0">
+    <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
+  </p>
+
+                <div *ngIf="purchaseHistory && purchaseHistory.length > 0">
+                  <h4>Previous Orders for this Customer</h4>
+                
+                  <!-- Iterate through each order -->
+                  <div *ngFor="let order of purchaseHistory">
+                    <p><strong>Order ID:</strong> {{ order.id }}</p>
+                    <p><strong>Order Number:</strong> {{ order.orderNumber }}</p>
+                    <p><strong>Time:</strong> {{ order.time }}</p>
+                    <p><strong>Status:</strong> {{ order.status }}</p>
+                    <p><strong>Pending Amount:</strong> ₹{{ (order.total - order.paidAmount) | number:'1.2-2' }}</p>
+                
+                    <h5>Items:</h5>
+                    <ul>
+                      <li *ngFor="let item of order.items">
+                        {{ item.name }} (x{{ item.qty  }}) - ₹{{ (item.price * (item.qty )) | number:'1.2-2' }}
+                      </li>
+                    </ul>
+                    <hr />
+                  </div>
+                </div>
+                
+                
               </div>
 
               
@@ -217,6 +243,20 @@
           Total: ₹{{ getTotal().toFixed(2) }}
         </div>
     
+        <div class="totals">
+          <!-- Total amount including current cart and pending amount -->
+          <p>
+            <strong>
+              Grand Total: ₹{{ (getTotal() + getTotalPendingAmount()) | number:'1.2-2' }}
+            </strong>
+          </p>
+        
+          <!-- Show pending amount separately if it's greater than 0 -->
+          <p *ngIf="getTotalPendingAmount() > 0">
+            <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
+          </p>
+        </div>
+        
         <!-- <button (click)="checkout()">Checkout</button> -->
         <button (click)="checkout()" [disabled]="cart.length === 0">Checkout</button>
     </div>
