@@ -113,44 +113,7 @@
 
         <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" [disabled]="guestName.startsWith('edit Order - #')"/>
   
-            <!-- Cart Section -->
-            <div class="cart-items" hidden>
-
-                <!-- PART 1: Previous Items for this Customer -->
-                <div *ngIf="previousCart && previousCart.length > 0">
-                  <h4>Previous Items for this Customer</h4>
-                  <ul>
-                    <!-- Simple display of items: name, qty, price -->
-                    <li *ngFor="let item of previousCart">
-                      {{ item.name }} (x{{ item.qty ?? 1 }})
-                      - ₹{{ (item.price * (item.qty ?? 1)) | number:'1.2-2' }}
-                    </li>
-                  </ul>
-                  <hr />
-                </div>
-              
-                <!-- PART 2: New Items (leave your existing logic the same) -->
-                <ul>
-                  <li *ngFor="let item of cart; let i = index">
-                    <div class="cart-item-header">
-                      <h3>{{ item.name }}</h3>
-                      <i class="fas fa-trash-alt" (click)="confirmDeleteItem(i)"></i>
-                    </div>
-                    <!-- The rest of your original structure here... -->
-                    <div class="cart-item-details">
-                      <label>Qty:</label>
-                      <input type="number"
-                             [(ngModel)]="item.qty"
-                             (change)="updateCartItem(item)"
-                             size="4" />
-                      <span> x ₹{{ (item.price).toFixed(2) }} =
-                            ₹{{ (item.price ) * (item.qty ?? 1) | number:'1.2-2' }}
-                      </span>
-                    </div>
-                    <hr />
-                  </li>
-                </ul>
-              </div>      
+                 
               <div class="cart-items">
 
                 <!-- PART 1: New Items (TOP) -->
@@ -191,27 +154,11 @@
             
                 <hr />
               
-                <!-- PART 2: Previous Items (BELOW) -->
-                <div *ngIf="previousCart && previousCart.length > 0" hidden>
-                  <h3>Previous Items for {{ guestName }}</h3>
-                  <!-- Show total pending amount above the items -->
-                  <p *ngIf="getPendingAmount() > 0">
-                    <strong>Pending Amount: ₹{{ getPendingAmount() | number:'1.2-2' }}</strong>
-                  </p>
-              
-                  <ul>
-                    <li *ngFor="let item of previousCart">
-                      <!-- Show the status and price/qty -->
-                      {{ item.name }} 
-                      (x{{ item.qty ?? 1 }}, {{ item.status }}) 
-                      = ₹{{ (item.price * (item.qty ?? 1)) | number:'1.2-2' }}
-                    </li>
-                  </ul>
-                </div>
+                
                <!-- Show total pending amount above the orders -->
-  <p *ngIf="getTotalPendingAmount() > 0">
-    <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
-  </p>
+              <p *ngIf="getTotalPendingAmount() > 0">
+                <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
+              </p>
 
                 <div *ngIf="purchaseHistory && purchaseHistory.length > 0">
                   <h4>Previous Orders for this Customer</h4>
