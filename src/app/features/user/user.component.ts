@@ -13,7 +13,7 @@
 
 
 // == bleo old good
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
@@ -129,10 +129,19 @@ export class UserComponent {
   categories: Category[] = [];
   customers: { id: number; name: string; avatar: string }[] = [];
   purchaseHistoryData: { [customerId: number]: PurchaseRecord[] } = {};
+
+  isPopupOpen: boolean = false;
+  customerCheckoutPopup: boolean = false;
+  paymentOption: 'full' | 'partial' | null = null;
+  // selectedOrder: number | null = null;
+  customAmount: string = '0';
+
+  //pending order
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
     ,private elRef: ElementRef
     ,private wsService: WebSocketService
+    ,private cdr: ChangeDetectorRef
   ) {}
   ngOnInit() {
     this.orderService.checkLogin();
@@ -536,6 +545,8 @@ export class UserComponent {
       this.guestName="";
       this.editOrderId=-1;
       this.selectedUser =null;
+      this.previousCart =[];
+      this.purchaseHistory= [];
     }
 
   // Filter the already fetched orders based on the selected status
@@ -650,6 +661,10 @@ filteredCustomers(): any[] {
        this.closeAllModals();
 
      }
+     //on click of esc close the order checkout popup
+     if (event.key === 'Escape' && (this.isPopupOpen || this.customerCheckoutPopup)) {
+      this.handleCloseOrderPopup(); 
+    }
    }
 
    // Close all modals and dropdowns
@@ -727,7 +742,11 @@ filteredCustomers(): any[] {
 
   // Trigger Checkout Modal
   checkout() {
+    if(this.selectedUser != null){
+      this.customerCheckoutPopup = true;
+    }else{
     this.showCheckoutModal = true;
+    }
     this.closeDropdown();
   }
 
@@ -737,6 +756,7 @@ filteredCustomers(): any[] {
     this.partialPayMode = false;
     this.partialPayAmount = 0;
     this.isPartialAmountValid = false;
+    this.customerCheckoutPopup = false;
   }
 
   // // Handle Full Pay
@@ -752,7 +772,7 @@ filteredCustomers(): any[] {
   confirmFullPay() {
     const totalAmount = this.getTotal();
     console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
-    this.closeCheckoutModal();
+    
    
     if(this.editOrderId != -1){
 
@@ -795,6 +815,7 @@ filteredCustomers(): any[] {
       status: 'Pending', // Status can be adjusted based on your system's logic
       total: totalAmount,
       amountPaid:this.partialPayAmount,
+      paymentMethodId:1,
       // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
       customerId: this.selectedUser ? this.selectedUser.id : undefined,
       orderItems: this.cart.map(item => ({
@@ -807,8 +828,11 @@ filteredCustomers(): any[] {
       }))
     };
 
-    // Call the service to create the order
-    this.orderService.createOrder(orderData).subscribe(
+    console.log(JSON.stringify(orderData, null, 2));
+    console.log("tess"+orderData.amountPaid);
+    console.log("tess"+orderData.toString);
+    this.closeCheckoutModal();
+    this.orderService.createOrderPayment(orderData).subscribe(
       (response: any) => {
         console.log('Order created successfully:', response);
         // Fire and forget the print request
@@ -899,6 +923,98 @@ filteredCustomers(): any[] {
       }
     );
   }
+    // Call the service to create the order
+  //   this.orderService.createOrder(orderData).subscribe(
+  //     (response: any) => {
+  //       console.log('Order created successfully:', response);
+  //       // Fire and forget the print request
+  //       // Fire and forget the print order request
+  //       // this.orderService.printOrder(response.orderId).subscribe();
+  //       // console.log('Order created successfully:-- id', response.id);
+  //       // const createdOrder = {
+  //       //   orderId: response.orderId,
+  //       //   orderNumber: response.orderNumber,
+  //       //   total: response.total,
+  //       //   orderItems: response.orderItems.map((item: any) => ({
+  //       //     name: item.menuItem.name, // Extract item name
+  //       //     quantity: item.quantity,
+  //       //     price: item.price
+  //       //   }))
+  //       // };
+
+  //       // Check if the response contains an orderId
+  //   // if (response && response.orderId) {
+  //   //   // Update orderData with the received orderId
+  //   //   orderData.orderItems = orderData.orderItems.map(item => ({
+  //   //     ...item,
+  //   //     orderId: response.orderId  // Assigning the received orderId
+  //   //   }));
+  //   // }
+
+
+  //   // below is actually good till 710 line -- this is RabittMQ sending msgs
+  //   // if (response && response.orderId) {
+  //   //   // Create a new variable for orderId
+  //   //   const newOrderId = response.orderNumber.slice(-3);
+    
+  //   //   // Use 'let' to allow modification of orderData
+  //   //   let updatedOrderData = { 
+  //   //     ...orderData, 
+  //   //     orderId: newOrderId // Assign orderId at the top level
+  //   //   };
+    
+  //   //   // // Assign orderId inside each order item
+  //   //   // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
+  //   //   //   ...item,
+  //   //   //   orderId: newOrderId // Assigning the same orderId to all items
+        
+  //   //   // }));
+
+  //   //   // updatedOrderData.orderItems = updatedOrderData.orderItems.map(item => ({
+  //   //   //   ...item,
+  //   //   //   orderId: newOrderId,  // Assign the same orderId to all items
+  //   //   //   name: item.name       // Keep the name from the original cart item
+  //   //   // }));
+
+      
+      
+    
+  //   //   // Send the updated orderData via WebSocket
+  //   //   this.wsService.sendAndPublishOrder(JSON.stringify(updatedOrderData));
+  //   //   console.log('Sent Order Data via WebSocket:', updatedOrderData);
+  //   // }
+    
+    
+    
+  //   // Send the updated orderData via WebSocket
+  //   // this.wsService.sendAndPublishOrder(JSON.stringify(orderData));
+  //   // console.log('Sent Order Data via WebSocket:', orderData);
+    
+
+    
+
+  // // Send the whole updated orderData via WebSocket
+  // // this.wsService.sendAndPublishOrder(JSON.stringify(orderData));
+  // // console.log('Sent Order Data via WebSocket:', orderData);
+
+
+
+  //       // console.log("abcc");
+  //       // console.log(createdOrder);
+  //       // this.printReceiptOld();
+  //       // this.printReceipt(response);
+  //       this.closeCheckoutModal();
+  //       this.cart = []; // Clear the cart after order creation
+  //       this.previousCart = [];
+  //       this.selectedUser =null;
+  //     },
+  //     error => {
+  //       // this.orderService.printOrder(66).subscribe();
+     
+  //       console.error('Error creating order:', error);
+  //     }
+  //   );
+  // }
   }
 
 //   printReceipt(order : Order) {
@@ -1054,7 +1170,7 @@ filteredCustomers(): any[] {
 
   // Handle Partial Pay
   confirmPartialPay() {
-    this.partialPayMode = true;
+    this.partialPayMode = !this.partialPayMode;    
   }
 
   // Validate Partial Payment Amount
@@ -1066,8 +1182,7 @@ filteredCustomers(): any[] {
   // Submit Partial Pay
   submitPartialPay() {
     console.log(`Partial Payment Confirmed: ${this.partialPayAmount}, Type: ${this.selectedPaymentType}`);
-    this.closeCheckoutModal();
-    // Add your payment processing logic here
+    this.confirmFullPay();
   }
 
   // Example Function to Calculate Total
@@ -1232,5 +1347,179 @@ saveAndApplyZoom(): void {
 //     // document.body.style.zoom = event.target.value; // Apply zoom to the body content
 
 // }
+
+// cartItems = [
+//   { id: 1, name: 'Item 1', price: 25.00 },
+//   { id: 2, name: 'Item 2', price: 35.00 },
+//   { id: 3, name: 'Item 3', price: 40.00 }
+// ];
+
+unpaidOrders = this.purchaseHistoryData;
+// [
+//   { id: 1, orderId: 'ORD123456', date: '2023-10-01', time: '10:30 AM', pendingAmount: 60.00 },
+//   { id: 2, orderId: 'ORD123457', date: '2023-10-02', time: '11:45 AM', pendingAmount: 85.00 }
+// ];
+
+get cartAmount(): string {
+  // return
+  //  this.cart.reduce((acc, item) => acc + (item.price * (item.qty ?? 1)), 0);
+  const baseCartAmount = this.cart.reduce((acc, item) => acc + (item.price * (item.qty ?? 1)), 0);
+  // this.cartItems.reduce((total, item) => total + item.price, 0);
+  const totalCustomAmount = parseFloat(this.customAmount) || 0;
+  return (baseCartAmount + totalCustomAmount).toFixed(2);
+}
+
+get totalUnpaidOrders(): string {
+  // return "null"; 
+  return this.purchaseHistory
+      .map(order => order.total - order.paidAmount) // Calculate pending for each order
+      .reduce((acc, pending) => acc + pending, 0).toString(); // Sum up all pending amounts
+  // this.unpaidOrders.reduce((total, order) => total + order.pendingAmount, 0).toFixed(2);
+}
+
+handleOpenPopup(orderId: number): void {
+  // alert("order id -"+orderId);
+  this.isPopupOpen = true;
+  this.selectedOrder = orderId;
+}
+
+handleClosePopup(): void {
+  this.isPopupOpen = false;
+  this.paymentOption = null;
+  this.selectedOrder = null;
+}
+
+handlePaymentOption(option: 'full' | 'partial'): void {
+  this.paymentOption = option;
+  console.log("Selected Order Details:", this.selectedOrderDetails);
+  
+  const paymentData = {
+    orderId: this.selectedOrderDetails?.id,
+    amount: (this.selectedOrderDetails?.total ?? 0) -( this.selectedOrderDetails?.paidAmount ?? 0),
+    paymentMethodId:1
+  }
+
+  // console.log(JSON.stringify(orderData, null, 2));
+  // console.log("tess"+orderData.amountPaid);
+  // console.log("tess"+orderData.toString);
+  this.orderService.updateOrderPayment(paymentData).subscribe(
+    (response: any) => {
+      console.log('Order payment updated successfully:', response);
+      // Fire and forget the print request
+       // Remove the paid order from the user's unpaid orders list
+       if (this.selectedUser && this.selectedOrderDetails) {
+        this.removePaidOrder(this.selectedUser.id, this.selectedOrderDetails.id);
+      }
+      // this.getTotalPendingAmount();
+      // this.totalUnpaidOrders;
+      // Update the total unpaid orders after removal
+      // this.getTotalPendingAmount();
+      console.log('Updated Pending Amount:', this.getTotalPendingAmount());
+
+      // this.cdr.detectChanges(); // Manually trigger change detection
+
+      this.isPopupOpen = false;
+    },
+    error => {
+      // this.orderService.printOrder(66).subscribe();
+   
+      console.error('Error updating payment:', error);
+    }
+  );
+
+
+}
+
+handlePay(): void {
+  if (this.paymentOption && this.selectedOrder) {
+    alert(`Payment processed for Order ID ${this.selectedOrder} with ${this.paymentOption === 'full' ? 'Full Pay' : 'Partial Pay'}`);
+    this.handleClosePopup();
+  } else if (parseFloat(this.customAmount) > 0) {
+    alert(`Custom payment of $${parseFloat(this.customAmount).toFixed(2)} processed`);
+    this.customAmount = '0';
+  }
+}
+
+// get selectedOrderDetails() {
+//   return null;
+//   // return this.unpaidOrders.find(order => order.id === this.selectedOrder) || null;
+// }
+
+// Method to get orders for the selected user
+getUserOrders(userId: number): PurchaseRecord[] {
+  return this.purchaseHistoryData[userId] || [];
+}
+
+
+// This will fetch the order details for the selected order
+// This will fetch the order details for the selected order
+get selectedOrderDetails() {
+  // Ensure selectedUser is not null or undefined before accessing its id
+  if (this.selectedUser) {
+    return this.purchaseHistoryData[this.selectedUser.id]?.find(
+      order => order.id === this.selectedOrder
+    ) || null;
+  }
+  return null;  // Return null if selectedUser is not defined
+}
+
+selectedOrders: any[] = []; // Array to store selected orders
+
+    // Toggle selection of an order
+  toggleOrderSelection(order: any) {
+    const index = this.selectedOrders.findIndex(o => o.id === order.id);
+    if (index > -1) {
+      this.selectedOrders.splice(index, 1); // Remove if already selected
+    } else {
+      this.selectedOrders.push(order); // Add if not selected
+    }
+  }
+
+  // Function to handle payment for selected orders
+  handlePaySelectedOrders() {
+    if (this.selectedOrders.length === 0) return;
+    
+    // Here, handle the payment logic (API call, etc.)
+    console.log("Processing payment for orders:", this.selectedOrders);
+    
+    // Clear selected orders after payment
+    this.selectedOrders = [];
+  }
+
+    // Close modal if the overlay (background) is clicked
+    handleOverlayClick(event: MouseEvent) {
+      if (event.target === event.currentTarget) {
+        this.handleCloseOrderPopup();
+      }
+    }
+  
+    // Close modal method
+    handleCloseOrderPopup() {
+      this.isPopupOpen = false;
+      this.customerCheckoutPopup = false;
+    }
+
+    // removePaidOrder(userId: number, orderId: number): void {
+    //   // Find the user's purchase history and remove the order by ID
+    //   const userPurchaseHistory = this.purchaseHistoryData[userId];
+    //   // Filter out the paid order
+    //   this.purchaseHistoryData[userId] = userPurchaseHistory.filter(order => order.id !== orderId);
+    // }
+
+    removePaidOrder(userId: number, orderId: number): void {
+      // Find the user's purchase history (if you need to do any other logic with user data)
+      const userPurchaseHistory = this.purchaseHistoryData[userId];
+      
+      // Remove the paid order from the user's purchase history
+      this.purchaseHistoryData[userId] = userPurchaseHistory.filter(order => order.id !== orderId);
+      
+      // Now, filter the paid order from the global purchase history (if required)
+      this.purchaseHistory = this.purchaseHistory.filter(order => order.id !== orderId);
+    
+      // Optionally, you may want to call `getTotalPendingAmount()` to update the pending amount after removing the order.
+      this.getTotalPendingAmount();
+    }
+    
+    
 
 }

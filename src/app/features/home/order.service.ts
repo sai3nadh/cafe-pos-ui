@@ -33,6 +33,8 @@ export class OrderService {
 
 
   private apiUrlCreate = `${environment.apiUrl}/orders/createOrderWithItems`;
+  private apiUrlCreatePayment = `${environment.apiUrl}/orders/createOrderWithItemsPayment`;
+  private apiUrlUpdatePayment = `${environment.apiUrl}/payments/payPendingAmt`;
   private apiUrlEdit = `${environment.apiUrl}/orders/editOrderWithItems`;
   private apiUrlGet = `${environment.apiUrl}/orders/orders/user/`;
   private apiUrlCompleteOrder = `${environment.apiUrl}/orders`;  // Base URL for complete order endpoint
@@ -51,6 +53,16 @@ export class OrderService {
     return this.http.post(this.apiUrlCreate, orderData);
   }
 
+    // Method to create an order with items
+    createOrderPayment(orderData: any): Observable<any> {
+      return this.http.post(this.apiUrlCreatePayment, orderData);
+    }
+
+    // Method to create an order with items
+    updateOrderPayment(paymentData: any): Observable<any> {
+      return this.http.post(this.apiUrlUpdatePayment, paymentData);
+    }
+  
   // Method to create an order with items
   editOrder(orderData: any): Observable<any> {
     return this.http.post(this.apiUrlEdit, orderData);

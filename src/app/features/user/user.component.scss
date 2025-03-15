@@ -1457,3 +1457,156 @@ i.fas.fa-trash-alt {
 .zoom-buttons button:hover {
   background-color: #ddd;
 }
+
+
+.order-container {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  
+  flex-direction: column;
+}
+
+.cart-card, .totals-card, .orders-card {
+  width: 100%;
+  max-width:45%; 
+  // 400px;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.orders-card{
+  overflow-y: auto;
+}
+
+.card-header, .card-content{
+  font-size: xx-large;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.card-content {
+  text-align: center;
+}
+
+.cart-amount {
+  // font-size: 24px;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.input-field {
+  width: 50%;
+  padding: 8px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 12px;
+}
+
+.order-container btn{
+  padding: 18px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.6em;
+  margin-right: 10px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.orders-list .order-item  {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 4px solid #ddd;
+  font-size: xxx-large;
+}
+.order-item button  {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: xxx-large;
+}
+
+
+.order-id {
+  font-weight: bold;
+}
+
+.order-date {
+  font-size: 32px;
+  color: #666;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  width: 30%;
+  // max-width: 400px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: xxx-large;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.popup-content .popup-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+}
+
+.popup-footer {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16px;
+  font-size: xx-large;
+}

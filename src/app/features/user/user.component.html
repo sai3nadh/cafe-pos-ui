@@ -205,7 +205,7 @@
         </div>
         
         <!-- <button (click)="checkout()">Checkout</button> -->
-        <button (click)="checkout()" [disabled]="cart.length === 0">Checkout</button>
+        <button (click)="checkout()" [disabled]="cart.length === 0 && purchaseHistory.length === 0 ">Checkout</button>
     </div>
     
 
@@ -422,3 +422,256 @@
       </div>
     </div>
   </div>
+
+
+  <div *ngIf="customerCheckoutPopup" class="order-container" (click)="handleOverlayClick($event)" >
+    <!-- Cart Amount -->
+    <div class="cart-card" (click)="$event.stopPropagation()">
+      <div class="card-header">Checkout</div>
+      <div class="card-content">
+        <div class="cart-amount">Cart Amount ${{ cartAmount }}</div>
+        <!-- <div class="cart-amount">Cart Amount ${{ getTotal().toFixed(2)}}</div> -->
+        <!-- Custom Amount: <input
+          type="number"
+          [(ngModel)]="customAmount"
+          placeholder="Enter custom amount"
+          class="input-field"
+        /> -->
+      </div>
+       <!-- Toggle Buttons for Payment Type -->
+       <!-- <div class="payment-toggle">
+        <button 
+          [class.active]="selectedPaymentType === 'cash'" 
+          (click)="selectPaymentType('cash')" 
+          style="color: black; font-weight: bold;">
+          Cash
+        </button>
+        <button 
+          [class.active]="selectedPaymentType === 'upi'" 
+          style="color: black; font-weight: bold;"
+          (click)="selectPaymentType('upi')">
+          UPI
+        </button>
+      </div> -->
+  
+      <!--  <div class="modal-buttons"> -->
+        <!-- <button (click)="confirmFullPay()">sssssFull Pay</button> -->
+        <!-- <button (click)="confirmPartialPay()">Partial Pay</button> -->
+        <!-- <button (click)="closeCheckoutModal()">Cancel</button> -->
+      <!-- </div> -->
+  
+      <!-- Partial Pay Input -->
+      <!-- <div *ngIf="partialPayMode" class="partial-pay">
+        <label>
+          Enter Partial Amount:
+          <input type="number" [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
+        </label>
+        <button [disabled]="!isPartialAmountValid" (click)="submitPartialPay()"
+        style="font-weight: bold; font-size: x-large;">Submit</button>
+      </div> -->
+      <div class="card-footer" *ngIf="+cartAmount > 0" >
+        <button (click)="handlePaymentOption('full')" class="btn">Full Pay</button>
+        <button (click)="confirmPartialPay()" class="btn">Partial Pay</button>
+        <button (click)="handleClosePopup()" class="btn">Save</button>
+        <button (click)="closeCheckoutModal()" class="btn">Cancel</button>
+
+        <!-- <button (click)="handlePay()" class="btn">Pay Custom Amount</button> -->
+      </div>
+
+      <div *ngIf="partialPayMode" class="partial-pay">
+        <label>
+          Enter Partial Amount:
+          <input type="number" [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
+        </label>
+        <button [disabled]="!isPartialAmountValid" (click)="submitPartialPay()"
+        style="font-weight: bold; font-size: x-large;">Submit</button>
+      </div>
+        
+
+
+    </div>
+  
+    <div class="modal" (click)="$event.stopPropagation()" hidden>
+      <h3>Confirm Payment</h3>
+      <p>Amount: ₹{{ getTotal().toFixed(2) }}</p>
+  
+      <!-- Toggle Buttons for Payment Type -->
+      <div class="payment-toggle">
+        <button 
+          [class.active]="selectedPaymentType === 'cash'" 
+          (click)="selectPaymentType('cash')" 
+          style="color: black; font-weight: bold;">
+          Cash
+        </button>
+        <button 
+          [class.active]="selectedPaymentType === 'upi'" 
+          style="color: black; font-weight: bold;"
+          (click)="selectPaymentType('upi')">
+          UPI
+        </button>
+      </div>
+  
+      <div class="modal-buttons">
+        <button (click)="confirmFullPay()">Full Pay</button>
+        <button (click)="confirmPartialPay()">Partial Pay</button>
+        <button (click)="closeCheckoutModal()">Cancel</button>
+      </div>
+  
+      <!-- Partial Pay Input -->
+      <div *ngIf="partialPayMode" class="partial-pay">
+        <label>
+          Enter Partial Amount:
+          <input type="number" [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
+        </label>
+        <button [disabled]="!isPartialAmountValid" (click)="submitPartialPay()"
+        style="font-weight: bold; font-size: x-large;">Submit</button>
+      </div>
+    </div>
+
+    <!-- Totals -->
+    <div class="totals-card" (click)="$event.stopPropagation()">
+      <div class="card-header">Totals</div>
+      <div class="card-content">
+        <div class="totals-row" style="font-size: 1.4em; padding-bottom: 20px;">
+          <span>Final Amount &nbsp;</span>
+            ₹{{ (getTotal() + getTotalPendingAmount()) | number:'1.2-2' }}
+
+        </div>
+        <div class="totals-row" style="color: rgb(228, 1, 1);">
+          <span>Cart &nbsp;</span>
+          <span>{{ cartAmount | currency: 'INR'}}</span>
+          <span> &nbsp;&nbsp;&nbsp;  Pending Amount &nbsp;</span>
+          <span>{{ totalUnpaidOrders | currency: 'INR'}}</span>
+        </div>
+        <!-- <div class="totals-row">
+          <span>Total Unpaid Orders</span>
+          <span>${{ totalUnpaidOrders }}</span>
+        </div> -->
+      </div>
+    </div>
+  
+    <!-- Unpaid Orders List -->
+    <!-- <div class="orders-card">
+      <div class="card-header">Unpaid Orders</div>
+      <div class="orders-list">
+        <div *ngFor="let order of unpaidOrders" class="order-item">
+          <div>
+            <div class="order-id">{{ order.orderId }}</div>
+            <div class="order-date">{{ order.date }} · {{ order.time }}</div>
+          </div>
+          <div class="order-amount">${{ order.pendingAmount.toFixed(2) }}</div>
+          <button (click)="handleOpenPopup(order.id)" class="btn">Confirm</button>
+        </div>
+      </div>
+    </div>
+   -->
+   
+   <!-- Unpaid Orders List -->
+<div class="orders-card" *ngIf="selectedUser" (click)="$event.stopPropagation()" >
+  <div class="card-header">Unpaid Orders for User: {{ selectedUser.name }}</div>
+  <div class="orders-list">
+    <!-- Iterate through the orders for the selected user -->
+    <div *ngFor="let order of getUserOrders(selectedUser.id)" class="order-item">
+      <div>
+        <div class="order-id">{{ order.orderNumber }}</div>
+        <div class="order-date">{{ order.time }} </div>
+      </div>
+      <div class="order-amount">
+        {{ (order.total - order.paidAmount) | currency: 'INR' }}
+
+        <!-- ${{ +order.total.toFixed(2) | currency: 'INR' - order.paidAmount  | currency: 'INR'}} -->
+      </div>
+      
+      <!-- Confirm Button -->
+      <button (click)="handleOpenPopup(order.id)" >Confirm</button>
+    </div>
+  </div>
+</div>
+
+
+   
+   <!-- Confirmation Popup -->
+<div *ngIf="isPopupOpen && selectedOrderDetails" class="popup-overlay">
+  <div class="popup">
+    <div class="popup-header">
+      <span>Confirm Payment</span>
+      <button (click)="handleClosePopup()" class="close-btn">X</button>
+    </div>
+    <div class="popup-content">
+      <!-- Order ID Row -->
+      <div class="popup-row">
+        <span>Order ID</span>
+        <span>{{ selectedOrderDetails.orderNumber }}</span>
+      </div>
+      <!-- Date Row -->
+      <div class="popup-row">
+        <span>Date</span>
+        <span>{{ selectedOrderDetails.time }}</span>
+      </div>
+      <!-- Time Row -->
+      <div class="popup-row">
+        <span>Time</span>
+        <span>{{ selectedOrderDetails.time }}</span>
+      </div>
+       <!-- Paid Amount Row -->
+       <div class="popup-row">
+         <span>Already paid Amount</span>
+         <span>{{ selectedOrderDetails.total| currency: 'INR'}}</span>
+       </div>
+        <!-- Paid Amount Row -->
+        <div class="popup-row">
+          <span>Already paid Amount</span>
+          <span>{{ selectedOrderDetails.paidAmount | currency: 'INR'}}</span>
+        </div>
+      <!-- Pending Amount Row -->
+      <div class="popup-row amount">
+        <span>Pending Amount</span>
+        <span>{{ (selectedOrderDetails.total - selectedOrderDetails.paidAmount) | currency: 'INR' }}</span>
+
+        <!-- <span>${{ (selectedOrderDetails.total.toFixed(2)-selectedOrderDetails.total.toFixed(2)) | currency: 'INR'}}</span> -->
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button (click)="handlePaymentOption('full')" class="btn">Pay</button>
+      <!-- <button (click)="handlePaymentOption('partial')" class="btn">Partial Pay</button> -->
+      <button (click)="handleClosePopup()" class="btn">Cancel</button>
+      <!-- <button (click)="handlePay()" [disabled]="!paymentOption" class="btn">Pay</button> -->
+    </div>
+  </div>
+</div>
+
+   <!-- Confirmation Popup -->
+    <!-- <div *ngIf="isPopupOpen && selectedOrderDetails" class="popup-overlay">
+      <div class="popup">
+        <div class="popup-header">
+          <span>Confirm Payment</span>
+          <button (click)="handleClosePopup()" class="close-btn">X</button>
+        </div>
+        <div class="popup-content">
+          <div class="popup-row">
+            <span>Order ID</span>
+            <span>{{ selectedOrderDetails.orderId }}</span>
+          </div>
+          <div class="popup-row">
+            <span>Date</span>
+            <span>{{ selectedOrderDetails.date }}</span>
+          </div>
+          <div class="popup-row">
+            <span>Time</span>
+            <span>{{ selectedOrderDetails.time }}</span>
+          </div>
+          <div class="popup-row amount">
+            <span>Pending Amount</span>
+            <span>${{ selectedOrderDetails.pendingAmount.toFixed(2) }}</span>
+          </div>
+        </div>
+        <div class="popup-footer">
+          <button (click)="handlePaymentOption('full')" class="btn">Full Pay</button>
+          <button (click)="handlePaymentOption('partial')" class="btn">Partial Pay</button>
+          <button (click)="handleClosePopup()" class="btn">Cancel</button>
+          <button (click)="handlePay()" [disabled]="!paymentOption" class="btn">Pay</button>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  
