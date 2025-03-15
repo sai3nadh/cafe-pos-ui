@@ -135,6 +135,7 @@ export class UserComponent {
   paymentOption: 'full' | 'partial' | null = null;
   // selectedOrder: number | null = null;
   customAmount: string = '0';
+  isLoading: boolean = false; // This will control the spinner visibility
 
   //pending order
   constructor(private router: Router, private orderService: OrderService
@@ -144,6 +145,7 @@ export class UserComponent {
     ,private cdr: ChangeDetectorRef
   ) {}
   ngOnInit() {
+    this.isLoading=true;
     this.orderService.checkLogin();
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
@@ -189,9 +191,10 @@ export class UserComponent {
 
 // Call this function to test the printer
 // this.testPrint();
+    this.isLoading=false;
   }
  
-  order: string = "Order#123"; // Example order
+  // order: string = "Order#123"; // Example order
 
   // sendOrder() {
   //   console.log("🔍 Sending Order:", this.order);
@@ -349,14 +352,16 @@ export class UserComponent {
 
   reprintOrder(order: any): void {
     console.log("Reprinting order with ID:", order.id);
-  
+  this.isLoading = true;
     this.orderService.reprintOrder(order.id).subscribe(
       (response) => {
         console.log("Reprint successful", response);
+        this.isLoading = false;
         // Handle success (e.g., show a success message, update the UI, etc.)
       },
       (error) => {
         console.error('Error reprinting order', error);
+        this.isLoading = false;
         // Handle error (e.g., show an error message to the user)
       }
     );
@@ -770,6 +775,7 @@ filteredCustomers(): any[] {
   
   // Handle Full Pay
   confirmFullPay() {
+    this.isLoading = true;
     const totalAmount = this.getTotal();
     console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
     
@@ -1015,6 +1021,7 @@ filteredCustomers(): any[] {
   //     }
   //   );
   // }
+  this.isLoading = false;
   }
 
 //   printReceipt(order : Order) {
@@ -1286,16 +1293,16 @@ getPendingAmount(): number {
 
 
 // If you're storing them in userCartHistoryMap...
-private userCartHistoryMap: { [userId: number]: HistoricalItem[] } = {
-  1: [
-    { id: 100, name: 'Latte (history)', price: 3.0, category: 1, qty: 2, status: 'Pending' },
-    { id: 101, name: 'Croissant (history)', price: 2.0, category: 2, qty: 1, status: 'Paid' },
-  ],
-  2: [
-    { id: 102, name: 'Cookies (history)', price: 1.0, category: 2, qty: 5, status: 'Pending' }
-  ],
+// private userCartHistoryMap: { [userId: number]: HistoricalItem[] } = {
+//   1: [
+//     { id: 100, name: 'Latte (history)', price: 3.0, category: 1, qty: 2, status: 'Pending' },
+//     { id: 101, name: 'Croissant (history)', price: 2.0, category: 2, qty: 1, status: 'Paid' },
+//   ],
+//   2: [
+//     { id: 102, name: 'Cookies (history)', price: 1.0, category: 2, qty: 5, status: 'Pending' }
+//   ],
   
-};
+// };
 
 
 // // zoomLevel: number = 1; // Default zoom level (100%)
@@ -1390,6 +1397,7 @@ handleClosePopup(): void {
 }
 
 handlePaymentOption(option: 'full' | 'partial'): void {
+  this.isLoading = true;  // Show the spinner when the request starts
   this.paymentOption = option;
   console.log("Selected Order Details:", this.selectedOrderDetails);
   
@@ -1419,10 +1427,11 @@ handlePaymentOption(option: 'full' | 'partial'): void {
       // this.cdr.detectChanges(); // Manually trigger change detection
 
       this.isPopupOpen = false;
+      this.isLoading = false;
     },
     error => {
       // this.orderService.printOrder(66).subscribe();
-   
+      this.isLoading = false;
       console.error('Error updating payment:', error);
     }
   );
