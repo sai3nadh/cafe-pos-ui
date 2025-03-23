@@ -35,6 +35,7 @@ export class OrderService {
   private apiUrlCreate = `${environment.apiUrl}/orders/createOrderWithItems`;
   private apiUrlCreatePayment = `${environment.apiUrl}/orders/createOrderWithItemsPayment`;
   private apiUrlUpdatePayment = `${environment.apiUrl}/payments/payPendingAmt`;
+  private apiUrlUpdateAllPayments = `${environment.apiUrl}/payments/payMultiplePendingAmts`;
   private apiUrlEdit = `${environment.apiUrl}/orders/editOrderWithItems`;
   private apiUrlGet = `${environment.apiUrl}/orders/orders/user/`;
   private apiUrlCompleteOrder = `${environment.apiUrl}/orders`;  // Base URL for complete order endpoint
@@ -62,6 +63,12 @@ export class OrderService {
     updateOrderPayment(paymentData: any): Observable<any> {
       return this.http.post(this.apiUrlUpdatePayment, paymentData);
     }
+
+    // order.service.ts
+    updateMultipleOrderPayments(paymentDataList: any[]): Observable<any> {
+      return this.http.post<any[]>(this.apiUrlUpdateAllPayments, paymentDataList);
+    }
+
   
   // Method to create an order with items
   editOrder(orderData: any): Observable<any> {

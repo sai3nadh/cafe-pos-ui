@@ -1286,6 +1286,7 @@ i.fas.fa-trash-alt {
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 1rem;
+  min-height: 350px;
 }
 
 .order-item-responsive {
@@ -1360,7 +1361,7 @@ i.fas.fa-trash-alt {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-size: xx-large; /* Set text size to xx-large */
   overflow-y: auto; /* In case the content overflows */
-
+  min-width: 350px;
 }
 .btn-edit, .btn-finish{
   // padding-top: 10px;
@@ -1638,4 +1639,19 @@ i.fas.fa-trash-alt {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.send-all-btn{
+  font-size: xxx-large;
+  font-weight: bold;
+  margin-top: 10px;
+  background-color: #007bff;
+}
+
+.send-all-btn-div{
+  display: flex;
+  justify-content: center;  /* Centers horizontally */
+  align-items: center;      /* Centers vertically */
+  height: 100px;  
+  
 }

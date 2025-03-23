@@ -569,6 +569,14 @@
    <!-- Unpaid Orders List -->
 <div class="orders-card" *ngIf="selectedUser" (click)="$event.stopPropagation()" >
   <div class="card-header">Unpaid Orders for User: {{ selectedUser.name }}</div>
+    <!-- Send All Pending Orders Button -->
+
+    <div class="send-all-btn-div">
+    <button class="send-all-btn" (click)="sendAllPendingOrders(selectedUser.id)">
+      Settle All Pending Amounts
+    </button>
+  </div>
+
   <div class="orders-list">
     <!-- Iterate through the orders for the selected user -->
     <div *ngFor="let order of getUserOrders(selectedUser.id)" class="order-item">

@@ -89,6 +89,7 @@ interface Order {
   status: string;
   items: Item[];
   total: number;
+  paidAmount : number;
   orderNumber: string;      // Order number (e.g., "110220251001")
 }
 
@@ -158,6 +159,7 @@ export class UserComponent {
     //   this.router.navigate(['/login']);
     // }
     this.editOrderId=-1;
+    this.alreadyPaidAmount = 0;
     if(localStorage.getItem('zoomLevel')!=null){
     document.body.style.zoom = `${Number(localStorage.getItem('zoomLevel')) * 100}%`;
   }
@@ -508,11 +510,15 @@ export class UserComponent {
   }
   handleFilterChange(status: string): void {
     this.selectedStatus = status;
-    
+    this.selectedOrder = null;
     if (status === 'All') {
       this.filteredOrders = this.allOrders;
     } else {
       this.filteredOrders = this.allOrders.filter(order => order.status === status);
+    }
+      // Set selectedOrder to the first item of filteredOrders if it exists
+    if (this.filteredOrders.length > 0) {
+      this.selectedOrder = this.filteredOrders[0];
     }
   }
 
@@ -521,6 +527,47 @@ export class UserComponent {
     // alert("se"+selectedOrder);
     // console.log("seee--",selectedOrder);
       // Assuming selectedOrder is the ID of the order to complete
+      this.isLoading = true; 
+      if(selectedOrder.status == 'Completed'){
+        // alert("already completed..!!")
+        this.isLoading = false; 
+        return;
+      }
+
+      // if(!this.selectedUser){
+            // Check if the order has a pending balance
+        if (selectedOrder.total - selectedOrder.paidAmount !== 0  ) {
+          const confirmation = window.confirm("The full amount has not been paid. Are you sure you want to finish the order?");
+          if (!confirmation) {
+            // User clicked "No", return to avoid further actions
+            //working on select of cancel
+            // alert("111");
+            // return;
+          }
+          else{
+            //this is working on select of ok
+            // alert("222");
+            // return;
+          }
+        }
+
+  const paymentData = {
+    orderId: this.selectedOrder?.id,
+    amount: (this.selectedOrder?.total ?? 0) -( this.selectedOrder?.paidAmount ?? 0),
+    paymentMethodId:1
+  }
+
+  this.orderService.updateOrderPayment(paymentData).subscribe(
+    (response: any) => {
+      console.log('Order payment updated successfully:', response);
+    },
+    error => {
+      console.error('Error updating payment:', error);
+    }
+  );
+
+  // above block for the adding the pending amount
+      // }
   this.orderService.completeOrder(selectedOrder.id).subscribe(
     response => {
       console.log('Order completed successfully', response);
@@ -528,9 +575,12 @@ export class UserComponent {
       this.toggleOrdersModal();
       this.filterOrders(this.selectedStatus); // To reapply any filters you have
       // this.toggleOrdersModal();
+      this.isLoading = false;
+      this.selectedOrder = null;
     },
     error => {
       console.error('Error completing the order', error);
+      this.isLoading = false;
       // You can display a message or handle the error accordingly
     }
   );
@@ -549,6 +599,7 @@ export class UserComponent {
       this.cart=[];
       this.guestName="";
       this.editOrderId=-1;
+      this.alreadyPaidAmount = 0;
       this.selectedUser =null;
       this.previousCart =[];
       this.purchaseHistory= [];
@@ -575,6 +626,7 @@ editOrder(order: Order) {
   }));
 this.guestName="edit Order - #"+order.orderNumber.slice(-3);
 this.editOrderId=order.id;
+this.alreadyPaidAmount = order.paidAmount;
 
   // Close the modal after selecting the order
   this.showOrders = false;
@@ -618,6 +670,7 @@ filteredCustomers(): any[] {
   showCheckoutModal = false;
   partialPayMode = false;
   partialPayAmount: number = 0;
+  alreadyPaidAmount: number = 0;
   isPartialAmountValid = false;
   selectedPaymentType: string = 'cash'; // Default payment type
   selectedUser: User | null = null;
@@ -787,7 +840,9 @@ filteredCustomers(): any[] {
         orderId:this.editOrderId,
         userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
         status: 'Pending', // Status can be adjusted based on your system's logic
-        total: totalAmount,
+        total:  totalAmount,
+        amountPaid:((totalAmount) - (this.alreadyPaidAmount) -( this.partialPayAmount)),
+        paymentMethodId:1,
         // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
         customerId: this.selectedUser ? this.selectedUser.id : undefined,
         orderItems: this.cart.map(item => ({
@@ -806,6 +861,7 @@ filteredCustomers(): any[] {
           this.cart = []; // Clear the cart after order creation
           this.previousCart = [];
           this.guestName = "";
+          this.emptyCart();
         },
         error => {
           console.error('Error creating order:', error);
@@ -814,6 +870,7 @@ filteredCustomers(): any[] {
       this.cart = []; // Clear the cart after order creation
           this.previousCart = [];
           this.guestName='';
+          this.alreadyPaidAmount = 0;
     }else{
     // Create the order object with the required format
     const orderData = {
@@ -921,6 +978,7 @@ filteredCustomers(): any[] {
         this.cart = []; // Clear the cart after order creation
         this.previousCart = [];
         this.selectedUser =null;
+        this.emptyCart();
       },
       error => {
         // this.orderService.printOrder(66).subscribe();
@@ -1485,6 +1543,7 @@ selectedOrders: any[] = []; // Array to store selected orders
   }
 
   // Function to handle payment for selected orders
+  // unnceccsary. remove later
   handlePaySelectedOrders() {
     if (this.selectedOrders.length === 0) return;
     
@@ -1528,6 +1587,60 @@ selectedOrders: any[] = []; // Array to store selected orders
       // Optionally, you may want to call `getTotalPendingAmount()` to update the pending amount after removing the order.
       this.getTotalPendingAmount();
     }
+    
+
+    //remove this method no use
+    sendAllPendingOrdersOld(userId: number) {
+      const allOrders = this.getUserOrders(userId);
+      const pendingOrders = allOrders
+        .filter(order => order.total > order.paidAmount)
+        .map(order => ({
+          orderId: order.id,
+          pendingAmount: +(order.total - order.paidAmount).toFixed(2)
+        }));
+    
+      // Do something with pendingOrders
+      console.log('Sending pending orders:', pendingOrders);
+    
+      // Example: call a service method to send this data
+      // this.orderService.sendPendingOrders(pendingOrders).subscribe(...);
+    }
+
+    sendAllPendingOrders(userId: number): void {
+      const allOrders = this.getUserOrders(userId);
+      const paymentDataList = allOrders
+        .filter(order => order.total > order.paidAmount)
+        .map(order => ({
+          orderId: order.id,
+          paymentMethodId: 1, // assuming method is fixed
+          amount: +(order.total - order.paidAmount).toFixed(2)
+        }));
+    
+      if (paymentDataList.length === 0) {
+        console.log("No pending payments to send.");
+        return;
+      }
+    
+      this.isLoading = true;
+    
+      this.orderService.updateMultipleOrderPayments(paymentDataList).subscribe(
+        (response) => {
+          console.log('Payments processed:', response);
+          // Remove paid orders from UI
+          for (const payment of paymentDataList) {
+            this.removePaidOrder(userId, payment.orderId);
+          }
+    
+          this.isLoading = false;
+          console.log('All selected payments processed successfully');
+        },
+        (error) => {
+          this.isLoading = false;
+          console.error('Error processing multiple payments:', error);
+        }
+      );
+    }
+    
     
     
 
