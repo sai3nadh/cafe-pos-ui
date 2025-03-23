@@ -1,0 +1,97 @@
+<!-- Container: Entire viewport -->
+<div class="container">
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+      <div class="nav-buttons">
+        <button (click)="goToHome()">Cafe-ABCD</button>
+         <!-- Orders Button -->
+         <button>
+          <!-- (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
+          Orders</button>
+      <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Users
+        </button>
+        <!-- <button (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();">Orders-Icon</button> -->
+      </div>
+    
+  <!-- Avatar Section with Dropdown -->
+<div class="avatar-section">
+    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
+    
+    <!-- Dropdown Menu (Initially Hidden) -->
+    <div *ngIf="dropdownVisible" class="dropdown-menu">
+        <!-- <button (click)="viewOrders()">View Orders</button>
+        <button (click)="viewReports()">View Reports</button> -->
+        <button >View Orders</button>
+        <button >View Reports</button>
+           <!-- Zoom Settings Button -->
+           <button (click)="openZoomSettings()" class="bg-green-500 text-white px-4 py-2 rounded">Zoom Settings</button>
+ 
+          <hr />
+      <button (click)="logout()">Logout</button>
+    </div>
+  </div>
+  
+    </div>
+  <!-- Zoom Modal (Initially Hidden) -->
+<div *ngIf="zoomModalVisible" class="zoom-modal-overlay">
+  <div class="zoom-modal">
+    <h3>Set Zoom Level</h3>
+    <label for="zoomSlider">Zoom Level: </label>
+    
+    <!-- Left and Right Buttons -->
+    <div class="zoom-buttons">
+      <button (click)="changeZoom(-0.05)">-</button>
+      <input
+        id="zoomSlider"
+        type="range"
+        min="0.5"
+        max="2"
+        step="0.05"
+        [(ngModel)]="zoomLevel"
+        (input)="adjustZoom($event)"
+      />
+      <button (click)="changeZoom(0.05)">+</button>
+    </div>
+    
+    <span>{{ (zoomLevel * 100).toFixed(0) }}%</span>
+    
+    <button (click)="closeZoomSettings()">Close</button>
+  </div>
+</div>
+
+    <!-- Main Content Section -->
+    <div class="main-content">
+     
+              <div class="orders-wrapper">
+                <div class="columns">
+                  <div *ngFor="let order of orders" >
+                    <div class="order-card">
+                      <div class="order-header">
+                        <div class="order-number">#{{ order.orderNumber.slice(-3) }}</div>
+                        <div class="order-time">{{ order.time }}</div>
+                      </div>
+              
+                      <div class="items-wrapper">
+                        <div class="item" *ngFor="let item of order.items">
+                          <div class="item-name">{{ item.name }}</div>
+                          <div class="item-qty"> -{{ item.qty }}</div>
+                          <!-- <div class="item-price">₹{{ item.price }}</div> -->
+                        </div>
+                      </div>
+              
+                      <div class="order-footer">
+                        <div>Total: ₹{{ order.total }}</div>
+                        <div class="paid" [class.paid]="order.paidAmount > 0">
+                          Paid: ₹{{ order.paidAmount }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+             
+
+    </div>
+  </div>
