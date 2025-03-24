@@ -8,6 +8,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxImageCompressService } from 'ngx-image-compress';  // Import the Image Compress Service
 import { OrderService } from '../home/order.service';
 import { UserComponent } from '../user/user.component';
+import { WebSocketService } from '../services/websocket.service';
+import { Subscription } from 'rxjs';
 
 
 export interface OrderItem {
@@ -58,20 +60,24 @@ export class PendingOrdersComponent {
        ,private orderService: OrderService
     //  private categoryService : CategoryService
     //   ,private elRef: ElementRef
-    //   ,private wsService: WebSocketService
+      ,private wsService: WebSocketService
     ) {
-      // this.customerForm = this.fb.group({
-      //   firstName: [''],
-      //   lastName: [''],
-      //   email: [''],
-      //   phoneNumber: [''],
-      //   address: [''],
-      //   birthday: [''],
-      //   image: [null]
-      // });
     }
+      private notifSub!: Subscription;
+    
     ngOnInit() {
       this.orderService.checkLogin();
+      this.wsService.connect(); // ✅ Ensure WebSocket connects on init
+      this.notifSub = this.wsService.subscribeToTopic('/topic/notifications').subscribe((msg) => {
+        console.log('🔔 Notification:', msg);
+          if(msg === "🆕 New Order Placed"){
+            console.log("notification received");
+            
+          }else{
+            console.log("outside");
+            
+          }
+      });
     }
 
     allOrders: Order[] = [
@@ -285,7 +291,7 @@ export class PendingOrdersComponent {
           "paidAmount": 0
       }
   ];
-    orders: Order[] = this.allOrders.filter(order => order.status !== 'Pendi');
+    orders: Order[] = this.allOrders.filter(order => order.status == 'Pendi');
   
 
   

@@ -64,6 +64,9 @@
     <div class="main-content">
      
               <div class="orders-wrapper">
+                <div *ngIf="orders.length === 0" class="no-orders-message">
+                    <h1>No orders available. Please check back later.</h1>
+                  </div>
                 <div class="columns">
                   <div *ngFor="let order of orders" >
                     <div class="order-card" (click)="selectOrder(order)">

@@ -22,6 +22,8 @@ import { CategoryService } from '../home/category.service'; // Import the servic
 import { StorageService } from '../services/storage.service';
 import { ElementRef, HostListener } from '@angular/core';
 import { WebSocketService } from '../services/websocket.service';
+import { Subscription } from 'rxjs';
+import { NotificationApiService } from '../services/notification-api.service';
 
 interface Category {
   id: number;
@@ -144,7 +146,11 @@ export class UserComponent {
     ,private elRef: ElementRef
     ,private wsService: WebSocketService
     ,private cdr: ChangeDetectorRef
+    ,private notifcationService : NotificationApiService
   ) {}
+
+  // private sub!: Subscription;
+  private notifSub!: Subscription;
   ngOnInit() {
     this.isLoading=true;
     this.orderService.checkLogin();
@@ -174,7 +180,20 @@ export class UserComponent {
   this.loadCat();
   this.loadCustomers() 
 // //below to connect rabbit
-  // this.wsService.connect(); // ✅ Ensure WebSocket connects on init
+  this.wsService.connect(); // ✅ Ensure WebSocket connects on init
+  // this.wsService.subscribeToTopic('/topic/notifications').subscribe(msg => {
+  //   // this.toastService.show(msg); // or update alert UI
+  //   alert("notif--- "+ msg);
+  //   console.log("msg"+msg);
+    // this.sub = this.wsService.subscribeToTopic('/topic/kitchen').subscribe(...);
+    // console.log("subbb"+this.sub);
+    // this.notifSub = this.wsService.subscribeToTopic('/topic/notifications').subscribe((msg) => {
+    //   console.log('🔔 Notification:', msg);
+    //   // alert('notif--- ' + msg);
+    // });
+    
+  // });
+  
   // this.sendOrder();
   // console.log("subb ordddd");
  
@@ -247,6 +266,9 @@ export class UserComponent {
   ngOnDestroy() {
     // this.wsService.disconnect(); // ✅ Disconnect WebSocket when leaving
     this.loadPurchaseHistory();
+    
+      // this.kitchenSub?.unsubscribe();
+      this.notifSub?.unsubscribe();
 
   }
   loadCat() {
@@ -596,6 +618,10 @@ export class UserComponent {
     }
 
     emptyCart(){
+       // Then send notification
+  this.notifcationService.sendNotification('🆕 New Order Placed').subscribe(() => {
+    console.log('Notification sent');
+  });
       this.cart=[];
       this.guestName="";
       this.editOrderId=-1;

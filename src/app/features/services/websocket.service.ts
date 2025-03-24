@@ -1,15 +1,105 @@
 import { Injectable } from '@angular/core';
-import { Client } from '@stomp/stompjs';
+import { Observable, Subject } from 'rxjs';
+import { CompatClient, IMessage, Stomp } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  private stompClient!: Client;
-  private readonly serverUrl = "ws://34.41.30.134:15674/ws";  // RabbitMQ WebSocket URL
-  private readonly queueName = "/queue/ordersb";  // ✅ FIXED
+  private stompClient!: CompatClient;
+  private isConnected = false;
+  private topicSubjects: { [topic: string]: Subject<any> } = {};
 
-  constructor() { }
+  constructor() {}
+
+  connect(): void {
+    if (this.isConnected) return;
+
+    const socket = new WebSocket('ws://localhost:8083/ws/websocket'); // 🧠 Change to IP for LAN
+    this.stompClient = Stomp.over(socket);
+
+    this.stompClient.connect({}, () => {
+      console.log('[WebSocket] Connected ✅');
+      this.isConnected = true;
+
+      // Re-subscribe to all existing topics
+      Object.keys(this.topicSubjects).forEach(topic => {
+        this.subscribeInternal(topic);
+      });
+    }, (error: any) => {
+      console.error('[WebSocket] Connection error:', error);
+      this.isConnected = false;
+    });
+  }
+
+  subscribeToTopic<T = any>(topic: string): Observable<T> {
+    if (!this.topicSubjects[topic]) {
+      this.topicSubjects[topic] = new Subject<T>();
+
+      if (this.isConnected) {
+        this.subscribeInternal(topic);
+      }
+    }
+
+    return this.topicSubjects[topic].asObservable();
+  }
+
+  private subscribeInternal(topic: string): void {
+    this.stompClient.subscribe(topic, (message: IMessage) => {
+      const body = this.tryParse(message.body);
+      this.topicSubjects[topic].next(body);
+    });
+  }
+
+  disconnect(): void {
+    if (this.stompClient && this.stompClient.connected) {
+      this.stompClient.disconnect(() => {
+        console.log('[WebSocket] Disconnected');
+        this.isConnected = false;
+      });
+    }
+  }
+
+  private tryParse(value: string): any {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  }
+
+
+  // private stompClient!: CompatClient;
+  // private messageSubject = new Subject<string>();
+  // public messages$ = this.messageSubject.asObservable();
+
+  // constructor() { }
+  
+  // connect() {
+  //   const socket = new WebSocket('ws://localhost:8083/ws/websocket'); // 🔁 Use IP if accessing from another device
+  //   this.stompClient = Stomp.over(socket);
+
+  //   this.stompClient.connect({}, () => {
+  //     console.log('[WebSocket] Connected ✅');
+
+  //     this.stompClient.subscribe('/topic/notifications', (message: IMessage) => {
+  //       console.log('[WebSocket] Message:', message.body);
+  //       this.messageSubject.next(message.body);
+  //     });
+  //   }, (error: any) => {
+  //     console.error('[WebSocket] Connection error:', error);
+  //   });
+  // }
+
+  // disconnect() {
+  //   if (this.stompClient && this.stompClient.connected) {
+  //     this.stompClient.disconnect(() => {
+  //       console.log('[WebSocket] Disconnected');
+  //     });
+  //   }
+  // }
+  
 
 
   // no longer needed till 74
