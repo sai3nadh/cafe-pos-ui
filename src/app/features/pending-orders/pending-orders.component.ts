@@ -289,6 +289,28 @@ export class PendingOrdersComponent {
   
 
   
+    selectedOrder: Order | null = null;
+
+selectOrder(order: Order) {
+  this.selectedOrder = order;
+}
+
+closeOrderPopup() {
+  this.selectedOrder = null;
+}
+
+finishOrder() {
+  console.log('Finish logic for', this.selectedOrder);
+  this.selectedOrder = null;
+}
+
+cancelOrder() {
+  console.log('Cancel logic for', this.selectedOrder);
+  this.selectedOrder = null;
+}
+
+
+
   // common methods for all
   // submitForm(): void {
   //   const formData = new FormData();
