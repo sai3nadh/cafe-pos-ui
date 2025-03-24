@@ -6,29 +6,30 @@ import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 // import { CustomerService } from './add-customer.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxImageCompressService } from 'ngx-image-compress';  // Import the Image Compress Service
-import { OrderService } from '../home/order.service';
+import { OrderDto, OrderItemDto , OrderService } from '../home/order.service';
+import { Order } from '../user/user.component';
 import { UserComponent } from '../user/user.component';
 import { WebSocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
 
 
-export interface OrderItem {
-  id: number;
-  name: string;
-  price: number;
-  category: number;
-  qty: number;
-}
+// export interface OrderItem {
+//   id: number;
+//   name: string;
+//   price: number;
+//   category: number;
+//   qty: number;
+// }
 
-export interface Order {
-  id: number;
-  time: string;
-  status: string;
-  items: OrderItem[];
-  total: number;
-  orderNumber: string;
-  paidAmount: number;
-}
+// export interface Orders {
+//   id: number;
+//   time: string;
+//   status: string;
+//   items: OrderItem[  ];
+//   total: number;
+//   orderNumber: string;
+//   paidAmount: number;
+// }
 
 
 @Component({
@@ -44,13 +45,6 @@ export class PendingOrdersComponent {
  dropdownVisible = false;
   showOrdersIcon: boolean = false; 
   
-  selectedImage: File | null = null;
-  responseMessage: string = '';
-  compressedImage: string | null = null;  // Declare compressedImage property to store base64 string
-  compressedBlob: Blob | null = null; // Compressed image as Blob
-
-
-
    constructor(private router: Router,
     private fb: FormBuilder, 
     // private adcustomerService: CustomerService,
@@ -67,12 +61,14 @@ export class PendingOrdersComponent {
     
     ngOnInit() {
       this.orderService.checkLogin();
+      this.userId = this.storageService.getLocalVariable('userId');
+      this.getOrders();
       this.wsService.connect(); // ✅ Ensure WebSocket connects on init
       this.notifSub = this.wsService.subscribeToTopic('/topic/notifications').subscribe((msg) => {
         console.log('🔔 Notification:', msg);
           if(msg === "🆕 New Order Placed"){
             console.log("notification received");
-            
+            this.getOrders();
           }else{
             console.log("outside");
             
@@ -80,219 +76,33 @@ export class PendingOrdersComponent {
       });
     }
 
-    allOrders: Order[] = [
-      {
-          "id": 227,
-          "time": "11:39 AM",
-          "status": "Pending",
-          "items": [
-              {
-                  "id": 2,
-                  "name": "Diet Coke",
-                  "price": 40.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 10,
-                  "name": "Double Egg Maggi",
-                  "price": 70.00,
-                  "category": 2,
-                  "qty": 2
-              },
-              {
-                  "id": 6,
-                  "name": "Water 1L",
-                  "price": 20.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 23,
-                  "name": "Ocean 65",
-                  "price": 65.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 22,
-                  "name": "Thumbs UP",
-                  "price": 50.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 16,
-                  "name": "Sandwich - Corn",
-                  "price": 80.00,
-                  "category": 2,
-                  "qty": 1
-              }
-          ],
-          "total": 395.00,
-          "orderNumber": "230325101",
-          "paidAmount": 0
-      },
-      {
-          "id": 228,
-          "time": "04:06 PM",
-          "status": "Completed",
-          "items": [
-              {
-                  "id": 13,
-                  "name": "Tea",
-                  "price": 10.00,
-                  "category": 3,
-                  "qty": 1
-              },
-              {
-                  "id": 1,
-                  "name": "Coke",
-                  "price": 40.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 5,
-                  "name": "Water Small",
-                  "price": 10.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 43,
-                  "name": "Osmania",
-                  "price": 5.00,
-                  "category": 4,
-                  "qty": 1
-              }
-          ],
-          "total": 65.00,
-          "orderNumber": "230325102",
-          "paidAmount": 65.00
-      },
-      {
-          "id": 229,
-          "time": "06:05 PM",
-          "status": "Completed",
-          "items": [
-              {
-                  "id": 2,
-                  "name": "Diet Coke",
-                  "price": 40.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 10,
-                  "name": "Double Egg Maggi",
-                  "price": 70.00,
-                  "category": 2,
-                  "qty": 1
-              },
-              {
-                  "id": 16,
-                  "name": "Sandwich - Corn",
-                  "price": 80.00,
-                  "category": 2,
-                  "qty": 1
-              }
-          ],
-          "total": 190.00,
-          "orderNumber": "230325103",
-          "paidAmount": 190.00
-      },
-      {
-          "id": 230,
-          "time": "06:09 PM",
-          "status": "Completed",
-          "items": [
-              {
-                  "id": 6,
-                  "name": "Water 1L",
-                  "price": 20.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 5,
-                  "name": "Water Small",
-                  "price": 10.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 4,
-                  "name": "Fanta",
-                  "price": 40.00,
-                  "category": 1,
-                  "qty": 1
-              }
-          ],
-          "total": 70.00,
-          "orderNumber": "230325104",
-          "paidAmount": 0
-      },
-      {
-          "id": 231,
-          "time": "06:10 PM",
-          "status": "Completed",
-          "items": [
-              {
-                  "id": 1,
-                  "name": "Coke",
-                  "price": 40.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 2,
-                  "name": "Diet Coke",
-                  "price": 40.00,
-                  "category": 1,
-                  "qty": 1
-              }
-          ],
-          "total": 80.00,
-          "orderNumber": "230325105",
-          "paidAmount": 0
-      },
-      {
-          "id": 232,
-          "time": "06:17 PM",
-          "status": "Completed",
-          "items": [
-              {
-                  "id": 6,
-                  "name": "Water 1L",
-                  "price": 20.00,
-                  "category": 1,
-                  "qty": 1
-              },
-              {
-                  "id": 5,
-                  "name": "Water Small",
-                  "price": 10.00,
-                  "category": 1,
-                  "qty": 1
-              }
-          ],
-          "total": 30.00,
-          "orderNumber": "230325106",
-          "paidAmount": 0
-      },
-      {
-          "id": 233,
-          "time": "06:18 PM",
-          "status": "Completed",
-          "items": [],
-          "total": 0.00,
-          "orderNumber": "230325107",
-          "paidAmount": 0
-      }
-  ];
-    orders: Order[] = this.allOrders.filter(order => order.status == 'Pendi');
+    allOrders: OrderDto[] =[];
+    orders: OrderDto[] =[];
+    // OrderDto[] = [];
+    userId = -1;
+ 
+  getOrders(){
+   
+    if(this.userId == -1){
+      alert("retuned--");
+      return;
+    }
+    this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
+      this.allOrders = orders;
+      this.orders = this.allOrders.filter(order => order.status === 'Pending');
+      
+    });   
+    
+  }
   
+  // ngOnDestroy to unsubscribe from WebSocket notifications and clean up
+  ngOnDestroy() {
+    if (this.notifSub) {
+      this.notifSub.unsubscribe(); // Unsubscribe from WebSocket notifications to avoid memory leaks
+      console.log('WebSocket subscription cleaned up');
+    }
+  }
+
 
   
     selectedOrder: Order | null = null;
@@ -314,37 +124,6 @@ cancelOrder() {
   console.log('Cancel logic for', this.selectedOrder);
   this.selectedOrder = null;
 }
-
-
-
-  // common methods for all
-  // submitForm(): void {
-  //   const formData = new FormData();
-  //   formData.append('firstName', this.customerForm.get('firstName')?.value);
-  //   formData.append('lastName', this.customerForm.get('lastName')?.value);
-  //   formData.append('email', this.customerForm.get('email')?.value);
-  //   formData.append('phoneNumber', this.customerForm.get('phoneNumber')?.value);
-  //   formData.append('address', this.customerForm.get('address')?.value);
-  //   formData.append('birthday', this.customerForm.get('birthday')?.value);
-
-  //   if (this.compressedBlob) {
-  //     console.log('Compressed file appended');
-  //     formData.append('image', this.compressedBlob, 'image.jpg');
-  //   }
-
-  //   console.log('Form Data:', formData);
-
-  //   this.adcustomerService.addCustomer(formData).subscribe(
-  //     (response) => {
-  //       this.responseMessage = 'Customer added successfully!';
-  //       console.log('Success:', response);
-  //     },
-  //     (error) => {
-  //       this.responseMessage = 'Error adding customer!';
-  //       console.error('Error:', error);
-  //     }
-  //   );
-  // }
 
 
   //below header functions

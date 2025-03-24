@@ -85,7 +85,7 @@ export interface ApiCategory {
   menuItems: any[]; // You can create a more specific interface if needed
 }
 
-interface Order {
+export interface Order {
   id: number;
   time: string;
   status: string;
@@ -599,6 +599,7 @@ export class UserComponent {
       // this.toggleOrdersModal();
       this.isLoading = false;
       this.selectedOrder = null;
+      this.NotifyKitchen();
     },
     error => {
       console.error('Error completing the order', error);
@@ -617,11 +618,14 @@ export class UserComponent {
       }
     }
 
+    NotifyKitchen(){
+             // Then send notification
+      this.notifcationService.sendNotification('🆕 New Order Placed').subscribe(() => {
+        console.log('Notification sent');
+      });
+    }
+
     emptyCart(){
-       // Then send notification
-  this.notifcationService.sendNotification('🆕 New Order Placed').subscribe(() => {
-    console.log('Notification sent');
-  });
       this.cart=[];
       this.guestName="";
       this.editOrderId=-1;
@@ -888,6 +892,7 @@ filteredCustomers(): any[] {
           this.previousCart = [];
           this.guestName = "";
           this.emptyCart();
+          this.NotifyKitchen();
         },
         error => {
           console.error('Error creating order:', error);
@@ -1005,6 +1010,7 @@ filteredCustomers(): any[] {
         this.previousCart = [];
         this.selectedUser =null;
         this.emptyCart();
+        this.NotifyKitchen();
       },
       error => {
         // this.orderService.printOrder(66).subscribe();
