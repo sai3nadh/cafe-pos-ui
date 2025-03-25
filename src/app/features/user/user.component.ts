@@ -1309,6 +1309,11 @@ filteredCustomers(): any[] {
     this.router.navigate(['/add-customer']);
     this.closeDropdown();
   }
+ 
+  pendingOrders(){
+    this.closeDropdown();
+    this.router.navigate(['/pending-orders']);
+  }
 
   goToDrafts() {
     this.closeDropdown();
