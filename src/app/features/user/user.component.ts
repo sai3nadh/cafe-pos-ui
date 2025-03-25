@@ -24,6 +24,7 @@ import { ElementRef, HostListener } from '@angular/core';
 import { WebSocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
 import { NotificationApiService } from '../services/notification-api.service';
+import { environment } from '../../../environments/environment';
 
 interface Category {
   id: number;
@@ -151,6 +152,8 @@ export class UserComponent {
 
   // private sub!: Subscription;
   private notifSub!: Subscription;
+  imageBaseUrl = environment.imageBaseUrl;
+
   ngOnInit() {
     this.isLoading=true;
     this.orderService.checkLogin();
@@ -840,6 +843,7 @@ filteredCustomers(): any[] {
 
   // Close Checkout Modal
   closeCheckoutModal() {
+    this.dropdownVisible = false;
     this.showCheckoutModal = false;
     this.partialPayMode = false;
     this.partialPayAmount = 0;
@@ -908,7 +912,8 @@ filteredCustomers(): any[] {
       userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
       status: 'Pending', // Status can be adjusted based on your system's logic
       total: totalAmount,
-      amountPaid:this.partialPayAmount,
+      // amountPaid:this.partialPayAmount,
+      amountPaid : this.partialPayAmount > 0 ? this.partialPayAmount : totalAmount,
       paymentMethodId:1,
       // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
       customerId: this.selectedUser ? this.selectedUser.id : undefined,

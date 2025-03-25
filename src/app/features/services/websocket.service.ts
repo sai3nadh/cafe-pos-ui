@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CompatClient, IMessage, Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,14 @@ export class WebSocketService {
   private isConnected = false;
   private topicSubjects: { [topic: string]: Subject<any> } = {};
 
+  private readonly backendUrl = `${environment.wsUrl}`;
   constructor() {}
 
   connect(): void {
     if (this.isConnected) return;
 
-    const socket = new WebSocket('ws://localhost:8083/ws/websocket'); // 🧠 Change to IP for LAN
+    // const socket = new WebSocket('ws://localhost:8083/ws/websocket'); // 🧠 Change to IP for LAN
+    const socket = new WebSocket(this.backendUrl); // 🧠 Change to IP for LAN
     this.stompClient = Stomp.over(socket);
 
     this.stompClient.connect({}, () => {

@@ -28,7 +28,7 @@ interface Category {
     CommonModule, // Add CommonModule here to make ngFor and ngIf work
     // EditMenuComponent
 ],
-  styleUrls: ['./edit-menu.component.css']
+  styleUrls: ['./edit-menu.component.scss']
 })
 export class EditMenuComponent implements OnInit {
   categories: Category[] = [];

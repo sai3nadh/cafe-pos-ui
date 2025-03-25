@@ -19,6 +19,7 @@
     <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
     
     <!-- Dropdown Menu (Initially Hidden) -->
+    <div *ngIf="dropdownVisible" class="modal-overlay" (click)="closeCheckoutModal()">
     <div *ngIf="dropdownVisible" class="dropdown-menu">
         <!-- <button (click)="viewOrders()">View Orders</button>
         <button (click)="viewReports()">View Reports</button> -->
@@ -31,7 +32,7 @@
  
           <hr />
       <button (click)="logout()">Logout</button>
-    </div>
+    </div></div>
   </div>
   
     </div>
@@ -88,7 +89,10 @@
               <h3>{{ item.name }} </h3>
               <!-- <p>₹{{ item.price.toFixed(2) }}</p> -->
               <!-- <img class="item-icons" src="../../../assets/icons/tea1.png" alt="Avatar" (click)="toggleDropdown()" /> -->
-              <img class="item-icons" [src]="'../../../assets/icons/' + item.id + '.png'" alt="item.name" (click)="toggleDropdown()" />
+              <!-- <img class="item-icons" [src]="'../../../assets/icons/' + item.id + '.png'" alt="item.name" (click)="toggleDropdown()" /> -->
+              <img class="item-icons" 
+              [src]="imageBaseUrl + item.id + '.png'" loading="lazy"
+              alt="item.name" (click)="toggleDropdown()" />
 
               <!-- <img class="item-icons" src="../../../assets/icons/i.png https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" /> -->
 
@@ -398,7 +402,7 @@
     <button class="btn" (click)="toggleUsers()">Users</button>
   <!-- Button to toggle user list visibility -->
   <button class="btn" (click)="emptyCart()">clearCart</button>
-  
+  <img *ngIf="selectedUser?.avatar" class="selected-user" [src]="selectedUser?.avatar" alt={{selectedUser?.name}} hidden/>
     <!-- User list with search functionality -->
     <div class="users-list" *ngIf="showUsers">
       <div class="search-bar">
