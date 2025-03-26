@@ -234,7 +234,14 @@
     <div class="modal" (click)="$event.stopPropagation()">
       <h3>Confirm Payment</h3>
       <p>Amount: ₹{{ getTotal().toFixed(2) }}</p>
-  
+     
+      Custom Amount: <input
+      type="number"
+      [(ngModel)]="customAmount"
+      placeholder="Enter custom amount"
+      class="input-field"
+    />
+
       <!-- Toggle Buttons for Payment Type -->
       <div class="payment-toggle">
         <button 
@@ -252,7 +259,7 @@
       </div>
   
       <div class="modal-buttons">
-        <button (click)="confirmFullPay()">Full Pay</button>
+        <button (click)="handlePayment('full')">Full Payn</button>
         <button (click)="confirmPartialPay()">Partial Pay</button>
         <button (click)="closeCheckoutModal()">Cancel</button>
       </div>
@@ -436,12 +443,12 @@
       <div class="card-content">
         <div class="cart-amount">Cart Amount ${{ cartAmount }}</div>
         <!-- <div class="cart-amount">Cart Amount ${{ getTotal().toFixed(2)}}</div> -->
-        <!-- Custom Amount: <input
+        Custom Amount: <input
           type="number"
           [(ngModel)]="customAmount"
           placeholder="Enter custom amount"
           class="input-field"
-        /> -->
+        />
       </div>
        <!-- Toggle Buttons for Payment Type -->
        <!-- <div class="payment-toggle">
@@ -475,9 +482,14 @@
         style="font-weight: bold; font-size: x-large;">Submit</button>
       </div> -->
       <div class="card-footer" *ngIf="+cartAmount > 0" >
-        <button (click)="handlePaymentOption('full')" class="btn">Full Pay</button>
+        <!-- <button (click)="handlePaymentOption('full')" class="btn">Full Pay</button>
         <button (click)="confirmPartialPay()" class="btn">Partial Pay</button>
         <button (click)="handleClosePopup()" class="btn">Save</button>
+        <button (click)="closeCheckoutModal()" class="btn">Cancel</button> -->
+
+        <button (click)="handlePayment('full')" class="btn">Full Pay</button>
+        <button (click)="confirmPartialPay()" class="btn">Partial Pay</button>
+        <button (click)="handlePayment('save')" class="btn">Save</button>
         <button (click)="closeCheckoutModal()" class="btn">Cancel</button>
 
         <!-- <button (click)="handlePay()" class="btn">Pay Custom Amount</button> -->

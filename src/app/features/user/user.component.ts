@@ -636,8 +636,28 @@ export class UserComponent {
       this.selectedUser =null;
       this.previousCart =[];
       this.purchaseHistory= [];
+      this.customAmount ="0";
     }
 
+    handlePayment(paymentType: string) {
+      switch(paymentType) {
+        case 'full':
+          this.partialPayAmount = this.getTotal();
+          console.log("amount paid"+ this.partialPayAmount);
+          this.confirmFullPay();
+          break;
+        // case 'half':
+        //   this.processHalfPayment();
+        //   break;
+        case 'save':
+           this.partialPayAmount = 0;
+          console.log("amount paid"+ this.partialPayAmount);
+          this.confirmFullPay();
+          break;
+        default:
+          console.log('Unknown payment option');
+      }
+    }
   // Filter the already fetched orders based on the selected status
   // filterOrders(status: string): void {
   //   this.selectedStatus = status;
@@ -877,6 +897,8 @@ filteredCustomers(): any[] {
         total:  totalAmount,
         amountPaid:((totalAmount) - (this.alreadyPaidAmount) -( this.partialPayAmount)),
         paymentMethodId:1,
+        customAmount :this.customAmount,
+        sittingArea: 'front',
         // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
         customerId: this.selectedUser ? this.selectedUser.id : undefined,
         orderItems: this.cart.map(item => ({
@@ -912,8 +934,10 @@ filteredCustomers(): any[] {
       userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
       status: 'Pending', // Status can be adjusted based on your system's logic
       total: totalAmount,
-      // amountPaid:this.partialPayAmount,
-      amountPaid : this.partialPayAmount > 0 ? this.partialPayAmount : totalAmount,
+      amountPaid:this.partialPayAmount,
+      customAmount: this.customAmount,
+      sittingArea: 'front',
+      // amountPaid : this.partialPayAmount > 0 ? this.partialPayAmount : totalAmount,
       paymentMethodId:1,
       // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
       customerId: this.selectedUser ? this.selectedUser.id : undefined,
@@ -1289,7 +1313,7 @@ filteredCustomers(): any[] {
 
   // Example Function to Calculate Total
   getTotal() {
-    return this.cart.reduce((acc, item) => acc + (item.price * (item.qty ?? 1)), 0);
+    return this.cart.reduce((acc, item) => acc + (item.price * (item.qty ?? 1)), 0)+parseFloat(this.customAmount) || 0;;
   }
 
   logout() {
