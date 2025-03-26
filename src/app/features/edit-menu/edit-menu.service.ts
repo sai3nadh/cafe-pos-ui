@@ -1,13 +1,16 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { MenuItem } from './edit-menu.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditMenuService {
 
-  private apiUrl = 'http://localhost:8083/api/categories';
+  private apiUrl = `${environment.apiUrl}/categories`; 
+  //  'http://localhost:8083/api/categories';
 
   constructor(private http: HttpClient) { }
 
@@ -23,4 +26,13 @@ export class EditMenuService {
     return this.http.post(this.apiUrl + '?name=' + encodeURIComponent(categoryData.name), {}, { headers });
   }
   
+   // Update an existing menu item
+   updateMenuItem(item: MenuItem): Observable<MenuItem> {
+    return this.http.put<MenuItem>(`/api/menuItems/${item.menuItemId}`, item);
+  }
+
+  // Create a new menu item
+  createMenuItem(categoryId: number, item: MenuItem): Observable<MenuItem> {
+    return this.http.post<MenuItem>(`/api/categories/${categoryId}/menuItems`, item);
+  }
 }

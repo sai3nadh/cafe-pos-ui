@@ -5,12 +5,13 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
 import { EditMenuService } from './edit-menu.service';
 import { OrderService } from '../home/order.service';
-interface MenuItem {
+export interface MenuItem {
   menuItemId: number;
   name: string;
   price: number;
   description: string;
   categoryId: number;
+  isKitchenItem: boolean; // New property for checkbox (whether it's a kitchen item)
 }
 
 interface Category {
@@ -34,16 +35,29 @@ export class EditMenuComponent implements OnInit {
   categories: Category[] = [];
   selectedCategory: Category | null = null;
   categoryToEdit: Category = { categoryId: 0, name: '', menuItems: [] };
-  itemToEdit: MenuItem = { menuItemId: 0, name: '', price: 0, description: '', categoryId: 0 };
+  itemToEdit: MenuItem ;
+  // // = { menuItemId: 0, name: '', price: 0, description: '', categoryId: 0 };
+  // itemToEdit: MenuItem = {
+  //   menuItemId: 0,
+  //   name: '',
+  //   price: 0,
+  //   description: '',
+  //   categoryId: 0,
+  //   isKitchenItem: false // Initialize the checkbox value to false
+  // };
   categoryModalVisible: boolean = false;
   itemModalVisible: boolean = false;
   showDeleteCategoryModal: boolean = false;
   showDeleteItemModal: boolean = false;
+  selectedImage: File | null = null;
+  imagePreviewUrl: string | null = null
 
   constructor(private http: HttpClient,
     private editMenuService : EditMenuService
    ,private orderService: OrderService
-  ) {}
+  ) {
+    this.itemToEdit = this.createEmptyMenuItem();
+  }
 
   ngOnInit() {
     this.loadCategories();
@@ -55,6 +69,22 @@ export class EditMenuComponent implements OnInit {
       this.categories = response;
     });
   }
+
+    
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+  
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+  
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagePreviewUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
 
   selectCategory(category: Category) {
     // Select the category and display its menu items on the right
@@ -123,7 +153,16 @@ export class EditMenuComponent implements OnInit {
   }
 
   openItemModal(category: Category) {
-    this.itemToEdit = { menuItemId: 0, name: '', price: 0, description: '', categoryId: category.categoryId }; // New menu item
+    // this.itemToEdit = { menuItemId: 0, name: '', price: 0, description: '', categoryId: category.categoryId }; // New menu item
+    this.itemToEdit = this.createEmptyMenuItem(); 
+    //  {
+    //   menuItemId: 0,
+    //   name: '',
+    //   price: 0,
+    //   description: '',
+    //   categoryId: 0,
+    //   isKitchenItem: false // Initialize the checkbox value to false
+    // };
     this.selectedCategory = category;
     this.itemModalVisible = true;
   }
@@ -131,6 +170,17 @@ export class EditMenuComponent implements OnInit {
   openItemEditModal(item: MenuItem) {
     this.itemToEdit = { ...item }; // Edit existing menu item
     this.itemModalVisible = true;
+  }
+
+  createEmptyMenuItem(): MenuItem {
+    return {
+      menuItemId: 0,
+      name: '',
+      price: 0,
+      description: '',
+      categoryId: 0,
+      isKitchenItem: false
+    };
   }
 
   // saveItem() {
@@ -149,26 +199,48 @@ export class EditMenuComponent implements OnInit {
 
 
   saveItem() {
-    if (this.itemToEdit.menuItemId) {
-      this.http.put(`/api/menuItems/${this.itemToEdit.menuItemId}`, this.itemToEdit).subscribe(() => {
-        this.loadCategories();
-        this.closeItemModal();
-      });
+    if (this.selectedCategory) {  // Check if selectedCategory is not null
+      if (this.itemToEdit.menuItemId) {
+        // Update existing item
+        this.editMenuService.updateMenuItem(this.itemToEdit).subscribe(() => {
+          this.loadCategories();
+          this.closeItemModal();
+        });
+      } else {
+        // Create new item
+        this.editMenuService.createMenuItem(this.selectedCategory.categoryId, this.itemToEdit).subscribe(() => {
+          this.loadCategories();
+          this.closeItemModal();
+        });
+      }
     } else {
-      const categoryData = {
-        name: "",       // Do not send the name, or set it as empty
-        version: 0,     // Set version
-        menuItems: null // Set menuItems as null
-      };
-
-      // Call the createCategory method from MenuService
-      this.editMenuService.createCategory(categoryData).subscribe(() => {
-        this.loadCategories();
-        this.closeItemModal();
-      });
+      console.error('No category selected.');
     }
   }
+  
+
+  // saveItem() {
+  //   if (this.itemToEdit.menuItemId) {
+  //     this.http.put(`/api/menuItems/${this.itemToEdit.menuItemId}`, this.itemToEdit).subscribe(() => {
+  //       this.loadCategories();
+  //       this.closeItemModal();
+  //     });
+  //   } else {
+  //     const categoryData = {
+  //       name: "",       // Do not send the name, or set it as empty
+  //       version: 0,     // Set version
+  //       menuItems: null // Set menuItems as null
+  //     };
+
+  //     // Call the createCategory method from MenuService
+  //     // this.editMenuService.createCategory(categoryData).subscribe(() => {
+  //     //   this.loadCategories();
+  //     //   this.closeItemModal();
+  //     // });
+  //   }
+  // }
   closeItemModal() {
+    this.selectedImage = null;
     this.itemModalVisible = false;
   }
 

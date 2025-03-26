@@ -40,7 +40,7 @@
   </div>
 
   <!-- Modals for Adding/Editing Menu Items -->
-  <div *ngIf="itemModalVisible" class="modal-overlay">
+  <!-- <div *ngIf="itemModalVisible" class="modal-overlay">
     <div class="modal-content">
       <h3>{{ itemToEdit ? 'Edit' : 'Add' }} Menu Item</h3>
       <input [(ngModel)]="itemToEdit.name" placeholder="Item Name" />
@@ -48,7 +48,44 @@
       <button (click)="saveItem()">Save</button>
       <button (click)="closeItemModal()">Cancel</button>
     </div>
+  </div> -->
+
+  <div *ngIf="itemModalVisible" class="modal-overlay">
+    <div class="modal-content">
+      
+      <!-- 🏷️ Dynamic Title -->
+      <h3>
+        {{ itemToEdit.menuItemId ? 'Edit Menu Item' : 'Add New Menu Item' }}
+      </h3>
+  
+      <!-- 📝 Item Name -->
+      <input [(ngModel)]="itemToEdit.name" placeholder="Item Name" />
+  
+      <!-- 💰 Item Price -->
+      <input [(ngModel)]="itemToEdit.price" placeholder="Item Price" type="number" />
+  
+            <!-- 🍽️ Kitchen Item (Checkbox) -->
+      <label>
+        <input [(ngModel)]="itemToEdit.isKitchenItem" type="checkbox" />
+        Kitchen Item
+      </label>
+
+      <!-- 📜 Description -->
+      <textarea [(ngModel)]="itemToEdit.description" placeholder="Item Description"></textarea>
+      <!-- 🖼️ Image Upload -->
+      <input type="file" (change)="onImageSelected($event)" />
+  
+      <!-- 🔍 Image Preview Below -->
+      <div *ngIf="imagePreviewUrl" style="margin-top: 10px;">
+        <img [src]="imagePreviewUrl" alt="Selected Image" width="150" />
+      </div>
+      <!-- ✅ Save / ❌ Cancel Buttons -->
+      <button (click)="saveItem()">Save</button>
+      <button (click)="closeItemModal()">Cancel</button>
+  
+    </div>
   </div>
+  
 
   <!-- Confirmation Modals for Deleting Categories -->
   <div *ngIf="showDeleteCategoryModal" class="modal-overlay">
