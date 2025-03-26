@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
 import { EditMenuService } from './edit-menu.service';
 import { OrderService } from '../home/order.service';
+import { StorageService } from '../services/storage.service';
 export interface MenuItem {
   menuItemId: number;
   name: string;
@@ -55,18 +56,23 @@ export class EditMenuComponent implements OnInit {
   constructor(private http: HttpClient,
     private editMenuService : EditMenuService
    ,private orderService: OrderService
+   ,private storageService: StorageService
+   ,private router: Router,
   ) {
     this.itemToEdit = this.createEmptyMenuItem();
   }
 
   ngOnInit() {
-    this.loadCategories();
     this.orderService.checkLogin();
+    this.loadCategories();
   }
 
   loadCategories() {
     this.http.get<Category[]>('http://localhost:8083/api/categories').subscribe((response) => {
       this.categories = response;
+      if(this.categories.length>0){
+        this.selectCategory(this.categories[0]);
+      }
     });
   }
 
@@ -261,6 +267,78 @@ export class EditMenuComponent implements OnInit {
   cancelDeleteItem() {
     this.showDeleteItemModal = false;
   }
+
+   dropdownVisible = false;
+    showOrdersIcon: boolean = false; 
+    // customerForm: FormGroup;
+    // selectedImage: File | null = null;
+    responseMessage: string = '';
+    compressedImage: string | null = null;  // Declare compressedImage property to store base64 string
+    compressedBlob: Blob | null = null; // Compressed image as Blob
+    goToHome() {
+      // this.cart=[];
+      // console.log('Going to Drafts...');
+      this.router.navigate(['/user']);
+      this.closeDropdown();
+    }
+    closeDropdown() {
+      this.dropdownVisible = false;
+    }
+    usersmenu() {
+      this.router.navigate(['/user']);
+      console.log('Users page...');
+    }
+    // Toggle dropdown visibility
+    toggleDropdown() {
+      this.dropdownVisible = !this.dropdownVisible;
+    }
+    
+  // // // Show Zoom Settings Modal
+  openZoomSettings(): void {
+    this.zoomModalVisible = true;
+  }
+  
+  // // // Close Zoom Settings Modal
+  closeZoomSettings(): void {
+    this.zoomModalVisible = false;
+  }
+   
+  
+  zoomLevel = 1; // Default zoom level
+  
+  zoomModalVisible = false; // Control visibility of the zoom modal
+  
+  adjustZoom(event: any) {
+    this.zoomLevel = event.target.value;
+    this.applyZoom();
+  }
+  
+  changeZoom(delta: number) {
+    this.zoomLevel = Math.min(2, Math.max(0.5, this.zoomLevel + delta));
+    // this.applyZoom();
+    this.saveAndApplyZoom();
+  
+  }
+  
+  
+  applyZoom() {
+    // Adjust the zoom level in your application as needed
+    document.body.style.zoom = `${this.zoomLevel * 100}%`;
+  }
+  saveAndApplyZoom(): void {
+    localStorage.setItem('zoomLevel', this.zoomLevel.toString()); // Save zoom level
+    this.applyZoom();
+  }
+  
+  
+  logout() {
+      
+    // Clear all session data from storage
+    this.storageService.clearAllLocalVariables();
+    this.router.navigate(['/login']);
+    console.log('Logging out...');
+  }
+  
 }
 // export class EditMenuComponent implements OnInit {
 //   categories: Category[] = [];
