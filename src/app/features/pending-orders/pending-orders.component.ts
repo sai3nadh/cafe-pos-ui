@@ -58,22 +58,27 @@ export class PendingOrdersComponent {
     ) {
     }
       private notifSub!: Subscription;
+      isLoading: boolean = false;
     
     ngOnInit() {
+      this.isLoading=true;
       this.orderService.checkLogin();
       this.userId = this.storageService.getLocalVariable('userId');
       this.getOrders();
+      this.filterOrdersBySittingArea(this.allOrders);
       this.wsService.connect(); // ✅ Ensure WebSocket connects on init
       this.notifSub = this.wsService.subscribeToTopic('/topic/notifications').subscribe((msg) => {
         console.log('🔔 Notification:', msg);
           if(msg === "🆕 New Order Placed"){
             console.log("notification received");
+            this.isLoading = true;
             this.getOrders();
           }else{
             console.log("outside");
             
           }
       });
+      // this.isLoading=false;
     }
 
     allOrders: OrderDto[] =[];
@@ -81,17 +86,94 @@ export class PendingOrdersComponent {
     // OrderDto[] = [];
     userId = -1;
  
+
+    frontOrders: OrderDto[] = [];
+    backOrders: OrderDto[] = [];
+    kitchenSummary: { name: string, qty: number }[] = [];
+
+
+
+    filterOrdersBySittingArea(allOrders: OrderDto[]): void {
+      this.frontOrders = allOrders.filter(order => order.sittingArea === 'front');
+      this.backOrders = allOrders.filter(order => order.sittingArea === 'back' );
+      this.orders = this.allOrders.filter(order => order.status === 'Pending');
+    }
+
+    filterOrders(area: 'all' | 'front' | 'back') {
+      this.isLoading = true;
+      switch (area) {
+        case 'front':
+          this.orders =this.frontOrders;
+          break;
+    
+        case 'back':
+          console.log("entered here")
+          this.orders = this.backOrders;
+          break;
+    
+        case 'all':
+        default:
+          this.orders = this.allOrders;
+          break;
+      }
+      this.isLoading = false;
+    }
+    
+
+    showKitchenModal = false;
+
+
+openKitchenSummary() {
+  this.generateKitchenSummary();
+  this.showKitchenModal = true;
+}
+
+closeKitchenSummary() {
+  this.showKitchenModal = false;
+}
+
+generateKitchenSummary() {
+  this.showKitchenModal=true;
+  const summaryMap = new Map<string, number>();
+console.log("called here--kitchen");
+
+  this.allOrders
+    .filter(order => order.status === 'Pending')
+    .forEach(order => {
+      order.items.forEach(item => {
+        if (item.kitchen) {
+          const currentQty = summaryMap.get(item.name) || 0;
+          summaryMap.set(item.name, currentQty + item.qty);
+        }
+      });
+    });
+
+  this.kitchenSummary = Array.from(summaryMap.entries()).map(([name, qty]) => ({ name, qty }));
+}
+
+
+closeKitchenPopup(){
+  this.showKitchenModal = false;
+}
+
   getOrders(){
    
     if(this.userId == -1){
       alert("retuned--");
+      this.isLoading = false; // Set here in case of early return
       return;
     }
     this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
       this.allOrders = orders;
       this.orders = this.allOrders.filter(order => order.status === 'Pending');
-      
-    });   
+      this.filterOrdersBySittingArea(this.allOrders);
+      this.isLoading = false; // Set here in case of early return
+    },
+    error => {
+      console.error("Error fetching orders", error);
+      this.isLoading = false; // ✅ Set false on error too
+    }
+  );   
     
   }
   

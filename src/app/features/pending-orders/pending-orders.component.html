@@ -67,9 +67,11 @@
      
       <!-- Left Sidebar -->
     <div class="sidebar">
-        <button>All Orders</button>
-        <button>Front Orders</button>
-        <button>Back Orders</button>
+        <button (click)="filterOrders('all')">All Orders</button>
+        <button (click)="filterOrders('front')">Front Orders</button>
+        <button (click)="filterOrders('back')">Back Orders</button>
+        <button (click)="generateKitchenSummary()">Kitchen Summary</button>
+
       </div>
       
               <div class="orders-wrapper">
@@ -136,4 +138,39 @@
       
  
       
+  </div>
+
+  <div class="order-popup-overlay" *ngIf="showKitchenModal"  (click)="closeKitchenPopup()">
+    <div class="order-popup">
+      <h3 style="align-items: center;">🍽️ Kitchen Summary <br>(Pending Orders)</h3>
+      <!-- <ul>
+        <li *ngFor="let item of kitchenSummary">
+          {{ item.name }} x {{ item.qty }}
+        </li>
+      </ul> -->
+      <div class="table-scroll">
+        <table class="summary-table">
+            <thead>
+            <tr>
+                <th>Item</th>
+                <th>Qty</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of kitchenSummary">
+                <td>{{ item.name }}</td>
+                <td>{{ item.qty }}</td>
+            </tr>
+            </tbody>
+           
+        </table>
+      </div>
+      <button (click)="closeKitchenSummary()">Close</button>
+    </div>
+  </div>
+  
+  
+
+  <div *ngIf="isLoading" class="spinner-overlay">
+    <div class="spinner"></div>
   </div>
