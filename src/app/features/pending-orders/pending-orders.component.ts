@@ -115,6 +115,10 @@ closeOrderPopup() {
   this.selectedOrder = null;
 }
 
+closeDropdownPopup(){
+  this.dropdownVisible = false;
+}
+
 finishOrder() {
   console.log('Finish logic for', this.selectedOrder);
   this.selectedOrder = null;

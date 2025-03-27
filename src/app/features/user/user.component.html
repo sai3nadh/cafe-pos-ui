@@ -242,6 +242,21 @@
       class="input-field"
     />
 
+    <!-- Sitting Area Toggle -->
+<div class="sitting-area-toggle">
+  <button 
+    [class.active]="selectedSittingArea === 'front'" 
+    (click)="toggleSittingArea('front')" 
+    style="color: black; font-weight: bold;">
+    Front Side
+  </button>
+  <button 
+    [class.active]="selectedSittingArea === 'back'" 
+    (click)="toggleSittingArea('back')" 
+    style="color: black; font-weight: bold;">
+    Back Side
+  </button>
+</div>
       <!-- Toggle Buttons for Payment Type -->
       <div class="payment-toggle">
         <button 
@@ -441,7 +456,7 @@
     <div class="cart-card" (click)="$event.stopPropagation()">
       <div class="card-header">Checkout</div>
       <div class="card-content">
-        <div class="cart-amount">Cart Amount ${{ cartAmount }}</div>
+        <div class="cart-amount">Cart Amount ₹{{ cartAmount }}</div>
         <!-- <div class="cart-amount">Cart Amount ${{ getTotal().toFixed(2)}}</div> -->
         Custom Amount: <input
           type="number"
@@ -449,6 +464,21 @@
           placeholder="Enter custom amount"
           class="input-field"
         />
+      </div>
+      <div class="sitting-area-toggle" *ngIf="+cartAmount > 0">
+        <button 
+          [class.active]="selectedSittingArea === 'front'" 
+          (click)="toggleSittingArea('front')" 
+          style="color: black; font-weight: bold;">
+          Front Side
+        </button>
+        <button 
+          [class.active]="selectedSittingArea === 'back'" 
+          (click)="toggleSittingArea('back')" 
+          style="color: black; font-weight: bold;">
+          Back Side
+        </button>
+        <hr/>
       </div>
        <!-- Toggle Buttons for Payment Type -->
        <!-- <div class="payment-toggle">

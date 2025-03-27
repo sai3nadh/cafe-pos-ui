@@ -23,6 +23,7 @@ export interface OrderDto {
   orderNumber: string;      // Order number (e.g., "110220251001")
   total: number;            // Total cost of the order
   paidAmount : number;
+  sittingArea: string;
   items: OrderItemDto[];    // List of items in the order
 }
 

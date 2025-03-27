@@ -94,6 +94,7 @@ export interface Order {
   total: number;
   paidAmount : number;
   orderNumber: string;      // Order number (e.g., "110220251001")
+  sittingArea: string;
 }
 
 export interface PurchaseItem {
@@ -140,7 +141,7 @@ export class UserComponent {
   // selectedOrder: number | null = null;
   customAmount: string = '0';
   isLoading: boolean = false; // This will control the spinner visibility
-
+  selectedSittingArea: string = 'front'; 
   //pending order
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
@@ -262,6 +263,17 @@ export class UserComponent {
 //     socket.onclose = function () {
 //         console.log("🔌 Connection to printer closed.");
 //     };
+// }
+ // Default to 'front'
+  
+// Method to select sitting area
+toggleSittingArea(sittingArea: string) {
+  this.selectedSittingArea = sittingArea;
+ 
+}
+//  // Function to toggle sitting area between 'front' and 'back'
+//  toggleSittingArea(sittingArea: string) {
+//   this.selectedSittingArea = sittingArea;
 // }
 
 
@@ -898,7 +910,7 @@ filteredCustomers(): any[] {
         amountPaid:((totalAmount) - (this.alreadyPaidAmount) -( this.partialPayAmount)),
         paymentMethodId:1,
         customAmount :this.customAmount,
-        sittingArea: 'front',
+        sittingArea: this.selectedSittingArea,
         // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
         customerId: this.selectedUser ? this.selectedUser.id : undefined,
         orderItems: this.cart.map(item => ({
@@ -936,7 +948,7 @@ filteredCustomers(): any[] {
       total: totalAmount,
       amountPaid:this.partialPayAmount,
       customAmount: this.customAmount,
-      sittingArea: 'front',
+      sittingArea:  this.selectedSittingArea,
       // amountPaid : this.partialPayAmount > 0 ? this.partialPayAmount : totalAmount,
       paymentMethodId:1,
       // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable

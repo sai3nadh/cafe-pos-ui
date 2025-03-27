@@ -19,6 +19,7 @@
     <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
     
     <!-- Dropdown Menu (Initially Hidden) -->
+<div *ngIf="dropdownVisible" class="dropdown-popup-overlay" (click)="closeDropdownPopup()">
     <div *ngIf="dropdownVisible" class="dropdown-menu">
         <!-- <button (click)="viewOrders()">View Orders</button>
         <button (click)="viewReports()">View Reports</button> -->
@@ -30,6 +31,7 @@
           <hr />
       <button (click)="logout()">Logout</button>
     </div>
+</div>
   </div>
   
     </div>
@@ -63,6 +65,13 @@
     <!-- Main Content Section -->
     <div class="main-content">
      
+      <!-- Left Sidebar -->
+    <div class="sidebar">
+        <button>All Orders</button>
+        <button>Front Orders</button>
+        <button>Back Orders</button>
+      </div>
+      
               <div class="orders-wrapper">
                 <div *ngIf="orders.length === 0" class="no-orders-message">
                     <h1>No orders available. Please check back later.</h1>
@@ -72,14 +81,17 @@
                     <div class="order-card" (click)="selectOrder(order)">
                       <div class="order-header">
                         <div class="order-number">#{{ order.orderNumber.slice(-3) }}</div>
-                        <div class="order-time">{{ order.time }}</div>
+                        <div class="order-time">{{ order.time }}<br>{{order.sittingArea}}</div>
+                        <!-- <div>{{order.sittingArea}}</div> -->
                       </div>
               
                       <div class="items-wrapper">
-                        <div class="item" *ngFor="let item of order.items">
+                        <div class="sssitem" *ngFor="let item of order.items">
+                            <div class="item" *ngIf="item.kitchen">
                           <div class="item-name">{{ item.name }}</div>
                           <div class="item-qty"> &nbsp;{{ item.qty }}</div>
                           <!-- <div class="item-price">₹{{ item.price }}</div> -->
+                           </div>
                         </div>
                       </div>
               
@@ -103,7 +115,8 @@
           
           <div class="order-popup-header">
             <h3>Order #{{ selectedOrder.orderNumber.slice(-3) }}</h3>
-            <p style="margin: auto;">{{ selectedOrder.time }}</p>
+            <p style="margin: auto; padding: inherit; justify-content: space-between;">{{ selectedOrder.time }} &nbsp;&nbsp;--&nbsp;&nbsp;&nbsp;&nbsp;{{ selectedOrder.sittingArea.toUpperCase() }}  </p>
+            <!-- <p style="margin: auto; font-weight: bold;">{{ selectedOrder.sittingArea.toUpperCase() }}</p> -->
           </div>
       
           <div class="order-popup-items">

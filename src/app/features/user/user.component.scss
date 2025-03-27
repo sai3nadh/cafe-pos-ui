@@ -1489,7 +1489,7 @@ i.fas.fa-trash-alt {
 
 .cart-card, .totals-card, .orders-card {
   width: 100%;
-  max-width:45%; 
+  max-width:55%; 
   // 400px;
   background: white;
   padding: 16px;
@@ -1530,6 +1530,7 @@ i.fas.fa-trash-alt {
   display: flex;
   justify-content: space-around;
   margin-top: 12px;
+  font-size: 1.6em;
 }
 
 .order-container btn{
@@ -1665,4 +1666,32 @@ i.fas.fa-trash-alt {
   align-items: center;      /* Centers vertically */
   height: 100px;  
   
+}
+
+.sitting-area-toggle button.active,
+.payment-toggle button.active {
+  background-color: #14974f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+}
+
+.sitting-area-toggle .button,
+.payment-toggle .button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.sitting-area-toggle button:hover,
+.payment-toggle button:hover {
+  background-color: #006b14a0;
+}
+
+.sitting-area-toggle button{
+  color: rgb(223, 223, 223);
+  background-color: #e1e1e1;
+  
+  font-size: xx-large;
 }
