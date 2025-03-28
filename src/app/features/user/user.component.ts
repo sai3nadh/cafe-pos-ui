@@ -40,6 +40,16 @@ interface Item {
   kitchen: boolean;
 }
 
+interface cartItem{
+  id: number;
+  name: string;
+  category: number;
+  price: number;
+  qty?: number;
+  kitchen: boolean;
+  itemNote: string;
+}
+
 
 // interface ItemKitchen {
 //   id: number;
@@ -90,12 +100,23 @@ export interface Order {
   id: number;
   time: string;
   status: string;
-  items: Item[];
+  // items: Item[];
+  items:cartItem[];
   total: number;
   paidAmount : number;
   orderNumber: string;      // Order number (e.g., "110220251001")
   sittingArea: string;
 }
+
+interface Modifier {
+  modifierId: number;
+  name: string;
+  default: boolean;
+  qty: number;
+}
+
+type CustomizingItem = cartItem & { modifiers: Modifier[] };
+
 
 export interface PurchaseItem {
   id: number;
@@ -142,6 +163,14 @@ export class UserComponent {
   customAmount: string = '0';
   isLoading: boolean = false; // This will control the spinner visibility
   selectedSittingArea: string = 'front'; 
+  customizeCartItemModal : boolean= false;
+  //this to add the custom itemNote
+  // selectedItem: cartItem[]=[];
+  // selectedItem: cartItem | null = null;  // Single cart item for customization
+  // selectedItem: any = null;  // Single cart item for customization
+  selectedItem: CustomizingItem | null = null;
+
+   
   //pending order
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
@@ -682,20 +711,38 @@ toggleSittingArea(sittingArea: string) {
       order.status.toLowerCase() === status.toLowerCase()
     );
   }
-// Method to populate the cart with the selected order's items
-editOrder(order: Order) {
-  this.cart = order.items.map(item => ({
-    ...item,
-    qty: item.qty || 1,      // Set default qty to 1 if not defined
-    category: item.category,  // Ensure category is included
-  }));
-this.guestName="edit Order - #"+order.orderNumber.slice(-3);
-this.editOrderId=order.id;
-this.alreadyPaidAmount = order.paidAmount;
 
-  // Close the modal after selecting the order
-  this.showOrders = false;
-}
+  editOrder(order: Order) {
+
+    this.cart = order.items.map(item => ({
+      ...item,
+      qty: item.qty || 1,      // Set default qty to 1 if not defined
+      category: item.category,  // Ensure category is included
+      itemNote:item.itemNote
+    }));
+  this.guestName="edit Order - #"+order.orderNumber.slice(-3);
+  this.editOrderId=order.id;
+  this.alreadyPaidAmount = order.paidAmount;
+  
+    // Close the modal after selecting the order
+    this.showOrders = false;
+  }
+
+  //below is working old method edit order
+// Method to populate the cart with the selected order's items
+// editOrder(order: Order) {
+//   this.cart = order.items.map(item => ({
+//     ...item,
+//     qty: item.qty || 1,      // Set default qty to 1 if not defined
+//     category: item.category,  // Ensure category is included
+//   }));
+// this.guestName="edit Order - #"+order.orderNumber.slice(-3);
+// this.editOrderId=order.id;
+// this.alreadyPaidAmount = order.paidAmount;
+
+//   // Close the modal after selecting the order
+//   this.showOrders = false;
+// }
 usersmenu() {
   this.router.navigate(['/user']);
   console.log('Users page...');
@@ -741,7 +788,8 @@ filteredCustomers(): any[] {
   selectedUser: User | null = null;
 
   selectedCategory: Category | null = null;
-  cart: Item[] = [];
+  // cart: Item[] = [];
+  cart: cartItem[] = [];
   guestName: string = '';
   // Somewhere near other properties
   // previousCart: Item[] = [];
@@ -758,13 +806,135 @@ filteredCustomers(): any[] {
   }
 
   addToCart(item: Item) {
-    this.closeDropdown();
+    // this.closeDropdown();
     const existingItem = this.cart.find(i => i.id === item.id);
     if (existingItem) {
       existingItem.qty = (existingItem.qty || 1) + 1;
     } else {
-      this.cart.push({ ...item, qty: 1 });
+      this.cart.push({
+        ...item, qty: 1,
+        itemNote: ''
+      });
     }
+    // console.log("items after adding to cart"+this.cart..toString());
+    console.log("Items in the cart:", JSON.stringify(this.cart, null, 2));
+
+    
+  }
+
+  cancelCartItemNote(){
+    this.customizeCartItemModal = false;
+  }
+  
+  // cusotmizeCartItem(item : cartItem){
+
+  //   this.selectedItem = { ...item };  // Copy the item to avoid modifying the original one directly
+  //   this.customizeCartItemModal = true;
+  //   // console.log(item.);
+  //   // const existingItem = this.cart.find(i => i.id === item.id);
+  //   // if (existingItem) {
+  //   //   // existingItem.qty = (existingItem.qty || 1) + 1;
+  //   //   existingItem.itemNote = "";
+  //   // } else {
+  //   //   this.cart.push({
+  //   //     ...item, qty: 1,
+  //   //     itemNote: ''
+  //   //   });
+  //   // }
+  //   // console.log("items after adding to cart"+this.cart..toString());
+  //   console.log("Items in the cart:", JSON.stringify(this.cart, null, 2));
+
+  // }
+  modifierMap: { [key: number]: { modifierId: number, name: string, default: boolean }[] } = {
+    13: [
+      { modifierId: 1, name: 'sugar', default: true },
+      { modifierId: 2, name: 'no sugar', default: false }
+    ],
+    9: [
+      { modifierId: 3, name: 'extra cheese', default: false },
+      { modifierId: 4, name: 'no cheese', default: false }
+    ]
+    // Add more item IDs and their modifiers here
+  };
+  
+  
+  cusotmizeCartItem(item: cartItem) {
+    const rawModifiers = this.modifierMap[item.id] || [];
+  
+    const modifiers = rawModifiers.map(mod => ({
+      ...mod,
+      qty: 0
+    }));
+  
+    this.selectedItem = {
+      ...item,
+      modifiers: rawModifiers.map(mod => ({
+        ...mod,
+        qty: 0
+      }))
+    } as cartItem & { modifiers: { modifierId: number, name: string, default: boolean, qty: number }[] };
+    
+    // this.selectedItem = {
+    //   ...item,
+    //   itemNote:JSON.stringify(modifiersorderData, null, 2) // only used during customization, not saved to cart
+    // };
+  
+    this.customizeCartItemModal = true;
+  }
+  getModifierTotalQty(): number {
+    return this.selectedItem?.modifiers?.reduce((sum, mod) => sum + (mod.qty || 0), 0) || 0;
+  }
+  saveCustomization() {
+    const totalModifierQty = this.getModifierTotalQty();
+    if (totalModifierQty !== this.selectedItem?.qty) {
+      alert(`Please make sure modifier quantities add up to ${this.selectedItem?.qty}`);
+      return;
+    }
+  
+    // Build string like "3x sugar, 4x no sugar"
+    const noteParts = this.selectedItem.modifiers
+      .filter(mod => mod.qty > 0)
+      .map(mod => `${mod.qty}x ${mod.name}`);
+  
+    this.selectedItem.itemNote = noteParts.join(', ');
+  
+    // Save updated item back to cart
+    const index = this.cart.findIndex(i => i.id === this.selectedItem?.id);
+    if (index !== -1) {
+      this.cart[index] = { ...this.selectedItem };
+    }
+  
+    this.closeCustomizeModal();
+  }
+  
+  
+  // Method to save the customization
+  saveCustomizationOld() {
+    // // Find the item in the cart and update it with the new values from the modal
+    // const index = this.cart.findIndex(item => item.id === this.selectedItem.id);
+    // if (index !== -1) {
+    //   this.cart[index] = { ...this.selectedItem };
+    // }
+    const existingItem = this.cart.find(//this.selectedItem?.id);
+      i => i.id === this.selectedItem?.id);
+    if (existingItem) {
+      // existingItem.qty = (existingItem.qty || 1) + 1;
+      existingItem.itemNote = "added note";
+    } 
+    else {
+      // this.cart.push({
+      //   ...item, 
+      //   itemNote: ''
+      // });
+    }
+    this.closeCustomizeModal();  // Close the modal after saving
+  }
+
+  // Method to close the customization modal
+  closeCustomizeModal() {
+    // this.showCustomizeModal = false;
+    this.customizeCartItemModal = false;
+    this.selectedItem = null;
   }
 
    // Close dropdown when clicked outside

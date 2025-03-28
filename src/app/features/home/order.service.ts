@@ -14,6 +14,7 @@ export interface OrderItemDto {
   category: number;   // Category id or code
   qty: number;        // Quantity ordered
   kitchen: boolean;
+  itemNote: string;
 }
 
 export interface OrderDto {

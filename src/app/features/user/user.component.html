@@ -92,7 +92,7 @@
               <!-- <img class="item-icons" [src]="'../../../assets/icons/' + item.id + '.png'" alt="item.name" (click)="toggleDropdown()" /> -->
               <img class="item-icons" 
               [src]="imageBaseUrl + item.id + '.png'" loading="lazy"
-              alt="item.name" (click)="toggleDropdown()" />
+              alt="item.name"  />
 
               <!-- <img class="item-icons" src="../../../assets/icons/i.png https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" /> -->
 
@@ -128,7 +128,8 @@
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
                     
                     <li *ngFor="let item of cart; let i = index">
-                        <div class="cart-item">
+                        <div class="cart-item" (click)="item.kitchen ? cusotmizeCartItem(item) : null">
+                         <!-- (click)="cusotmizeCartItem(item)"> -->
                         <!-- Item Name and Delete Button on the same row -->
                         <div class="cart-item-header">
                             <h3>{{ item.name }}</h3>
@@ -230,6 +231,39 @@
     </div>
   </div>
   
+  <div *ngIf="customizeCartItemModal" class="modal-overlay" (click)="cancelCartItemNote()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Customize {{ selectedItem?.name }}</h3>
+            
+            <!-- Only show the customization form if selectedItem is not null -->
+      <!-- <div *ngIf="selectedItem">
+        Customize Item Note
+        <label for="item-note">Note:</label>
+        <textarea id="item-note" [(ngModel)]="selectedItem.itemNote"></textarea>
+
+        Customize Item Quantity
+        <label for="item-qty">Quantity:</label>
+        <input type="number" [(ngModel)]="selectedItem.qty" min="1">
+      </div> -->
+
+      <!-- Modifier Customization -->
+<div *ngIf="selectedItem?.modifiers?.length">
+  <h4>Modifiers (split quantity):</h4>
+  <div *ngFor="let mod of selectedItem?.modifiers" class="modifier-row">
+    <input type="number" [(ngModel)]="mod.qty" min="0" [max]="selectedItem?.qty || null">
+    <span>{{ mod.name }}</span>
+  </div>
+  <p>Total modifier quantity: {{ getModifierTotalQty() }} / {{ selectedItem?.qty }}</p>
+</div>
+
+      <div class="modal-actions">
+        <button (click)="saveCustomization()">Save</button>
+        <button (click)="closeCustomizeModal()">Cancel</button>
+      </div>
+    </div>
+  
+  </div>
+
   <div *ngIf="showCheckoutModal" class="modal-overlay" (click)="closeCheckoutModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <h3>Confirm Payment</h3>
