@@ -98,7 +98,7 @@
           <div class="form-container">
             <h2>Add Customer</h2>
           
-            <form [formGroup]="customerForm" (ngSubmit)="submitForm()">
+            <!-- <form [formGroup]="customerForm" (ngSubmit)="submitForm()">
               <div class="form-field">
                 <label for="firstName">First Name:</label>
                 <input type="text" id="firstName" formControlName="firstName" required>
@@ -109,7 +109,7 @@
                 <input type="text" id="lastName" formControlName="lastName" required>
               </div>
           
-              <!-- Other fields -->
+             
               <div class="form-field">
                 <label for="email">Email:</label>
                 <input type="email" id="email" formControlName="email" required>
@@ -136,10 +136,84 @@
               </div>
           
               <button type="submit" [disabled]="customerForm.invalid">Add Customer</button>
+            </form> -->
+            <form [formGroup]="customerForm" (ngSubmit)="submitForm()">
+              <!-- First Name -->
+              <div class="form-field">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" formControlName="firstName" required>
+                <small *ngIf="(customerForm.get('firstName')?.touched || submitted) && customerForm.get('firstName')?.errors?.['required']" class="error">
+                  First name is required.
+                </small>
+              </div>
+            
+              <!-- Last Name -->
+              <div class="form-field">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" formControlName="lastName" required>
+                <small *ngIf="(customerForm.get('lastName')?.touched || submitted) && customerForm.get('lastName')?.errors?.['required']" class="error">
+                  Last name is required.
+                </small>
+              </div>
+            
+              <!-- Email -->
+              <div class="form-field">
+                <label for="email">Email:</label>
+                <input type="email" id="email" formControlName="email" required>
+                <small *ngIf="(customerForm.get('email')?.touched || submitted) && customerForm.get('email')?.errors?.['required']" class="error">
+                  Email is required.
+                </small>
+                <small *ngIf="(customerForm.get('email')?.touched || submitted) && customerForm.get('email')?.errors?.['email']" class="error">
+                  Enter a valid email.
+                </small>
+              </div>
+            
+              <!-- Phone Number -->
+              <div class="form-field">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" formControlName="phoneNumber" required>
+                <small *ngIf="(customerForm.get('phoneNumber')?.touched || submitted) && customerForm.get('phoneNumber')?.errors?.['required']" class="error">
+                  Phone number is required.
+                </small>
+              </div>
+            
+              <!-- Address -->
+              <div class="form-field">
+                <label for="address">Address:</label>
+                <input type="text" id="address" formControlName="address" required>
+                <small *ngIf="(customerForm.get('address')?.touched || submitted) && customerForm.get('address')?.errors?.['required']" class="error">
+                  Address is required.
+                </small>
+              </div>
+            
+              <!-- Birthday -->
+              <div class="form-field">
+                <label for="birthday">Birthday:</label>
+                <input type="date" id="birthday" formControlName="birthday" >
+                <small *ngIf="(customerForm.get('birthday')?.touched || submitted) && customerForm.get('birthday')?.errors?.['required']" class="error">
+                  Birthday is required.
+                </small>
+              </div>
+            
+              <!-- Image Upload -->
+              <div class="form-field">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*">
+              </div>
+            
+              <!-- Submit Button -->
+              <button type="submit">Add Customer</button>
             </form>
-          
-            <p>{{ responseMessage }}</p>
+            
+            <p *ngIf="responseMessage" [ngClass]="{'success-p': isSuccess, 'error-p': !isSuccess}">
+              {{ responseMessage }}
+            </p>
+            <!-- <p>{{ responseMessage }}</p> -->
           </div>
           
     </div>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner-overlay">
+    <div class="spinner"></div>
   </div>

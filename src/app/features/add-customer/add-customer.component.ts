@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { StorageService } from '../services/storage.service';
 import { CommonModule } from '@angular/common';  // Add this import
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CustomerService } from './add-customer.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxImageCompressService } from 'ngx-image-compress';  // Import the Image Compress Service
@@ -28,6 +28,7 @@ export class AddCustomerComponent {
   compressedImage: string | null = null;  // Declare compressedImage property to store base64 string
   compressedBlob: Blob | null = null; // Compressed image as Blob
 
+  submitted: boolean = false;
 
 
    constructor(private router: Router,
@@ -41,18 +42,23 @@ export class AddCustomerComponent {
     //   ,private elRef: ElementRef
     //   ,private wsService: WebSocketService
     ) {
+     
       this.customerForm = this.fb.group({
-        firstName: [''],
-        lastName: [''],
-        email: [''],
-        phoneNumber: [''],
-        address: [''],
-        birthday: [''],
-        image: [null]
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        phoneNumber: ['', Validators.required],
+        address: ['', Validators.required],
+        birthday: ['', Validators.required],
+        image: [null]  // No validator needed for optional image
       });
+      
     }
     ngOnInit() {
       this.orderService.checkLogin();
+      if(localStorage.getItem('zoomLevel')!=null){
+        document.body.style.zoom = `${Number(localStorage.getItem('zoomLevel')) * 100}%`;
+      }
     }
   // cart: Item[] = [];
 
@@ -212,6 +218,15 @@ export class AddCustomerComponent {
   
 
   submitForm(): void {
+    this.submitted = true;
+
+    if (this.customerForm.invalid) {
+      this.customerForm.markAllAsTouched(); // <--- this line is key for showing errors
+console.log("here");
+
+      return;
+    }console.log("out");
+    
     const formData = new FormData();
     formData.append('firstName', this.customerForm.get('firstName')?.value);
     formData.append('lastName', this.customerForm.get('lastName')?.value);
@@ -231,17 +246,47 @@ export class AddCustomerComponent {
       this.sendToServer(formData); // Send without image
     }
   }
-  
+  isSuccess : boolean = false;
+  isLoading : boolean = false;
   // Helper function to send data to server
   sendToServer(formData: FormData) {
+    this.isLoading = true;
     this.adcustomerService.addCustomer(formData).subscribe(
       (response) => {
         this.responseMessage = 'Customer added successfully!';
+        
+        this.isSuccess = true;
+  
+        this.customerForm.reset();
+        this.submitted = false;
+        this.customerForm.markAsPristine();
+        this.customerForm.markAsUntouched();
+
+        
+        const fileInput = document.getElementById('image') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+  
+          // Optional: Auto-hide message after 3 seconds
+      setTimeout(() => {
+        this.responseMessage = '';
+      }, 6500);
+
         console.log('Success:', response);
+        this.isLoading = false;
       },
       (error) => {
-        this.responseMessage = 'Error adding customer!';
+        const backendMessage = error?.error?.message;
+        // this.responseMessage = 'Error adding customer! Try Again..';
+        this.responseMessage = backendMessage || 'Error adding customer! Try Again..';
+
+        this.isSuccess = false;
+       
+        setTimeout(() => {
+          this.responseMessage = '';
+        }, 6000);
+        
         console.error('Error:', error);
+        this.isLoading = false;
       }
     );
   }
