@@ -1,7 +1,9 @@
 <!-- Container: Entire viewport -->
 <div class="container">
+    <!-- <div *ngIf="showTopBar" class="top-bar"> -->
+
     <!-- Top Navigation Bar -->
-    <div class="top-bar">
+    <div *ngIf="showTopBar" class="top-bar">
       <div class="nav-buttons">
         <button (click)="goToHome()">Cafe-ABCD</button>
          <!-- Orders Button -->
@@ -34,6 +36,8 @@
 </div>
   </div>
   
+    <!-- </div> -->
+
     </div>
   <!-- Zoom Modal (Initially Hidden) -->
 <div *ngIf="zoomModalVisible" class="zoom-modal-overlay">
@@ -66,12 +70,23 @@
     <div class="main-content">
      
       <!-- Left Sidebar -->
-    <div class="sidebar">
-        <button (click)="filterOrders('all')">All Orders</button>
+    <div class="sidebar" [style.height]="showTopBar ? '90vh' : '100vh'">
+        <!-- <button (click)="filterOrders('all')">All Orders</button>
         <button (click)="filterOrders('front')">Front Orders</button>
         <button (click)="filterOrders('back')">Back Orders</button>
-        <button (click)="generateKitchenSummary()">Kitchen Summary</button>
+        <button (click)="generateKitchenSummary()">Kitchen Summary</button> -->
 
+        <div class="top-buttons">
+            <button (click)="filterOrders('all')"   [class.active]="activeFilter === 'all'">All Orders</button>
+            <button (click)="filterOrders('front')" [class.active]="activeFilter === 'front'" >Front Orders</button>
+            <button (click)="filterOrders('back')"  [class.active]="activeFilter === 'back'">Back Orders</button>
+            <button (click)="generateKitchenSummary()" [class.active]="activeFilter === 'kitchen'">Kitchen Summary</button>
+          </div>
+        
+          <div class="bottom-button">
+            <button (click)="toggleTopBar()">  {{ showTopBar ? 'Hide' : 'Show' }}
+            </button> <!-- Or whatever function you want -->
+          </div>
       </div>
       
               <div class="orders-wrapper">

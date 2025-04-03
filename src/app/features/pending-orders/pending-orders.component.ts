@@ -92,14 +92,21 @@ export class PendingOrdersComponent {
     kitchenSummary: { name: string, qty: number }[] = [];
 
 
+    showTopBar: boolean = true;
+
+toggleTopBar() {
+  this.showTopBar = !this.showTopBar;
+}
 
     filterOrdersBySittingArea(allOrders: OrderDto[]): void {
       this.frontOrders = allOrders.filter(order => order.sittingArea === 'front');
       this.backOrders = allOrders.filter(order => order.sittingArea === 'back' );
       this.orders = this.allOrders.filter(order => order.status === 'Pending');
     }
+    activeFilter: string = 'all';
 
     filterOrders(area: 'all' | 'front' | 'back') {
+      this.activeFilter = area;
       this.isLoading = true;
       switch (area) {
         case 'front':

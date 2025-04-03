@@ -154,7 +154,7 @@ body {
     box-sizing: border-box;
     display: flex;
     // margin-top: 110px;
-    margin-left: 120px;
+    margin-left: 180px;
     // overflow-y: hidden;
   }
 
@@ -166,11 +166,25 @@ body {
     left: 0;
     width: 75px;  /* Adjust the width as needed */
     background-color: #f4f4f4;
-    padding: 20px;
-    height: 100%;  /* Full height */
+    padding: 15px;
+    // height: 100%;  /* Full height */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    width: min-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // height: 90vh;
+
 }
 
+.sidebar button.active {
+    background-color: #e86500; /* Blue background */
+    color: white;              /* White text */
+    font-weight: bold;
+    border-radius: 4px;
+  }
+  
+  //delete side bar buttons
 
 /* Sidebar button styling */
 .sidebar button {
@@ -178,12 +192,36 @@ body {
     // width: 100%;     /* Ensures buttons stretch across the full width */
     margin-bottom: 10px;  /* Adds some spacing between buttons */
     padding: 15px;  /* Adds padding inside the button */
-    background-color: #ddd;  /* Button background color */
+    background-color: #042a68;  /* Button background color */
     border: none;   /* Removes the default border */
     cursor: pointer;  /* Shows a pointer cursor on hover */
     text-align: left;  /* Aligns button text to the left */
-    font-size: 16px;  /* Button font size */
+    font-size: 1.2em;  /* Button font size */
+    height: 120px;
+    color: white;
+    text-align: center;
 }
+
+.top-buttons button,
+.bottom-button button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+  width: 100%;
+  margin-bottom: 10px;
+  text-align: center;
+  color: white;
+  background-color: #003b80;
+  border: none;
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.bottom-button button {
+  background-color: #880000; /* Red tone for logout or distinct action */
+}
+
 
 .sidebar button:hover {
     background-color: #ccc;  /* Changes background color on hover */
