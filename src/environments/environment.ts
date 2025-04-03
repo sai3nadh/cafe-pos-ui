@@ -5,6 +5,7 @@ export const environment = {
     // apiUrl: 'http://192.168.1.209:8083/api',
     // wsUrl: 'ws://192.168.1.209:8083/ws/websocket'
     ,wsUrl: 'ws://localhost:8083/ws/websocket'
+    // ,imageBaseUrl: 'http://192.168.1.209:8083/images/'  // ✅ Same here
     ,imageBaseUrl: 'http://localhost:8083/images/'  // ✅ Same here
 
 

@@ -851,7 +851,7 @@ filteredCustomers(): any[] {
       { modifierId: 2, name: 'no sugar', default: false }
     ],
     9: [
-      { modifierId: 3, name: 'extra cheese', default: false },
+      { modifierId: 3, name: 'extra cheese', default: true },
       { modifierId: 4, name: 'no cheese', default: false }
     ]
     // Add more item IDs and their modifiers here
@@ -860,26 +860,34 @@ filteredCustomers(): any[] {
   
   cusotmizeCartItem(item: cartItem) {
     const rawModifiers = this.modifierMap[item.id] || [];
-  
+    const itemQty = item.qty ?? 1; // fallback if qty is undefined
+
     const modifiers = rawModifiers.map(mod => ({
       ...mod,
-      qty: 0
+      qty: mod.default ? itemQty : 0
+      // qty: 0
     }));
   
     this.selectedItem = {
       ...item,
-      modifiers: rawModifiers.map(mod => ({
-        ...mod,
-        qty: 0
-      }))
+      modifiers
+      // : rawModifiers.map(mod => ({
+      //   ...mod,
+      //   qty: mod.default ? this.selectedItem : 0
+      // }))
     } as cartItem & { modifiers: { modifierId: number, name: string, default: boolean, qty: number }[] };
     
     // this.selectedItem = {
     //   ...item,
-    //   itemNote:JSON.stringify(modifiersorderData, null, 2) // only used during customization, not saved to cart
+      // itemNote:JSON.stringify(modifiersorderData, null, 2) // only used during customization, not saved to cart
+      console.log("item note"+JSON.stringify(this.selectedItem, null, 2));
+      if(this.selectedItem.modifiers.length>0){
+        this.customizeCartItemModal = true;
+      }else{
+        alert("NO MODIFIERS..!!")
     // };
-  
-    this.customizeCartItemModal = true;
+  //set a popup msg like no options to customize
+    this.customizeCartItemModal = false;}
   }
   getModifierTotalQty(): number {
     return this.selectedItem?.modifiers?.reduce((sum, mod) => sum + (mod.qty || 0), 0) || 0;
@@ -902,7 +910,14 @@ filteredCustomers(): any[] {
     const index = this.cart.findIndex(i => i.id === this.selectedItem?.id);
     if (index !== -1) {
       this.cart[index] = { ...this.selectedItem };
+      console.log("print the cart whole"+JSON.stringify(this.cart, null, 2));
+      
     }
+
+    console.log("reprint itemss"+JSON.stringify(this.selectedItem, null, 2));
+    console.log("reprint itemss"+JSON.stringify(this.selectedItem, null, 2));
+    console.log("end");
+    
   
     this.closeCustomizeModal();
   }
@@ -1087,7 +1102,8 @@ filteredCustomers(): any[] {
           orderId: this.editOrderId, // Set to the appropriate order ID if needed
           menuItemId: item.id,
           quantity: item.qty || 1,
-          price: item.price
+          price: item.price,
+          itemNote:item.itemNote
         }))
       };
 
@@ -1129,7 +1145,8 @@ filteredCustomers(): any[] {
         quantity: item.qty || 1,
         price: item.price,
         kitchen:item.kitchen,
-        name:item.name
+        name:item.name,
+        itemNote:item.itemNote
       }))
     };
 

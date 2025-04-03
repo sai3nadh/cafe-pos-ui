@@ -48,28 +48,38 @@ body {
     justify-content: space-between;
     margin-top: 80px; /* Offset the content by the height of the fixed top bar */
     width: 100%;
-    height: 100%;
+    // height: 100%;
+    // height: calc(100vh - 80px); /* adjust for the top bar height */
+
+    flex: 1;
   }
   
   /* Left Section (Items Grid) */
   .left-section {
-    flex: 3;
+    // flex: 3;
+    flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     padding: 10px;
-    position: relative; /* Adjusted to handle the fixed categories section */
+    height: 100vh;
+    // position: relative; /* Adjusted to handle the fixed categories section */
   }
   
   /* Fixed Categories Section */
   .categories {
-    position: fixed;
-    top: 80px; /* Start below the top bar */
-    left: 10px;
-    width: calc(65% - 20px); /* To make it fit in the left section */
-    z-index: 100;
+    // position: fixed;
+    // top: 80px; /* Start below the top bar */
+    // left: 10px;
+    // width: calc(65% - 20px); /* To make it fit in the left section */
+    // z-index: 100;
     padding-top: 20px;
-    display: flex;
+    display: inline-grid;
     flex-wrap: wrap;
+    // gap: 10px;
+    // height: calc(100vh - 80px); /* Full height minus top bar */
+    overflow-y: auto;
+    width: min-content;
+    // height: 100px;
   }
   
   .categories button {
@@ -82,6 +92,7 @@ body {
     border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.3s;
+    min-height: 170PX;
   }
   
   .categories button:hover,.categories button.active-category {
@@ -90,8 +101,10 @@ body {
  
   /* Items Section - Scrollable */
   .items-section {
-    margin-top: 100px; /* Ensure it starts below the fixed categories */
+    // margin-top: 100px; /* Ensure it starts below the fixed categories */
     overflow-y: auto;
+    // margin-left: 240PX;
+    flex: 1;
     // max-height: calc(100vh - 150px); /* Limit item section height to fit within viewport */
   }
   
@@ -284,7 +297,7 @@ body {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    height: 90vh; 
+    // height: 100vh; 
     overflow: -moz-scrollbars-none; /* For Firefox */
     overflow: hidden;
     scrollbar-width: none; /* For Firefox */
@@ -883,16 +896,11 @@ i.fas.fa-trash-alt {
     cursor: pointer;
   }
   
-  .main-content {
-    display: flex;
-    flex: 1;
-  }
+  // .main-content {
+  //   display: flex;
+  //   flex: 1;
+  // }
   
-  .categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
   
   .category-btn {
     padding: 10px 20px;
@@ -910,7 +918,7 @@ i.fas.fa-trash-alt {
   .users-btn-container {
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 220px;
     padding: 20px;
   }
   
@@ -1451,7 +1459,7 @@ i.fas.fa-trash-alt {
 /* Container holding both left and right sections */
 .container {
   display: flex;
-  height: 90vh; /* Make the entire container 90% of the viewport height */
+  height: 100vh; /* Make the entire container 90% of the viewport height */
 }
 
 .zoom-buttons button {

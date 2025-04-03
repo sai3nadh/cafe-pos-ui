@@ -200,14 +200,14 @@
                 <label for="image">Upload Image:</label>
                 <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*">
               </div>
-            
+             
+              <p *ngIf="responseMessage" [ngClass]="{'success-p': isSuccess, 'error-p': !isSuccess}">
+                {{ responseMessage }}
+              </p>
               <!-- Submit Button -->
               <button type="submit">Add Customer</button>
             </form>
-            
-            <p *ngIf="responseMessage" [ngClass]="{'success-p': isSuccess, 'error-p': !isSuccess}">
-              {{ responseMessage }}
-            </p>
+           
             <!-- <p>{{ responseMessage }}</p> -->
           </div>
           
