@@ -749,6 +749,7 @@ usersmenu() {
 }
 // Method to toggle user list visibility
 toggleUsers() {
+  this.searchTerm='';
   this.loadPurchaseHistory();
   this.showUsers = !this.showUsers;
 }
@@ -767,11 +768,17 @@ toggleUsers() {
 // }
 
 filteredCustomers(): any[] {
-  return this.customers.filter(customer =>
-    customer.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-  );
+  const term = this.searchTerm.toLowerCase();
+  return this.customers.filter(customer => {
+    const nameMatches = customer.name?.toLowerCase().includes(term);
+    const idMatches = customer.id?.toString().includes(term);
+    return nameMatches || idMatches;
+  });
 }
 
+closeUsersModal(){
+  this.showUsers=false;
+}
 
   showDeleteModal = false;
   itemToDeleteIndex: number | null = null;

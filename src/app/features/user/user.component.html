@@ -463,8 +463,10 @@
   <!-- Button to toggle user list visibility -->
   <button class="btn" (click)="emptyCart()">clearCart</button>
   <img *ngIf="selectedUser?.avatar" class="selected-user" [src]="selectedUser?.avatar" alt={{selectedUser?.name}} hidden/>
-    <!-- User list with search functionality -->
-    <div class="users-list" *ngIf="showUsers">
+    
+  <div *ngIf="showUsers" class="modal-overlay" (click)="closeUsersModal()">
+  <!-- User list with search functionality -->
+    <div class="users-list" *ngIf="showUsers"  (click)="$event.stopPropagation()">
       <div class="search-bar">
         <input [(ngModel)]="searchTerm" placeholder="Search users" />
             <span class="close-icon" (click)="toggleUsers()">
@@ -485,6 +487,7 @@
           <p>{{ customer.name }}</p>
         </div>
       </div>
+    </div>
     </div>
   </div>
 
