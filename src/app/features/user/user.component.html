@@ -8,7 +8,8 @@
          <button>
           <!-- (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
           Orders</button>
-      <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded">
+      <!-- <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
+      <button (click)="toggleUsers()" class="bg-blue-500 text-white px-4 py-2 rounded">
           Users
         </button>
         <button (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();">Orders-Icon</button>
@@ -461,7 +462,8 @@
     <!-- Button to toggle user list visibility -->
     <button class="btn" (click)="toggleUsers()">Users</button>
   <!-- Button to toggle user list visibility -->
-  <button class="btn" (click)="emptyCart()">clearCart</button>
+  <button class="btn" (click)="emptyCart()" [disabled]="!(cart.length > 0 || purchaseHistory.length > 0)"
+    >clearCart</button>
   <img *ngIf="selectedUser?.avatar" class="selected-user" [src]="selectedUser?.avatar" alt={{selectedUser?.name}} hidden/>
     
   <div *ngIf="showUsers" class="modal-overlay" (click)="closeUsersModal()">
