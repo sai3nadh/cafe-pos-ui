@@ -190,6 +190,7 @@ export class UserComponent {
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
+    this.role = this.storageService.getLocalVariable("role");
     // const userId = this.storageService.getLocalVariable('userId');
     // const username = this.storageService.getLocalVariable('username');
 
@@ -540,6 +541,7 @@ toggleSittingArea(sittingArea: string) {
   // showOrders: boolean = false;
   // You might have a logged-in user id
   userId: number = -1; // example user id
+  role: string = ""; // example user id
   
   // Call this method when you want to open the modal
   openModal(): void {

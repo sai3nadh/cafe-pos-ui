@@ -30,6 +30,7 @@ export class RegisterComponent {
 
     ngOnInit() {
       this.orderService.checkLogin();
+      document.body.style.zoom  ="100";
     }
 
   handleRegister(): void {

@@ -23,6 +23,7 @@ export class LoginComponent {
   loggedIn: boolean = false;
   isRegister: boolean = false;
   loginError: string = '';
+  role: string = '';
 
   constructor(private router: Router, private loginService: LoginService,
      private cd: ChangeDetectorRef
@@ -52,6 +53,7 @@ export class LoginComponent {
           // this.storageService.setLocalVariable('email', response.email);
           this.storageService.setLocalVariable('username', response.username);
           this.storageService.setLocalVariable('firstName', response.role);
+          this.storageService.setLocalVariable('role', response.role);
           // this.storageService.setLocalVariable('lastName', response.lastName);
           
           this.router.navigate(['/user']); // Navigate to home

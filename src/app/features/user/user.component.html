@@ -38,32 +38,6 @@
   </div>
   
     </div>
-  <!-- Zoom Modal (Initially Hidden) -->
-<div *ngIf="zoomModalVisible" class="zoom-modal-overlay">
-  <div class="zoom-modal">
-    <h3>Set Zoom Level</h3>
-    <label for="zoomSlider">Zoom Level: </label>
-    
-    <!-- Left and Right Buttons -->
-    <div class="zoom-buttons">
-      <button (click)="changeZoom(-0.05)">-</button>
-      <input
-        id="zoomSlider"
-        type="range"
-        min="0.5"
-        max="2"
-        step="0.05"
-        [(ngModel)]="zoomLevel"
-        (input)="adjustZoom($event)"
-      />
-      <button (click)="changeZoom(0.05)">+</button>
-    </div>
-    
-    <span>{{ (zoomLevel * 100).toFixed(0) }}%</span>
-    
-    <button (click)="closeZoomSettings()">Close</button>
-  </div>
-</div>
 
     <!-- Main Content Section -->
     <div class="main-content">
@@ -223,6 +197,36 @@
 
     </div>
   </div>
+
+  <div *ngIf="zoomModalVisible" class="modal-overlay" (click)="closeZoomSettings()">
+    
+      <!-- Zoom Modal (Initially Hidden) -->
+  <!-- <div *ngIf="zoomModalVisible" class="zoom-modal-overlay" (click)="$event.stopPropagation()"> -->
+    <div class="zoom-modal" (click)="$event.stopPropagation()">
+      <h3>Set Zoom Level</h3>
+      <label for="zoomSlider">Zoom Level: </label>
+      
+      <!-- Left and Right Buttons -->
+      <div class="zoom-buttons">
+        <button (click)="changeZoom(-0.05)">-</button>
+        <input
+          id="zoomSlider"
+          type="range"
+          min="0.5"
+          max="2"
+          step="0.05"
+          [(ngModel)]="zoomLevel"
+          (input)="adjustZoom($event)"
+        />
+        <button (click)="changeZoom(0.05)">+</button>
+      </div>
+      
+      <span>{{ (zoomLevel * 100).toFixed(0) }}%</span>
+      
+      <button (click)="closeZoomSettings()">Close</button>
+    </div>
+  <!-- </div> -->
+</div>
   <!-- Confirmation Modal -->
 <!-- Confirmation Modal -->
 
@@ -399,72 +403,76 @@
 <!-- Orders Modal -->
 
 <!-- Orders Modal -->
-<div *ngIf="showOrdersIcon" class="custom-modal-overlay">
-  <div class="modal-content-icon">
-    <!-- Close Button -->
-    <button (click)="toggleOrdersModalClose()" class="close-btn">X</button>
-  
-    <h2 class="text-lg font-bold mb-4">Orders</h2>
-    <div class="flex justify-center mb-4 space-x-4">
-      <button class="btn-filter" [class.active]="selectedStatus === 'All'" (click)="handleFilterChange('All')">All</button>
-      <button class="btn-filter" [class.active]="selectedStatus === 'Pending'" (click)="handleFilterChange('Pending')">Pending</button>
-      <button class="btn-filter" [class.active]="selectedStatus === 'Completed'" (click)="handleFilterChange('Completed')">Completed</button>
-    </div>
-  
-    <div class="order-bottom-section">
-      <div class="bottom-left">
-        <div class="order-grid-responsive">
-          <div *ngFor="let order of filteredOrders" class="order-item-responsive" (click)="showOrderDetails(order)" [ngClass]="{'selected-order': selectedOrder?.orderNumber === order.orderNumber}">
-            <div class="order-circle" [ngClass]="{'text-red-500': order.status === 'Pending', 'text-green-500': order.status === 'Completed'}">
-              <div class="order-text">
-                <span>{{ order.orderNumber | slice: -3 }}</span>
-                <span class="order-status">{{ order.status }}</span>
+<div *ngIf="showOrdersIcon" class="custom-modal-overlay" (click)="toggleOrdersModalClose()">
+ 
+  <!-- <div *ngIf="showOrdersIcon" class="custom-modal-overlay"> -->
+    <div class="modal-content-icon">
+      <!-- Close Button -->
+      <button (click)="toggleOrdersModalClose()" class="close-btn">X</button>
+    
+      <h2 class="text-lg font-bold mb-4">Orders</h2>
+      <div class="flex justify-center mb-4 space-x-4">
+        <button class="btn-filter" [class.active]="selectedStatus === 'All'" (click)="handleFilterChange('All')">All</button>
+        <button class="btn-filter" [class.active]="selectedStatus === 'Pending'" (click)="handleFilterChange('Pending')">Pending</button>
+        <button class="btn-filter" [class.active]="selectedStatus === 'Completed'" (click)="handleFilterChange('Completed')">Completed</button>
+      </div>
+    
+      <div class="order-bottom-section">
+        <div class="bottom-left">
+          <div class="order-grid-responsive">
+            <div *ngFor="let order of filteredOrders" class="order-item-responsive" (click)="showOrderDetails(order)" [ngClass]="{'selected-order': selectedOrder?.orderNumber === order.orderNumber}">
+              <div class="order-circle" [ngClass]="{'text-red-500': order.status === 'Pending', 'text-green-500': order.status === 'Completed'}">
+                <div class="order-text">
+                  <span>{{ order.orderNumber | slice: -3 }}</span>
+                  <span class="order-status">{{ order.status }}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="bottom-right">
-        <div class="order-details-fixed" *ngIf="selectedOrder">
-          <h3 style="margin-bottom: 10px;">Order Items - #{{ selectedOrder.orderNumber | slice: -3}}</h3>
-          <h5 style="margin-top: 10px; margin-bottom: 5px; text-align: justify;">Time: {{selectedOrder.time}}</h5>
-          <!-- <ul>
-            <li *ngFor="let item of selectedOrder.items">
-              {{ item.name }} - {{ item.qty }}
-            </li>
-          </ul> -->
-          <div *ngFor="let item of selectedOrder.items" class="item-row">
-            <span class="item-name">{{ item.name }}</span>
-            <span class="item-qty"> - {{ item.qty }}</span>
-          </div>
+        <div class="bottom-right">
+          <div class="order-details-fixed" *ngIf="selectedOrder">
+            <h3 style="margin-bottom: 10px;">Order Items - #{{ selectedOrder.orderNumber | slice: -3}}</h3>
+            <h5 style="margin-top: 10px; margin-bottom: 5px; text-align: justify;">Time: {{selectedOrder.time}}</h5>
+            <!-- <ul>
+              <li *ngFor="let item of selectedOrder.items">
+                {{ item.name }} - {{ item.qty }}
+              </li>
+            </ul> -->
+            <div *ngFor="let item of selectedOrder.items" class="item-row">
+              <span class="item-name">{{ item.name }}</span>
+              <span class="item-qty"> - {{ item.qty }}</span>
+            </div>
 
-          <div class="order-summary" style="text-align: right; font-weight: bold;">
-            <hr/>
-          <p><strong>Total:</strong> {{ selectedOrder.total | currency: 'INR' }}</p>
-          <p><strong>Pending Amount:</strong> {{ selectedOrder.total - selectedOrder.paidAmount | currency: 'INR' }}</p>
-          </div>
-          <div class="button-section">
-            <button class="btn-edit" (click)="editOrder(selectedOrder);toggleOrdersModalClose();">Edit</button>
-            <button class="btn-finish" 
-            (click)="finishOrder(selectedOrder)" 
-            [disabled]="selectedOrder.status !== 'Pending'">Finish</button>
-            <br/>
-            <button class="btn-reprint" (click)="reprintOrder(selectedOrder)">Reprint</button>
+            <div class="order-summary" style="text-align: right; font-weight: bold;">
+              <hr/>
+            <p><strong>Total:</strong> {{ selectedOrder.total | currency: 'INR' }}</p>
+            <p><strong>Pending Amount:</strong> {{ selectedOrder.total - selectedOrder.paidAmount | currency: 'INR' }}</p>
+            </div>
+            <div class="button-section">
+              <button class="btn-edit" (click)="editOrder(selectedOrder);toggleOrdersModalClose();">Edit</button>
+              <button class="btn-finish" 
+              (click)="finishOrder(selectedOrder)" 
+              [disabled]="selectedOrder.status !== 'Pending'">Finish</button>
+              <br/>
+              <button class="btn-reprint" (click)="reprintOrder(selectedOrder)">Reprint</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  
+    
+  <!-- </div> -->
 </div>
-
 
   <div class="users-btn-container">
     <!-- Button to toggle user list visibility -->
     <button class="btn" (click)="toggleUsers()">Users</button>
   <!-- Button to toggle user list visibility -->
-  <button class="btn" (click)="emptyCart()" [disabled]="!(cart.length > 0 || purchaseHistory.length > 0)"
-    >clearCart</button>
+  <button class="btn" (click)="emptyCart()" 
+          [disabled]="!(cart.length > 0 || purchaseHistory.length > 0 || selectedUser)"
+          >clearCart</button>
+
   <img *ngIf="selectedUser?.avatar" class="selected-user" [src]="selectedUser?.avatar" alt={{selectedUser?.name}} hidden/>
     
   <div *ngIf="showUsers" class="modal-overlay" (click)="closeUsersModal()">
