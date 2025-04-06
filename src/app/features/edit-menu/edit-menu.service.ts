@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MenuItem } from './edit-menu.component';
+import { Category } from './edit-menu.component';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,17 @@ export class EditMenuService {
    // Update an existing menu item
    updateMenuItem(item: MenuItem): Observable<MenuItem> {
     return this.http.put<MenuItem>(`/api/menuItems/${item.menuItemId}`, item);
+  }
+
+
+  getCategories() {
+    return this.http.get<Category[]>(this.apiUrl);
+  }
+  
+  updateCategory(categoryId: number, name: string) {
+    const params = new HttpParams().set('name', name);
+    // return this.http.put(this.apiUrl+`/api/categories/${categoryId}`, {}, { params });
+    return this.http.put(this.apiUrl+`/${categoryId}`, {}, { params });
   }
 
   // Create a new menu item

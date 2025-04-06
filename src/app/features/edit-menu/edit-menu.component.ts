@@ -15,7 +15,7 @@ export interface MenuItem {
   isKitchenItem: boolean; // New property for checkbox (whether it's a kitchen item)
 }
 
-interface Category {
+export interface Category {
   categoryId: number;
   name: string;
   menuItems: MenuItem[];
@@ -67,14 +67,24 @@ export class EditMenuComponent implements OnInit {
     this.loadCategories();
   }
 
+  // loadCategories() {
+  //   this.http.get<Category[]>('http://localhost:8083/api/categories').subscribe((response) => {
+  //     this.categories = response;
+  //     if(this.categories.length>0){
+  //       this.selectCategory(this.categories[0]);
+  //     }
+  //   });
+  // }
+
   loadCategories() {
-    this.http.get<Category[]>('http://localhost:8083/api/categories').subscribe((response) => {
+    this.editMenuService.getCategories().subscribe((response) => {
       this.categories = response;
-      if(this.categories.length>0){
+      if (this.categories.length > 0) {
         this.selectCategory(this.categories[0]);
       }
     });
   }
+  
 
     
   onImageSelected(event: Event): void {
@@ -103,10 +113,14 @@ export class EditMenuComponent implements OnInit {
     this.categoryModalVisible = true;
   }
 
-  openCategoryEditModal(category: Category) {
-    this.categoryToEdit = { ...category }; // Edit existing category
-    this.categoryModalVisible = true;
-  }
+  // commented 
+  // openCategoryEditModal(category: Category) {
+  //   this.categoryToEdit = { ...category }; // Edit existing category
+  //   this.categoryModalVisible = true;
+  // }
+
+  
+
 
   // saveCategory() {
   //   if (this.categoryToEdit.categoryId) {
@@ -263,6 +277,33 @@ export class EditMenuComponent implements OnInit {
       });
     }
   }
+
+
+  editCategoryModalVisible: boolean = false;
+  addCategoryModalVisible: boolean = false;
+  updateCategory() {
+    if (this.categoryToEdit && this.categoryToEdit.categoryId) {
+      
+      this.editMenuService.updateCategory(this.categoryToEdit.categoryId, this.categoryToEdit.name).subscribe(() => {
+        this.loadCategories();
+        this.closeEditCategoryModal();
+      });
+    }
+  }
+  
+  closeEditCategoryModal(){
+   this.editCategoryModalVisible = false;
+  }
+  
+  openCategoryEditModal(category: Category) {
+    this.categoryToEdit = { ...category };
+    this.editCategoryModalVisible = true;
+  }
+  
+  
+
+
+
 
   cancelDeleteItem() {
     this.showDeleteItemModal = false;

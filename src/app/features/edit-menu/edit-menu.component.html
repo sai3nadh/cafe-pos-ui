@@ -98,12 +98,32 @@
   <!-- Modals for Adding/Editing Categories -->
   <div *ngIf="categoryModalVisible" class="modal-overlay">
     <div class="modal-content">
-      <h3>{{ categoryToEdit ? 'Edit' : 'Add' }} Category</h3>
+      <h3>{{ categoryToEdit.categoryId>0  ? 'Edit' : 'Add' }} Category</h3>
       <input [(ngModel)]="categoryToEdit.name" placeholder="Category Name" />
       <button (click)="saveCategory()">Save</button>
       <button (click)="closeCategoryModal()">Cancel</button>
     </div>
   </div>
+
+      <!-- Add Category Modal -->
+    <!-- <div *ngIf="addCategoryModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <h3>Add Category</h3>
+        <input [(ngModel)]="newCategory.name" placeholder="Category Name" />
+        <button (click)="addCategory()">Save</button>
+        <button (click)="closeAddCategoryModal()">Cancel</button>
+      </div>
+    </div> -->
+      <!-- Edit Category Modal -->
+    <div *ngIf="editCategoryModalVisible" class="modal-overlay">
+      <div class="modal-content">
+        <h3>Edit Category</h3>
+        <input [(ngModel)]="categoryToEdit.name" placeholder="Category Name" />
+        <button (click)="updateCategory()">Save</button>
+        <button (click)="closeEditCategoryModal()">Cancel</button>
+      </div>
+    </div>
+
 
   <!-- Modals for Adding/Editing Menu Items -->
   <!-- <div *ngIf="itemModalVisible" class="modal-overlay">
