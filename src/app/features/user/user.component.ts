@@ -1537,6 +1537,10 @@ closeUsersModal(){
     this.closeDropdown();
   }
 
+  registerUser(){
+    this.router.navigate(['/register']);
+    this.closeDropdown();
+  }
   
   addCustomer() {
 

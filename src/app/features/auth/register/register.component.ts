@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { RegisterService } from './register.service';
 import { StorageService } from '../../services/storage.service';
+import { OrderService } from '../../home/order.service';
 
 @Component({
     selector: 'app-register',
@@ -23,7 +24,13 @@ export class RegisterComponent {
 
   constructor(private router: Router, private registerService: RegisterService
     , private storageService: StorageService
+    ,private orderService : OrderService
   ) {}
+
+
+    ngOnInit() {
+      this.orderService.checkLogin();
+    }
 
   handleRegister(): void {
     if (this.name && this.email && this.password && this.confirmPassword) {
