@@ -12,7 +12,7 @@ export interface MenuItem {
   price: number;
   description: string;
   categoryId: number;
-  isKitchenItem: boolean; // New property for checkbox (whether it's a kitchen item)
+  kitchenItem: boolean; // New property for checkbox (whether it's a kitchen item)
 }
 
 export interface Category {
@@ -36,7 +36,9 @@ export class EditMenuComponent implements OnInit {
   categories: Category[] = [];
   selectedCategory: Category | null = null;
   categoryToEdit: Category = { categoryId: 0, name: '', menuItems: [] };
-  itemToEdit: MenuItem ;
+  itemToEdit: MenuItem;
+  originalItem :MenuItem;
+
   // // = { menuItemId: 0, name: '', price: 0, description: '', categoryId: 0 };
   // itemToEdit: MenuItem = {
   //   menuItemId: 0,
@@ -60,6 +62,7 @@ export class EditMenuComponent implements OnInit {
    ,private router: Router,
   ) {
     this.itemToEdit = this.createEmptyMenuItem();
+    this.originalItem = this.createEmptyMenuItem();
   }
 
   ngOnInit() {
@@ -98,6 +101,7 @@ export class EditMenuComponent implements OnInit {
         this.imagePreviewUrl = e.target.result;
       };
       reader.readAsDataURL(file);
+      this.selectedImage = file;
     }
   }
 
@@ -188,7 +192,12 @@ export class EditMenuComponent implements OnInit {
   }
 
   openItemEditModal(item: MenuItem) {
-    this.itemToEdit = { ...item }; // Edit existing menu item
+   
+    this.itemToEdit = {
+      ...item
+      // kitchenItem: !!item.isKitchenItem // ✅ Convert 1 → true, 0 → false
+    };
+    this.originalItem = { ...item }; // ← Keep original for comparison
     this.itemModalVisible = true;
   }
 
@@ -199,7 +208,7 @@ export class EditMenuComponent implements OnInit {
       price: 0,
       description: '',
       categoryId: 0,
-      isKitchenItem: false
+      kitchenItem: false
     };
   }
 
@@ -218,25 +227,245 @@ export class EditMenuComponent implements OnInit {
   // }
 
 
+  hasItemChanged(): boolean {
+    return (
+      this.itemToEdit.name !== this.originalItem.name ||
+      this.itemToEdit.price !== this.originalItem.price ||
+      this.itemToEdit.description !== this.originalItem.description ||
+      this.itemToEdit.kitchenItem !== this.originalItem.kitchenItem
+    );
+  }
+
+  
   saveItem() {
-    if (this.selectedCategory) {  // Check if selectedCategory is not null
-      if (this.itemToEdit.menuItemId) {
-        // Update existing item
-        this.editMenuService.updateMenuItem(this.itemToEdit).subscribe(() => {
-          this.loadCategories();
-          this.closeItemModal();
-        });
-      } else {
-        // Create new item
-        this.editMenuService.createMenuItem(this.selectedCategory.categoryId, this.itemToEdit).subscribe(() => {
-          this.loadCategories();
-          this.closeItemModal();
+    if (!this.selectedCategory) {
+      console.error('No category selected.');
+      return;
+    }
+  
+    const uploadImageIfNeeded = (menuItemId: number) => {
+      if (this.selectedImage) {
+        const originalName = this.selectedImage.name; // e.g. burger.jpg
+        const extension = originalName.substring(originalName.lastIndexOf('.') + 1); // jpg, png, etc.
+        
+        const filenameWithExt = `${menuItemId}.${extension}`; // e.g. 51.jpg
+    
+        const formData = new FormData();
+        formData.append('file', this.selectedImage);
+        formData.append('filename', filenameWithExt);
+        this.editMenuService.uploadImage(formData).subscribe({
+          next: (res) => console.log("Image uploaded:", res),
+          error: (err) => console.error("Image upload failed", err)
         });
       }
+    };
+  
+    // Check if item already exists (editing mode)
+    if (this.itemToEdit.menuItemId) {
+      const hasChanged = this.hasItemChanged();
+  
+      if (hasChanged) {
+        const requestPayload = {
+          categoryId: this.selectedCategory.categoryId,
+          name: this.itemToEdit.name,
+          description: this.itemToEdit.description,
+          kitchenItem: this.itemToEdit.kitchenItem ? 1 : 0,
+          price: this.itemToEdit.price
+        };
+  
+        this.editMenuService.updateMenuItem(this.itemToEdit.menuItemId, requestPayload).subscribe((updatedItem) => {
+          this.loadCategories();
+          // this.closeItemModal();
+          // uploadImageIfNeeded(updatedItem.menuItemId);
+        });
+      } else {
+        console.log("No changes made to item — skipping update API");
+        // this.closeItemModal(); 
+      }
+      // if (this.selectedImage) {
+        // alert("called.. img..")
+        uploadImageIfNeeded(this.itemToEdit.menuItemId);
+        this.closeItemModal();
+      // }
     } else {
-      console.error('No category selected.');
+      // Creating new item (no need to check for changes)
+      const requestPayload = {
+        categoryId: this.selectedCategory.categoryId,
+        name: this.itemToEdit.name,
+        description: this.itemToEdit.description,
+        kitchenItem: this.itemToEdit.kitchenItem ? 1 : 0,
+        price: this.itemToEdit.price
+      };
+  
+      this.editMenuService.createMenuItem(requestPayload).subscribe((createdItem) => {
+        this.loadCategories();
+        this.closeItemModal();
+        if (this.selectedImage) {
+          uploadImageIfNeeded(createdItem.menuItemId);
+        }
+      });
     }
+    
   }
+  
+  
+  //old working
+  // saveItem() {
+  //   if (!this.selectedCategory) {
+  //     console.error('No category selected.');
+  //     return;
+  //   }
+  
+  //   const requestPayload = {
+  //     categoryId: this.selectedCategory.categoryId,
+  //     name: this.itemToEdit.name,
+  //     description: this.itemToEdit.description,
+  //     kitchenItem: this.itemToEdit.isKitchenItem ? 1 : 0,
+  //     // kitchenItem: this.itemToEdit.isKitchenItem,
+  //     price: this.itemToEdit.price
+  //   };
+  
+  //   const uploadImageIfNeeded = (menuItemId: number) => {
+  //     if (this.selectedImage) {
+  //       const formData = new FormData();
+  //       formData.append('file', this.selectedImage);
+  //       formData.append('filename', `${menuItemId}`); // Use menuItemId as filename
+  
+  //       this.editMenuService.uploadImage(formData).subscribe({
+  //         next: (response) => console.log('✅ Image uploaded:', response),
+  //         error: (err) => console.error('❌ Image upload failed', err)
+  //       });
+  //     }
+  //   };
+  
+  //   if (this.itemToEdit.menuItemId) {
+  //     alert("Editing existing menu item");
+  //     this.editMenuService.updateMenuItem(this.itemToEdit.menuItemId, requestPayload).subscribe((updatedItem) => {
+  //       this.loadCategories();
+  //       this.closeItemModal();
+  //       uploadImageIfNeeded(updatedItem.menuItemId); // Upload using returned ID
+  //     });
+  //   } else {
+  //     alert("Creating new menu item");
+  //     this.editMenuService.createMenuItem(requestPayload).subscribe((createdItem) => {
+  //       this.loadCategories();
+  //       this.closeItemModal();
+  //       uploadImageIfNeeded(createdItem.menuItemId); // Upload using new ID
+  //     });
+  //   }
+  // }
+  createMenuItem(data: any) {
+    return this.http.post<MenuItem>('/api/menuItems', data);
+  }
+  
+  updateMenuItem(menuItemId: number, data: any) {
+    return this.http.put<MenuItem>(`/api/menuItems/${menuItemId}`, data);
+  }
+  
+  uploadImage(formData: FormData) {
+    return this.http.post('/api/files/uploadOrReplace', formData, { responseType: 'text' });
+  }
+  
+  
+  // saveItemOld() {
+  //   if (!this.selectedCategory) {
+  //     console.error('No category selected.');
+  //     return;
+  //   }
+  
+  //   const requestPayload = {
+  //     categoryId: this.selectedCategory.categoryId,
+  //     name: this.itemToEdit.name,
+  //     description: this.itemToEdit.description,
+  //     kitchenItem: this.itemToEdit.isKitchenItem,
+  //     price: this.itemToEdit.price
+  //   };
+  
+  //   const uploadImageIfNeeded = (itemName: string) => {
+  //     if (this.selectedImage) {
+  //       const formData = new FormData();
+  //       formData.append('file', this.selectedImage);
+  //       formData.append('filename', itemName); // Save as item name
+  
+  //       this.editMenuService.uploadImage(formData).subscribe({
+  //         next: (response) => console.log('Image uploaded:', response),
+  //         error: (err) => console.error('Image upload failed', err)
+  //       });
+  //     }
+  //   };
+
+  //   if(true){
+  //     return;
+  //   }
+  
+  //   if (this.itemToEdit.menuItemId) {
+  //     alert("Editing existing menu item");
+  //     this.editMenuService.updateMenuItem(this.itemToEdit.menuItemId, requestPayload).subscribe(() => {
+  //       this.loadCategories();
+  //       this.closeItemModal();
+  //       uploadImageIfNeeded(this.itemToEdit.name); // Upload after save
+  //     });
+  //   } else {
+  //     alert("Creating new menu item");
+  //     this.editMenuService.createMenuItem(requestPayload).subscribe((createdItem) => {
+  //       this.loadCategories();
+  //       this.closeItemModal();
+  //       uploadImageIfNeeded(requestPayload.name); // Upload after creation
+  //     });
+  //   }
+  // }
+  
+  // saveItem() {
+  //   if (!this.selectedCategory) {
+  //     console.error('No category selected.');
+  //     return;
+  //   }
+  
+  //   const requestPayload = {
+  //     categoryId: this.selectedCategory.categoryId,
+  //     name: this.itemToEdit.name,
+  //     description: this.itemToEdit.description,
+  //     kitchenItem: this.itemToEdit.isKitchenItem,
+  //     price: this.itemToEdit.price
+  //   };
+  
+  //   if (this.itemToEdit.menuItemId) {
+  //     alert("Editing existing menu item");
+  //     this.editMenuService.updateMenuItem(this.itemToEdit.menuItemId, requestPayload).subscribe(() => {
+  //       this.loadCategories();
+  //       this.closeItemModal();
+  //     });
+  //   } else {
+  //     alert("Creating new menu item");
+  //     this.editMenuService.createMenuItem(requestPayload).subscribe(() => {
+  //       this.loadCategories();
+  //       this.closeItemModal();
+  //     });
+  //   }
+  // }
+  
+
+  // saveItem() {
+  //   if (this.selectedCategory) {  // Check if selectedCategory is not null
+  //     if (this.itemToEdit.menuItemId) {
+  //       alert("editing the existing");
+  //       // Update existing item
+  //       // this.editMenuService.updateMenuItem(this.itemToEdit).subscribe(() => {
+  //       //   this.loadCategories();
+  //       //   this.closeItemModal();
+  //       // });
+  //     } else {
+  //       alert("creating new menu item")
+  //       // Create new item
+  //       this.editMenuService.createMenuItem(this.selectedCategory.categoryId, this.itemToEdit).subscribe(() => {
+  //         this.loadCategories();
+  //         this.closeItemModal();
+  //       });
+  //     }
+  //   } else {
+  //     console.error('No category selected.');
+  //   }
+  // }
   
 
   // saveItem() {

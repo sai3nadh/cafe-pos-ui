@@ -11,6 +11,7 @@ import { Category } from './edit-menu.component';
 export class EditMenuService {
 
   private apiUrl = `${environment.apiUrl}/categories`; 
+  private apiMenuItemUrl = `${environment.apiUrl}/menu-items`; 
   //  'http://localhost:8083/api/categories';
 
   constructor(private http: HttpClient) { }
@@ -28,9 +29,9 @@ export class EditMenuService {
   }
   
    // Update an existing menu item
-   updateMenuItem(item: MenuItem): Observable<MenuItem> {
-    return this.http.put<MenuItem>(`/api/menuItems/${item.menuItemId}`, item);
-  }
+  //  updateMenuItem(item: MenuItem): Observable<MenuItem> {
+  //   return this.http.put<MenuItem>(`/api/menuItems/${item.menuItemId}`, item);
+  // }
 
 
   getCategories() {
@@ -44,7 +45,37 @@ export class EditMenuService {
   }
 
   // Create a new menu item
-  createMenuItem(categoryId: number, item: MenuItem): Observable<MenuItem> {
-    return this.http.post<MenuItem>(`/api/categories/${categoryId}/menuItems`, item);
-  }
+  // createMenuItem(categoryId: number, item: MenuItem): Observable<MenuItem> {
+  //   return this.http.post<MenuItem>(`/api/categories/${categoryId}/menuItems`, item);
+  // }
+
+
+// Create new menu item
+// createMenuItem(menuItemData: any) {
+//   return this.http.post('/api/menuItems', menuItemData);
+// }
+
+// // Update existing menu item
+// updateMenuItem(menuItemId: number, menuItemData: any) {
+//   return this.http.put(`/api/menuItems/${menuItemId}`, menuItemData);
+// }
+
+// uploadImage(formData: FormData) {
+//   return this.http.post('/api/files/uploadOrReplace', formData, { responseType: 'text' });
+// }
+
+createMenuItem(data: any) {
+  return this.http.post<MenuItem>(this.apiMenuItemUrl, data);
+}
+
+updateMenuItem(menuItemId: number, data: any) {
+  return this.http.put<MenuItem>(this.apiMenuItemUrl+`/${menuItemId}`, data);
+}
+
+uploadImage(formData: FormData) {
+  return this.http.post(environment.apiUrl+'/files/uploadOrReplace', formData, { responseType: 'text' });
+}
+
+
+
 }

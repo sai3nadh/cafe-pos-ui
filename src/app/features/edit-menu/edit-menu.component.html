@@ -152,8 +152,13 @@
   
             <!-- 🍽️ Kitchen Item (Checkbox) -->
       <label>
-        <input [(ngModel)]="itemToEdit.isKitchenItem" type="checkbox" />
+        <input [(ngModel)]="itemToEdit.kitchenItem" type="checkbox" />
         Kitchen Item
+      </label>
+
+      <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">{{itemToEdit.kitchenItem}}
+        <input [(ngModel)]="itemToEdit.kitchenItem" type="checkbox" />
+        <span>Kitchen Item</span>
       </label>
 
       <!-- 📜 Description -->
@@ -166,7 +171,7 @@
         <img [src]="imagePreviewUrl" alt="Selected Image" width="150" />
       </div>
       <!-- ✅ Save / ❌ Cancel Buttons -->
-      <button (click)="saveItem()">Save</button>
+      <button (click)="saveItem()">SSSSave</button>
       <button (click)="closeItemModal()">Cancel</button>
   
     </div>
