@@ -491,6 +491,7 @@ export class EditMenuComponent implements OnInit {
   closeItemModal() {
     this.selectedImage = null;
     this.itemModalVisible = false;
+    this.imagePreviewUrl = null;
   }
 
   confirmDeleteItem(item: MenuItem) {
