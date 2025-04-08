@@ -1556,6 +1556,11 @@ closeUsersModal(){
     this.router.navigate(['/pending-orders']);
   }
 
+  editItems(){
+    this.closeDropdown();
+    this.router.navigate(['/edit-menu']);
+  }
+
   goToDrafts() {
     this.closeDropdown();
     console.log('Going to Drafts...');
