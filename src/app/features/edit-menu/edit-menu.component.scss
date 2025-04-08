@@ -2,10 +2,11 @@
 .container {
   display: flex;
   min-height: 100vh;
+  font-size: 1.5em;
 }
 
 .left-panel {
-  width: 250px;
+  width: max-content;
   background-color: #f7fafc;
   padding: 20px;
   border-right: 1px solid #ccc;
@@ -21,7 +22,7 @@ button {
   padding: 8px 16px;
   margin: 5px 0;
   cursor: pointer;
-  font-size: 14px;
+  font-size: inherit;
   border-radius: 4px;
 }
 
@@ -30,7 +31,7 @@ button:hover {
 }
 
 h2 {
-  font-size: 20px;
+  font-size: inherit;
   font-weight: bold;
   margin-bottom: 16px;
 }
@@ -92,10 +93,13 @@ h2 {
 
 .right-panel li button {
   padding: 5px;
-  margin-left: 5px;
+  margin-left: 15px;
   background: transparent;
   border: 1px solid #ccc;
   border-radius: 4px;
+  height: 50px;
+  width: 180px;
+  font-size: inherit;
 }
 
 .right-panel li button:hover {
@@ -119,7 +123,7 @@ h2 {
   background-color: white;
   padding: 20px;
   border-radius: 6px;
-  width: 400px;
+  // width: 600px;
   max-width: 90%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -130,6 +134,7 @@ input {
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 1.2em;
 }
 
 input:focus {
@@ -226,4 +231,113 @@ body {
 .dropdown-menu button:hover {
   background-color: #f0f0f0;
   color: #007bff; /* Highlight text on hover */
+}
+
+
+.modal-content h3 {
+  margin-bottom: 24px;
+  // font-size: 1.5rem;
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: inherit;
+}
+
+.form-row label {
+  // flex: 0 0 130px;
+  font-weight: 500;
+}
+
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.form-row input,
+.form-row textarea {
+  flex: 1;
+  padding: 8px 12px;
+  // font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-row textarea {
+  resize: vertical;
+  font-size: inherit;
+}
+
+
+
+.form-row .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-row input[type="file"] {
+  border: none;
+  padding-left: 0;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+  font-size: 1.5em;
+}
+
+.modal-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  // font-size: 1rem;
+  cursor: pointer;
+}
+
+.save {
+  background-color: #28a745;
+  color: #fff;
+  font-size: 0.9em;
+}
+
+.cancel {
+  background-color: #ccc;
+  color: #333;
+  font-size: 0.9em;
+}
+
+.image-preview {
+  margin-left: 130px;
+  margin-top: -8px;
+}
+
+.image-preview img {
+  width: 150px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+
+// .form-row input[type="checkbox"] {
+//   flex: none;
+//   // width: auto;
+//   height: 70px;
+//   margin-left: 0;
+// }
+input[type="checkbox"] {
+  // width: 24px;
+  // height: 24px;
+  flex: none;
+  height: 70px;
+  margin-left: 0;
+  padding: 100px;
+  width: 100px;
+  
 }

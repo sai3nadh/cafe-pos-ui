@@ -88,8 +88,11 @@
       <li *ngFor="let item of selectedCategory.menuItems">
         {{ item.name }} - {{ item.price  | currency: 'INR' }}
         <div class="actions">
-          <button (click)="openItemEditModal(item)">✏️</button>
-          <button (click)="confirmDeleteItem(item)">🗑️</button>
+          <!-- <button (click)="openItemEditModal(item)">✏️</button>
+          <button (click)="confirmDeleteItem(item)">🗑️</button> -->
+          <button (click)="openItemEditModal(item)">✏️ Edit</button>
+          <!-- need to fix Delete -->
+          <!-- <button (click)="confirmDeleteItem(item)">🗑️ Delete</button> -->
         </div>
       </li>
     </ul>
@@ -136,47 +139,48 @@
     </div>
   </div> -->
 
-  <div *ngIf="itemModalVisible" class="modal-overlay">
-    <div class="modal-content">
-      
-      <!-- 🏷️ Dynamic Title -->
-      <h3>
-        {{ itemToEdit.menuItemId ? 'Edit Menu Item' : 'Add New Menu Item' }}
-      </h3>
-  
-      <!-- 📝 Item Name -->
-      <input [(ngModel)]="itemToEdit.name" placeholder="Item Name" />
-  
-      <!-- 💰 Item Price -->
-      <input [(ngModel)]="itemToEdit.price" placeholder="Item Price" type="number" />
-  
-            <!-- 🍽️ Kitchen Item (Checkbox) -->
-      <label>
-        <input [(ngModel)]="itemToEdit.kitchenItem" type="checkbox" />
-        Kitchen Item
-      </label>
+<div *ngIf="itemModalVisible" class="modal-overlay">
+  <div class="modal-content">
+    <h3>{{ itemToEdit.menuItemId ? 'Edit Menu Item' : 'Add New Menu Item' }}</h3>
 
-      <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">{{itemToEdit.kitchenItem}}
-        <input [(ngModel)]="itemToEdit.kitchenItem" type="checkbox" />
-        <span>Kitchen Item</span>
-      </label>
+    <div class="form-row">
+      <label>Item Name:</label>
+      <input [(ngModel)]="itemToEdit.name" type="text" />
+    </div>
 
-      <!-- 📜 Description -->
-      <textarea [(ngModel)]="itemToEdit.description" placeholder="Item Description"></textarea>
-      <!-- 🖼️ Image Upload -->
-      <input type="file" (change)="onImageSelected($event)" />
-  
-      <!-- 🔍 Image Preview Below -->
-      <div *ngIf="imagePreviewUrl" style="margin-top: 10px;">
-        <img [src]="imagePreviewUrl" alt="Selected Image" width="150" />
+    <div class="form-row">
+      <label>Item Price:</label>
+      <input [(ngModel)]="itemToEdit.price" type="number" />
+    </div>
+
+    <div class="form-row">
+      <label>Kitchen Item:</label>
+      <div class="checkbox-label">
+        <input [(ngModel)]="itemToEdit.kitchenItem" type="checkbox" />
+        <span>Yes</span>
       </div>
-      <!-- ✅ Save / ❌ Cancel Buttons -->
-      <button (click)="saveItem()">SSSSave</button>
-      <button (click)="closeItemModal()">Cancel</button>
-  
+    </div>
+
+    <div class="form-row">
+      <label>Description:</label>
+      <textarea [(ngModel)]="itemToEdit.description"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Upload Image:</label>
+      <input type="file" (change)="onImageSelected($event)" />
+    </div>
+
+    <div *ngIf="imagePreviewUrl" class="image-preview">
+      <img [src]="imagePreviewUrl" alt="Preview" />
+    </div>
+
+    <div class="button-group">
+      <button class="modal-button save" (click)="saveItem()">Save</button>
+      <button class="modal-button cancel" (click)="closeItemModal()">Cancel</button>
     </div>
   </div>
-  
+</div>
 
   <!-- Confirmation Modals for Deleting Categories -->
   <div *ngIf="showDeleteCategoryModal" class="modal-overlay">
