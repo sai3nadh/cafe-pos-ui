@@ -111,7 +111,14 @@ export class OrderService {
 
     // Method to reprint an order
   reprintOrder(orderId: number): Observable<any> {
-    const requestUrl = `${this.url}${orderId}/reprint`;  // Constructing the URL with orderId
+    // const requestUrl = `${this.url}${orderId}/reprint`;  // Constructing the URL with orderId
+    // alert("url"+requestUrl);
+     let requestUrl = `${this.url}${orderId}/reprint`;
+
+  // Remove '/api' if it's in the URL
+  requestUrl = requestUrl.replace('/api', '');
+    alert("url"+requestUrl);
+
     return this.http.post<any>(requestUrl, {});  // Making the POST request with empty body
   }
 

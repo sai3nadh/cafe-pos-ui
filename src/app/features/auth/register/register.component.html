@@ -36,12 +36,34 @@
           [(ngModel)]="confirmPassword"
           placeholder="Confirm your password"
         />
+        <label for="role">Role</label>
+        <select id="role" [(ngModel)]="selectedRoleId" name="role">
+          <option *ngFor="let role of roles" [value]="role.roleId">
+            {{ role.name }}
+          </option>
+        </select>
+    
+        <div *ngIf="successMessage" class="success-message">
+              {{ successMessage }}
+            </div>
+                  
+            <div *ngIf="errorMessage" class="error-message">
+              {{ errorMessage }}
+            </div>
       </div>
+    
       <div class="card-footer">
         <button (click)="handleRegister()">Register</button>
-        <p class="toggle-text">
+       
+        <!-- <p class="toggle-text">
           Already have an account? <a [routerLink]="'/login'">Login</a>
-        </p>
+        </p> -->
+      </div><div class="card-footer">
+        <!-- <button (click)="handleRegister()">Register</button> -->
+        <button (click)="cancel()" style="background-color: rgb(190, 114, 93);">Cancel</button>
+        <!-- <p class="toggle-text">
+          Already have an account? <a [routerLink]="'/login'">Login</a>
+        </p> -->
       </div>
     </div>
   </div>
