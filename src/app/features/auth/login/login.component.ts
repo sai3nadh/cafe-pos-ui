@@ -6,6 +6,14 @@ import { ChangeDetectorRef } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { CommonModule } from '@angular/common';
 
+export interface UserProfile {
+  userId: number;
+  username: string;
+  role: string;
+  firstName: string;
+  lastName: string;
+}
+
 @Component({
     selector: 'app-login',
     imports: [
@@ -24,6 +32,7 @@ export class LoginComponent {
   isRegister: boolean = false;
   loginError: string = '';
   role: string = '';
+  isLoading: boolean = false;
 
   constructor(private router: Router, private loginService: LoginService,
      private cd: ChangeDetectorRef
@@ -32,6 +41,7 @@ export class LoginComponent {
 
    // Implement ngOnInit lifecycle hook
    ngOnInit(): void {
+    this.isLoading = true;
     // Check if user is already logged in by checking stored session variables
     const userId = this.storageService.getLocalVariable('userId');
     const username = this.storageService.getLocalVariable('username');
@@ -40,6 +50,99 @@ export class LoginComponent {
       // If user data exists, redirect to home
       this.router.navigate(['/user']);
     }
+
+    this.loadProfiles();
+  }
+
+  profiles: UserProfile[] = [];
+  // selectedUser: UserProfile | null = null;
+  // pin: string = '';
+  error: string = '';
+
+  selectedUser: UserProfile | null = null;
+pin: string = '';
+
+getInitials(firstName: string, lastName: string): string {
+  return (firstName?.[0] || '') + (lastName?.[0] || '');
+}
+selectUser(user: UserProfile) {
+  this.selectedUser = user;
+  this.pin = '';
+  // Show modal (if you're using one)
+}
+reset(): void {
+  this.selectedUser = null;
+  this.pin = '';
+  this.error = '';
+}
+closePinPopup(){
+
+  this.reset();
+}
+submitPinLogin(): void {
+this.isLoading = true;
+  if (!this.selectedUser || !this.pin)
+    { 
+      this.isLoading = false;
+      return;
+    }
+
+  this.loginService.loginWithPin(this.selectedUser.username, this.pin).subscribe({
+    next: (res) => {
+      // alert(`Welcome ${res.username}`);
+      this.storageService.setLocalVariable('userId', res.userId);
+      // this.storageService.setLocalVariable('userId', res.userId);
+      // this.storageService.setLocalVariable('userId', res.userId);
+      this.storageService.setLocalVariable('username', res.username);
+      this.storageService.setLocalVariable('firstName', res.firstName);
+      this.storageService.setLocalVariable('lastName', res.lastName);
+      this.storageService.setLocalVariable('role', res.role);
+   
+      this.isLoading = false;
+      this.router.navigate(['/user']);
+    },
+    error: (err) => {
+      // this.error = 'Invalid PIN';
+      this.isLoading = false;
+      this.error = err.error?.message || 'Login failed. Please try again.';
+
+    }
+  });
+}
+
+  // submitPinLogin() {
+  //   const payload = {
+  //     userId: this.selectedUser?.userId,
+  //     pin: this.pin
+  //   };
+  //   alert("payload"+ payload);
+
+  //   // this.http.post('http://localhost:8083/api/auth/pin-login', payload).subscribe(
+  //   //   (res: any) => {
+  //   //     console.log('Login successful:', res);
+  //   //     // Store token/session and redirect to dashboard
+  //   //   },
+  //   //   err => {
+  //   //     console.error('Login failed:', err);
+  //   //     alert('Invalid PIN');
+  //   //   }
+  //   // );
+
+  // }
+
+  loadProfiles(){
+    
+    this.loginService.getProfiles().subscribe({
+      next: (res) => {this.profiles = res;
+         this.isLoading = false;
+      },
+      error: () => {
+        this.error = 'Failed to load profiles.';
+        this.isLoading = false;
+
+      }
+    });
+    // this.isLoading = false;
   }
   
   handleLogin() {

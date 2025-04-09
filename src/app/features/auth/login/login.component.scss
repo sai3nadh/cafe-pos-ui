@@ -1,120 +1,391 @@
 /* Parent container to center the login form */
-.flexf {
+// .flexf {
+//     display: flex;
+//     justify-content: center; /* Center horizontally */
+//     align-items: center; /* Center vertically */
+//     height: 100vh; /* Full viewport height */
+//   }
+//   .flex {
+//     display: flex;
+//     justify-content: center; /* Center horizontally */
+//     align-items: flex-start; /* Align items towards the top */
+//     height: 100vh; /* Full viewport height */
+//     padding-top: 50px; /* Add space from the top */
+//     padding: 20px; /* Optional: Adjust padding for smaller screens */
+//   }
+  
+  
+//   /* Login form card */
+//   .card {
+//     position: relative; /* Keeps it independent from background */
+//     z-index: 1; /* Ensure it stays above the background */
+//     background-color: white; /* Solid background for readability */
+//     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+//     border-radius: 10px;
+//     padding: 20px;
+//     width: 90%;
+//     max-width: 650px; /* Adjust width for responsive design */
+//   }
+  
+//   /* Text inside the card */
+//   .card-header h2 {
+//     text-align: center;
+//     font-size: 1.5rem;
+//   }
+  
+//   .card-content label {
+//     display: block;
+//     margin-bottom: 5px;
+//     font-weight: bold;
+//   }
+  
+//   .card-content input {
+//     width: 95%;
+//     padding: 10px;
+//     margin-bottom: 15px;
+//     border: 1px solid #ccc;
+//     border-radius: 5px;
+//     font-size: 1.2rem;
+//   }
+  
+//   .card-footer button {
+//     width: 100%; /* Full width for mobile devices */
+//     padding: 10px;
+//     font-size: 1.2rem;
+//     background-color: #0a498d;
+//     color: white;
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+//   }
+  
+//   .card-footer button:hover {
+//     background-color: #0056b3;
+//   }
+  
+//   .login-page {
+//     height: 100vh;
+//     background: url('../../../../assets/logo.png') no-repeat center center fixed; /* Watermark */
+//     background-size: cover; /* Cover the full page */
+//     position: relative;
+  
+//     /* Dark overlay */
+//     &::before {
+//       content: ""; /* Overlay content */
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 100%;
+//       height: 100%;
+//       background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+//       z-index: -1; /* Place it behind the content */
+//     }
+//   }
+  
+//   .flex {
+//     display: flex;
+//     justify-content: center; /* Center horizontally */
+//     align-items: flex-start; /* Align items towards the top */
+//     height: 100%;
+//     padding-top: 50px; /* Adjust top spacing */
+//     padding: 20px; /* Optional padding for small screens */
+//   }
+  
+
+//   .card-footer {
+//     text-align: center;
+//     margin-top: 15px;
+//   }
+  
+//   .toggle-text {
+//     font-size: 0.9rem;
+//     margin-top: 10px;
+//   }
+  
+//   .toggle-text a {
+//     color: #007bff; /* Blue link color */
+//     text-decoration: none;
+//     font-weight: bold;
+//   }
+  
+//   .toggle-text a:hover {
+//     text-decoration: underline;
+//   }
+//   .error-message {
+//     color: red;
+//     margin-top: 10px;
+//     font-weight: bold;
+//     background-color: yellow;  /* For debugging */
+//     padding: 5px;
+//   }
+
+  // below is new one
+  // .profiles-container {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   gap: 20px;
+  // }
+  
+  // .profile-card {
+  //   width: 150px;
+  //   padding: 15px;
+  //   border: 2px solid #ccc;
+  //   border-radius: 10px;
+  //   text-align: center;
+  //   cursor: pointer;
+  //   background: #f9f9f9;
+  // }
+  
+  // .avatar-icon {
+  //   font-size: 40px;
+  // }
+
+
+  // .profiles-container {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   gap: 20px;
+  // }
+  
+  // .profile-card {
+  //   width: 140px;
+  //   border: 2px solid #ccc;
+  //   border-radius: 10px;
+  //   padding: 12px;
+  //   text-align: center;
+  //   cursor: pointer;
+  //   background: #f0f0f0;
+  // }
+  
+  // .avatar-icon {
+  //   font-size: 36px;
+  //   margin-bottom: 5px;
+  // }
+  
+  // .pin-modal {
+  //   margin-top: 30px;
+  //   background: #fff;
+  //   padding: 20px;
+  //   border: 2px solid #ddd;
+  //   border-radius: 10px;
+  //   width: 300px;
+  // }
+  
+  // .error {
+  //   color: red;
+  //   margin-top: 10px;
+  // }
+  
+  // .profiles-gridold {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   justify-content: center;
+  //   gap: 24px;
+  //   padding: 30px;
+  // }
+  
+  // .profile-carsd {
+  //   width: 150px;
+  //   height: 150px;
+  //   background-color: #f5f5f5;
+  //   border-radius: 16px;
+  //   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  //   cursor: pointer;
+  //   text-align: center;
+  //   padding: 20px;
+  //   transition: transform 0.2s ease;
+  // }
+  
+  // .profile-card:hover {
+  //   transform: scale(1.05);
+  //   background-color: #e8e8e8;
+  // }
+  
+  .avatar-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+  
+  // .profile-name {
+  //   font-weight: 600;
+  //   font-size: 16px;
+  // }
+  
+  // .profile-role {
+  //   font-size: 14px;
+  //   color: #555;
+  // }
+  
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    height: 100vh; /* Full viewport height */
-  }
-  .flex {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: flex-start; /* Align items towards the top */
-    height: 100vh; /* Full viewport height */
-    padding-top: 50px; /* Add space from the top */
-    padding: 20px; /* Optional: Adjust padding for smaller screens */
+    align-items: center;
+    justify-content: center;
   }
   
-  
-  /* Login form card */
-  .card {
-    position: relative; /* Keeps it independent from background */
-    z-index: 1; /* Ensure it stays above the background */
-    background-color: white; /* Solid background for readability */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 20px;
-    width: 90%;
-    max-width: 650px; /* Adjust width for responsive design */
-  }
-  
-  /* Text inside the card */
-  .card-header h2 {
+  .modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    width: 320px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     text-align: center;
-    font-size: 1.5rem;
   }
   
-  .card-content label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .card-content input {
-    width: 95%;
+  .modal-box input {
     padding: 10px;
-    margin-bottom: 15px;
+    width: 80%;
+    margin-top: 15px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1.2rem;
+    border-radius: 8px;
+    font-size: 16px;
   }
   
-  .card-footer button {
-    width: 100%; /* Full width for mobile devices */
-    padding: 10px;
-    font-size: 1.2rem;
-    background-color: #0a498d;
-    color: white;
+  .modal-actions {
+    margin-top: 20px;
+  }
+  
+  .modal-actions button {
+    padding: 8px 16px;
+    margin: 0 8px;
+    font-size: 14px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
   }
   
-  .card-footer button:hover {
-    background-color: #0056b3;
+  .modal-actions .cancel-btn {
+    background-color: #e74c3c;
+    color: #fff;
   }
   
-  .login-page {
-    height: 100vh;
-    background: url('../../../../assets/logo.png') no-repeat center center fixed; /* Watermark */
-    background-size: cover; /* Cover the full page */
-    position: relative;
-  
-    /* Dark overlay */
-    &::before {
-      content: ""; /* Overlay content */
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
-      z-index: -1; /* Place it behind the content */
-    }
+  .modal-actions button:not(.cancel-btn) {
+    background-color: #2ecc71;
+    color: #fff;
   }
   
-  .flex {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: flex-start; /* Align items towards the top */
-    height: 100%;
-    padding-top: 50px; /* Adjust top spacing */
-    padding: 20px; /* Optional padding for small screens */
-  }
-  
-
-  .card-footer {
-    text-align: center;
+  .error {
+    color: red;
     margin-top: 15px;
   }
   
-  .toggle-text {
-    font-size: 0.9rem;
-    margin-top: 10px;
+
+  .profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 24px;
+    padding: 30px;
+    max-width: 1000px;
+    margin: auto;
   }
   
-  .toggle-text a {
-    color: #007bff; /* Blue link color */
-    text-decoration: none;
-    font-weight: bold;
+  .profile-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
   }
   
-  .toggle-text a:hover {
-    text-decoration: underline;
+  .profile-card:hover {
+    transform: scale(1.05);
+    background-color: #f0f4f8;
   }
-  .error-message {
-    color: red;
-    margin-top: 10px;
+  
+  .avatar-circle {
+    width: auto;// 60px;
+    height: 80px;
+    margin: auto;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+    font-size: 24px;
     font-weight: bold;
-    background-color: yellow;  /* For debugging */
-    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
+  
+  .profile-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .profile-role {
+    font-size: small;
+    color: #777;
+  }
+  
+
+  .login-header {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .login-header h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    letter-spacing: 1px;
+  }
+  
+  .login-header p {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  
+
+/* Spinner overlay */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.login-page {
+//   min-height: 100vh;
+//   background-image: url('../../../../assets/logo.png'); /* 👈 Replace with your actual image path */
+//   background-size: cover;
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   padding: 30px;
+//   box-sizing: border-box;
+background-color: #928a8a5d;
+}
+
