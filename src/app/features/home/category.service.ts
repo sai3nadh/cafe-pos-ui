@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ApiCategory } from '../user/user.component';
 
 // Define an interface that represents the category data from your API.
-export interface ApiCategory {
-  categoryId: number;
-  name: string;
-  version: number;
-  menuItems: any[]; // You can create a more specific interface if needed
-}
+// export interface ApiCategory {
+//   categoryId: number;
+//   name: string;
+//   version: number;
+//   menuItems: any[]; // You can create a more specific interface if needed
+// }
 
 @Injectable({
   providedIn: 'root'

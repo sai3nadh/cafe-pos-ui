@@ -178,9 +178,7 @@ closeKitchenPopup(){
       this.orders = this.allOrders.filter(order => order.status === 'Pending');
       this.pendingOrders = this.orders;
       this.filterOrdersBySittingArea(this.allOrders);
-      this.isLoading = false; // Set here in case of early return
-      console.log("herrrr---");
-      
+      this.isLoading = false; // Set here in case of early return 
     },
     error => {
       console.error("Error fetching orders", error);
@@ -192,9 +190,6 @@ closeKitchenPopup(){
   
 
     NotifyUser(){
-        // Then send notification
-        console.log("notified successful-- notifi");
-        
         this.notifcationService.sendOrderEvent('🆕 Order Placed ready').subscribe(() => {
         console.log('Notification sent -- order ready');
         });
