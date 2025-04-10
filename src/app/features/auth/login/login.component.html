@@ -76,9 +76,11 @@
 <div class="login-header">
   <h1>Cafe-SISILI</h1>
   <p>Select your profile to log in</p>
+   <h1>{{onloadMsg}}</h1>
 </div>
 <div class="profiles-grid">
-  <div *ngIf="profiles.length === 0">Server Down!!!</div>
+  <!-- <div *ngIf="profiles.length === 0">Please contact Administrator!!!</div> -->
+  <!-- <h1>{{onloadMsg}}</h1> -->
   <div class="profile-card" *ngFor="let user of profiles" (click)="selectUser(user)">
     <div class="avatar-circle">
       

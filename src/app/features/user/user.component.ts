@@ -225,6 +225,31 @@ export class UserComponent {
     //   console.log('🔔 Notification:', msg);
     //   // alert('notif--- ' + msg);
     // });
+
+    this.notifSub = this.wsService.subscribeToTopic('/topic/orders').subscribe((msg) => {
+      console.log('🔔 Notification:', msg);
+        if(msg === "🆕 Order Placed ready"){
+          console.log("notification received");
+          this.isLoading = true;
+          this.toggleOrdersModal();
+        }else{
+          console.log("outside");
+          
+        }
+    });
+    
+    // this.notifSub = this.wsService.subscribeToTopic('/topic/user').subscribe((msg) => {
+    //   console.log('🔔 Notification:', msg);
+    //     if(msg === "🆕 Order Placed ready"){
+    //       console.log("notification received"+msg);
+    //       this.isLoading = true;
+    //       // this.getOrders();
+    //       this.toggleOrdersModal();
+    //     }else{
+    //       console.log("outside");
+          
+    //     }
+    // });
     
   // });
   
@@ -562,12 +587,13 @@ toggleSittingArea(sittingArea: string) {
     // this.showOrdersIcon = !this.showOrdersIcon;
     // Load orders only if they haven't been loaded before
     // if (this.allOrders.length === 0) {
-      this.selectedStatus= "Pending";
+      // this.selectedStatus= "Pending";
       this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
         this.allOrders = orders;
         // Apply default filter (for example, "Pending")
         // this.filterOrders(this.selectedStatus);
         this.handleFilterChange(this.selectedStatus);
+        this.isLoading=false;
       });
       console.log("all orders - test");
       console.log(this.allOrders);

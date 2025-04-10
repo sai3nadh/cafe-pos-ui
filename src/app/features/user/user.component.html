@@ -414,7 +414,8 @@
       <h2 class="text-lg font-bold mb-4">Orders</h2>
       <div class="flex justify-center mb-4 space-x-4">
         <button class="btn-filter" [class.active]="selectedStatus === 'All'" (click)="handleFilterChange('All')">All</button>
-        <button class="btn-filter" [class.active]="selectedStatus === 'Pending'" (click)="handleFilterChange('Pending')">Pending</button>
+        <button class="btn-filter" [class.active]="selectedStatus === 'Pending'" (click)="handleFilterChange('Pending')">Kitchen</button>
+        <button class="btn-filter" [class.active]="selectedStatus === 'Ready'" (click)="handleFilterChange('Ready')">Ready</button>
         <button class="btn-filter" [class.active]="selectedStatus === 'Completed'" (click)="handleFilterChange('Completed')">Completed</button>
       </div>
     
@@ -454,7 +455,10 @@
               <button class="btn-edit" (click)="editOrder(selectedOrder);toggleOrdersModalClose();">Edit</button>
               <button class="btn-finish" 
               (click)="finishOrder(selectedOrder)" 
-              [disabled]="selectedOrder.status !== 'Pending'">Finish</button>
+              [disabled]="selectedOrder.status !== 'Pending' && selectedOrder.status !== 'Ready'"
+              
+              >Finish</button>
+              <!-- [disabled]="selectedOrder.status !== 'Pending'" -->
               <br/>
               <button class="btn-reprint" (click)="reprintOrder(selectedOrder)">Reprint</button>
             </div>

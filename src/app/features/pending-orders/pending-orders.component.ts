@@ -11,7 +11,7 @@ import { Order } from '../user/user.component';
 import { UserComponent } from '../user/user.component';
 import { WebSocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
-
+import { NotificationApiService } from '../services/notification-api.service';
 
 // export interface OrderItem {
 //   id: number;
@@ -55,6 +55,7 @@ export class PendingOrdersComponent {
     //  private categoryService : CategoryService
     //   ,private elRef: ElementRef
       ,private wsService: WebSocketService
+      ,private notifcationService : NotificationApiService
     ) {
     }
       private notifSub!: Subscription;
@@ -65,7 +66,7 @@ export class PendingOrdersComponent {
       this.orderService.checkLogin();
       this.userId = this.storageService.getLocalVariable('userId');
       this.getOrders();
-      this.filterOrdersBySittingArea(this.allOrders);
+      // this.filterOrdersBySittingArea(this.allOrders);
       this.wsService.connect(); // ✅ Ensure WebSocket connects on init
       this.notifSub = this.wsService.subscribeToTopic('/topic/notifications').subscribe((msg) => {
         console.log('🔔 Notification:', msg);
@@ -82,6 +83,7 @@ export class PendingOrdersComponent {
     }
 
     allOrders: OrderDto[] =[];
+    pendingOrders: OrderDto[] =[];
     orders: OrderDto[] =[];
     // OrderDto[] = [];
     userId = -1;
@@ -106,6 +108,7 @@ toggleTopBar() {
     activeFilter: string = 'all';
 
     filterOrders(area: 'all' | 'front' | 'back') {
+      this.filterOrdersBySittingArea(this.pendingOrders);
       this.activeFilter = area;
       this.isLoading = true;
       switch (area) {
@@ -120,7 +123,7 @@ toggleTopBar() {
     
         case 'all':
         default:
-          this.orders = this.allOrders;
+          this.orders = this.pendingOrders;
           break;
       }
       this.isLoading = false;
@@ -142,7 +145,7 @@ closeKitchenSummary() {
 generateKitchenSummary() {
   this.showKitchenModal=true;
   const summaryMap = new Map<string, number>();
-console.log("called here--kitchen");
+console.log("generating kitchen--kitchen");
 
   this.allOrders
     .filter(order => order.status === 'Pending')
@@ -170,11 +173,14 @@ closeKitchenPopup(){
       this.isLoading = false; // Set here in case of early return
       return;
     }
-    this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
-      this.allOrders = orders;
+    this.orderService.getOrdersForUserToday(this.userId).subscribe((ordersData: OrderDto[]) => {
+      this.allOrders = ordersData;
       this.orders = this.allOrders.filter(order => order.status === 'Pending');
+      this.pendingOrders = this.orders;
       this.filterOrdersBySittingArea(this.allOrders);
       this.isLoading = false; // Set here in case of early return
+      console.log("herrrr---");
+      
     },
     error => {
       console.error("Error fetching orders", error);
@@ -184,6 +190,80 @@ closeKitchenPopup(){
     
   }
   
+
+    NotifyUser(){
+        // Then send notification
+        console.log("notified successful-- notifi");
+        
+        this.notifcationService.sendOrderEvent('🆕 Order Placed ready').subscribe(() => {
+        console.log('Notification sent -- order ready');
+        });
+    }
+    //move order to the finished state
+    readyOrder(selectedOrder: Order){
+      // alert("se"+selectedOrder);
+      // console.log("seee--",selectedOrder);
+        // Assuming selectedOrder is the ID of the order to complete
+        this.isLoading = true; 
+        if(selectedOrder.status == 'Completed'){
+          // alert("already completed..!!")
+          this.isLoading = false; 
+          return;
+        }
+  
+        // if(!this.selectedUser){
+              // Check if the order has a pending balance
+          if (selectedOrder.total - selectedOrder.paidAmount !== 0  ) {
+            const confirmation = window.confirm("The full amount has not been paid. Are you sure you want to finish the order?");
+            if (!confirmation) {
+              // User clicked "No", return to avoid further actions
+              //working on select of cancel
+              // alert("111");
+              // return;
+            }
+            else{
+              //this is working on select of ok
+              // alert("222");
+              // return;
+            }
+          }
+  
+    // const paymentData = {
+    //   orderId: this.selectedOrder?.id,
+    //   amount: (this.selectedOrder?.total ?? 0) -( this.selectedOrder?.paidAmount ?? 0),
+    //   paymentMethodId:1
+    // }
+  
+    // commented update payment from the kithen
+    // this.orderService.updateOrderPayment(paymentData).subscribe(
+    //   (response: any) => {
+    //     console.log('Order payment updated successfully:', response);
+    //   },
+    //   error => {
+    //     console.error('Error updating payment:', error);
+    //   }
+    // );
+  
+   
+
+    this.orderService.updateOrderStatus(selectedOrder.id, 'Ready').subscribe(
+      response => {
+        console.log('Order status updated successfully', response);
+        // Optionally, you can update the orders or handle UI changes here
+        this.isLoading = false;
+        this.selectedOrder = null;
+        // this.NotifyKitchen();
+        // Notify user here if needed
+        this.NotifyUser();
+      },
+      error => {
+        console.error('Error updating the order status', error);
+        this.isLoading = false;
+        // You can display a message or handle the error accordingly
+      }
+    );
+  }
+    
   // ngOnDestroy to unsubscribe from WebSocket notifications and clean up
   ngOnDestroy() {
     if (this.notifSub) {

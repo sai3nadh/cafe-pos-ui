@@ -89,6 +89,15 @@ export class OrderService {
     // Make a PUT request to complete the order
     return this.http.put(`${this.apiUrlCompleteOrder}/${orderId}/complete`, {});
   }
+
+  // Method to update the status of an order by ID
+  updateOrderStatus(orderId: number, status: string): Observable<any> {
+    // Make a PUT request to update the order status
+    return this.http.put(`${this.apiUrlCompleteOrder}/${orderId}/status`, null, {
+      params: { status }
+    });
+  }
+
   // // ✅ New method to print order
   // printOrder(orderId: number): Observable<any> {
   //   console.log(`${this.apiUrlPrintOrder}/${orderId}`);

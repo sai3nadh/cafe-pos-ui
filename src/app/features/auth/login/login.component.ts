@@ -33,6 +33,7 @@ export class LoginComponent {
   loginError: string = '';
   role: string = '';
   isLoading: boolean = false;
+  onloadMsg:string ="";
 
   constructor(private router: Router, private loginService: LoginService,
      private cd: ChangeDetectorRef
@@ -131,15 +132,17 @@ this.isLoading = true;
   // }
 
   loadProfiles(){
-    
+    this.onloadMsg="Please wait...";
     this.loginService.getProfiles().subscribe({
       next: (res) => {this.profiles = res;
          this.isLoading = false;
+         this.onloadMsg = "";
       },
       error: () => {
         this.error = 'Failed to load profiles.';
         this.isLoading = false;
 
+        this.onloadMsg="Please Contact Administrator...";
       }
     });
     // this.isLoading = false;
@@ -187,25 +190,25 @@ this.isLoading = true;
     }
   }
   
-  handleLoginOld() {
-    if (this.username && this.password) {
-      // Call the login service to authenticate
-      this.loginService.login(this.username, this.password).subscribe(
-        (response) => {
-          // Handle successful login response
-          this.loggedIn = true;
-          this.router.navigate(['/home']); // Navigate to home
-        },
-        (error) => {
-          // Handle error if login fails
-          this.loggedIn = false;
-          this.loginError = 'Invalid username or password';
-        }
-      );
-    } else {
-      alert('Please enter a valid username and password!');
-    }
-  }
+  // handleLoginOld() {
+  //   if (this.username && this.password) {
+  //     // Call the login service to authenticate
+  //     this.loginService.login(this.username, this.password).subscribe(
+  //       (response) => {
+  //         // Handle successful login response
+  //         this.loggedIn = true;
+  //         this.router.navigate(['/home']); // Navigate to home
+  //       },
+  //       (error) => {
+  //         // Handle error if login fails
+  //         this.loggedIn = false;
+  //         this.loginError = 'Invalid username or password';
+  //       }
+  //     );
+  //   } else {
+  //     alert('Please enter a valid username and password!');
+  //   }
+  // }
   // constructor(private router: Router) {}
 
   // handleLogin() {
