@@ -96,13 +96,20 @@
 <!-- PIN Modal -->
 <div class="modal-backdrop" *ngIf="selectedUser" (click)="closePinPopup()">
   <div class="modal-box" (click)="$event.stopPropagation()">
-    <h2>Enter PIN for {{ selectedUser.firstName }}</h2>
+    <h2>Enter PIN for {{ selectedUser.username }}</h2>
     <input
+  #pinInput
       type="password"
-      [(ngModel)]="pin"
+  inputmode="numeric"
+  pattern="[0-9]*"
       maxlength="6"
       placeholder="Enter PIN"
+  [(ngModel)]="pin"
+  (keydown.enter)="submitPinLogin()"
+  (ngModelChange)="onPinChange()"
+  (keypress)="allowOnlyNumbers($event)"
     />
+
     <div class="modal-actions">
       <button (click)="submitPinLogin()">Login</button>
       <button class="cancel-btn" (click)="reset()">Cancel</button>

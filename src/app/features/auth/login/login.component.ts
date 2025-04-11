@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { LoginService } from './login.service';
@@ -24,7 +25,8 @@ export interface UserProfile {
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewChecked {
+  @ViewChild('pinInput') pinInputRef!: ElementRef;
 
   username: string = '';
   password: string = '';
@@ -39,6 +41,28 @@ export class LoginComponent {
      private cd: ChangeDetectorRef
     , private storageService: StorageService
   ) {  }
+  ngAfterViewChecked(): void {
+    
+    if (this.selectedUser && this.pinInputRef) {
+      this.pinInputRef.nativeElement.focus();
+    }
+    // throw new Error('Method not implemented.');
+  }
+  @HostListener('window:keydown.escape', ['$event'])
+handleEscapeKey(event: KeyboardEvent) {
+  if (this.selectedUser) {
+    this.closePinPopup();
+  }
+}
+
+allowOnlyNumbers(event: KeyboardEvent): void {
+  const char = event.key;
+  if (!/^\d$/.test(char)) {
+    event.preventDefault();
+  }
+}
+
+
 
    // Implement ngOnInit lifecycle hook
    ngOnInit(): void {
@@ -80,6 +104,15 @@ closePinPopup(){
 
   this.reset();
 }
+
+
+onPinChange(): void {
+  if (this.pin.length === 4) {
+    this.submitPinLogin();
+  }
+}
+
+
 submitPinLogin(): void {
 this.isLoading = true;
   if (!this.selectedUser || !this.pin)
@@ -104,6 +137,7 @@ this.isLoading = true;
     },
     error: (err) => {
       // this.error = 'Invalid PIN';
+      this.pin='';
       this.isLoading = false;
       this.error = err.error?.message || 'Login failed. Please try again.';
 
