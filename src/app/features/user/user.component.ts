@@ -172,6 +172,7 @@ export class UserComponent {
   // selectedItem: cartItem | null = null;  // Single cart item for customization
   // selectedItem: any = null;  // Single cart item for customization
   selectedItem: CustomizingItem | null = null;
+  canEdit: boolean = false;
 
    
   //pending order
@@ -195,6 +196,9 @@ export class UserComponent {
     console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
     this.role = this.storageService.getLocalVariable("role");
+    if(this.role.toLocaleLowerCase() == "admin" || this.role.toLocaleLowerCase() == "owner" ){
+      this.canEdit = true;
+    }
     // const userId = this.storageService.getLocalVariable('userId');
     // const username = this.storageService.getLocalVariable('username');
 
@@ -934,7 +938,7 @@ closeUsersModal(){
       if(this.selectedItem.modifiers.length>0){
         this.customizeCartItemModal = true;
       }else{
-        alert("NO MODIFIERS..!!")
+        // alert("NO MODIFIERS..!!")
     // };
   //set a popup msg like no options to customize
     this.customizeCartItemModal = false;}
@@ -1782,11 +1786,15 @@ handlePaymentOption(option: 'full' | 'partial'): void {
   this.isLoading = true;  // Show the spinner when the request starts
   this.paymentOption = option;
   console.log("Selected Order Details:", this.selectedOrderDetails);
-  
+  if (!this.selectedOrderDetails || !this.selectedPaymentMethodId) {
+    console.warn('Missing order details or payment method.');
+
+    return;
+  }
   const paymentData = {
     orderId: this.selectedOrderDetails?.id,
     amount: (this.selectedOrderDetails?.total ?? 0) -( this.selectedOrderDetails?.paidAmount ?? 0),
-    paymentMethodId:1
+    paymentMethodId:this.selectedPaymentMethodId
   }
 
   // console.log(JSON.stringify(orderData, null, 2));
@@ -1810,6 +1818,7 @@ handlePaymentOption(option: 'full' | 'partial'): void {
 
       this.isPopupOpen = false;
       this.isLoading = false;
+      this.selectedPaymentMethodId = 1;
     },
     error => {
       // this.orderService.printOrder(66).subscribe();
@@ -1930,13 +1939,48 @@ selectedOrders: any[] = []; // Array to store selected orders
       // this.orderService.sendPendingOrders(pendingOrders).subscribe(...);
     }
 
-    sendAllPendingOrders(userId: number): void {
+    isPaymentMethodPopupOpen: boolean = false;
+selectedPaymentMethodId: number = 1;
+
+openPaymentMethodPopup() {
+  if (!this.canEdit) return;
+  this.isPaymentMethodPopupOpen = true;
+}
+
+    confirmSettleAll(methodId: number) {
+      this.selectedPaymentMethodId = methodId;
+      this.isPaymentMethodPopupOpen = false;
+      if (this.selectedUser) {
+        this.sendAllPendingOrders(this.selectedUser.id, methodId);
+      }
+          
+      // Call the actual method with payment type
+      // this.sendAllPendingOrders(this.selectedUser?.id, methodId);
+    }
+    
+    closePaymentMethodPopup() {
+      this.isPaymentMethodPopupOpen = false;
+    }
+    
+    finishSettleAll() {
+      if (this.selectedUser && this.selectedPaymentMethodId) {
+        this.isPaymentMethodPopupOpen = false;
+        this.sendAllPendingOrders(this.selectedUser.id, this.selectedPaymentMethodId);
+        this.selectedPaymentMethodId = 1;
+      }
+    }
+    // closePaymentMethodPopup() {
+    //   this.isPaymentMethodPopupOpen = false;
+    //   this.selectedPaymentMethodId = null;
+    // }
+    // sendAllPendingOrders(userId: number): void {
+    sendAllPendingOrders(userId: number, paymentMethodId: number) {
       const allOrders = this.getUserOrders(userId);
       const paymentDataList = allOrders
         .filter(order => order.total > order.paidAmount)
         .map(order => ({
           orderId: order.id,
-          paymentMethodId: 1, // assuming method is fixed
+          paymentMethodId: paymentMethodId, // assuming method is fixed
           amount: +(order.total - order.paidAmount).toFixed(2)
         }));
     

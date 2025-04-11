@@ -17,10 +17,12 @@
     
   <!-- Avatar Section with Dropdown -->
 <div class="avatar-section">
-    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
+  <button (click)="pendingOrders()"  class="lock-btn">Kitchen</button>
+  <button (click)="logout()"  class="lock-btn">Lock</button>
+  <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar"  (click)="toggleDropdown()" />
     
     <!-- Dropdown Menu (Initially Hidden) -->
-    <div *ngIf="dropdownVisible" class="modal-overlay" (click)="closeCheckoutModal()">
+    <div *ngIf="dropdownVisible && canEdit" class="modal-overlay" (click)="closeCheckoutModal()">
     <div *ngIf="dropdownVisible" class="dropdown-menu">
         <!-- <button (click)="viewOrders()">View Orders</button>
         <button (click)="viewReports()">View Reports</button> -->
@@ -288,6 +290,7 @@
       [(ngModel)]="customAmount"
       placeholder="Enter custom amount"
       class="input-field"
+      min="0"
     />
 
     <!-- Sitting Area Toggle -->
@@ -306,7 +309,7 @@
   </button>
 </div>
       <!-- Toggle Buttons for Payment Type -->
-      <div class="payment-toggle">
+      <!-- <div class="payment-toggle">
         <button 
           [class.active]="selectedPaymentType === 'cash'" 
           (click)="selectPaymentType('cash')" 
@@ -319,10 +322,23 @@
           (click)="selectPaymentType('upi')">
           UPI
         </button>
+      </div> -->
+
+      <!-- Toggle Button Group -->
+      <div class="payment-toggle">
+        <label [class.active]="selectedPaymentMethodId === 1">
+          <input type="radio" name="paymentMethod" [value]="1" [(ngModel)]="selectedPaymentMethodId" />
+          Cash
+        </label>
+
+        <label [class.active]="selectedPaymentMethodId === 2">
+          <input type="radio" name="paymentMethod" [value]="2" [(ngModel)]="selectedPaymentMethodId" />
+          UPI
+        </label>
       </div>
   
       <div class="modal-buttons">
-        <button (click)="handlePayment('full')">Full Payn</button>
+        <button (click)="handlePayment('full')">Full Pay</button>
         <button (click)="confirmPartialPay()">Partial Pay</button>
         <button (click)="closeCheckoutModal()">Cancel</button>
       </div>
@@ -331,10 +347,13 @@
       <div *ngIf="partialPayMode" class="partial-pay">
         <label>
           Enter Partial Amount:
-          <input type="number" [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
-        </label>
+          <input type="number" 
+          style="width: 40%;"
+          min="0"
+          [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
+        </label><br>
         <button [disabled]="!isPartialAmountValid" (click)="submitPartialPay()"
-        style="font-weight: bold; font-size: x-large;">Submit</button>
+        style="font-weight: bold; font-size: xxx-large;">Submit</button>
       </div>
     </div>
   </div>
@@ -523,6 +542,7 @@
           [(ngModel)]="customAmount"
           placeholder="Enter custom amount"
           class="input-field"
+          min="0"
         />
       </div>
       <div class="sitting-area-toggle" *ngIf="+cartAmount > 0">
@@ -588,7 +608,7 @@
       <div *ngIf="partialPayMode" class="partial-pay">
         <label>
           Enter Partial Amount:
-          <input type="number" [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
+          <input type="number" min="0" [(ngModel)]="partialPayAmount" (input)="validatePartialPayAmount()" />
         </label>
         <button [disabled]="!isPartialAmountValid" (click)="submitPartialPay()"
         style="font-weight: bold; font-size: x-large;">Submit</button>
@@ -679,9 +699,12 @@
     <!-- Send All Pending Orders Button -->
 
     <div class="send-all-btn-div">
-    <button class="send-all-btn" (click)="sendAllPendingOrders(selectedUser.id)">
+    <button class="send-all-btn" [disabled]="!canEdit" (click)="openPaymentMethodPopup()">
       Settle All Pending Amounts
     </button>
+  </div>
+  <div class="note" *ngIf="!canEdit">
+    <h2 style="color: red;">🔒 Only an admin or owner can settle dues. Please reach out to them.</h2>
   </div>
 
   <div class="orders-list">
@@ -698,15 +721,66 @@
       </div>
       
       <!-- Confirm Button -->
-      <button (click)="handleOpenPopup(order.id)" >Confirm</button>
+      <button (click)="handleOpenPopup(order.id)"  [disabled]="!canEdit" >Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Method Selection Popup -->
+<div *ngIf="isPaymentMethodPopupOpen" class="popup-overlay" hidden>
+  <div class="popup">
+    <div class="popup-header">
+      <span>Select Payment Method</span>
+      <button (click)="closePaymentMethodPopup()" class="close-btn">X</button>
+    </div>
+
+    <div class="popup-content">
+      <p>How do you want to settle all pending amounts?</p>
+
+      <div class="payment-options">
+        <button class="btn" (click)="confirmSettleAll(1)">💰 Cash</button>
+        <button class="btn" (click)="confirmSettleAll(2)">📲 UPI</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Payment Method Selection Popup -->
+<div *ngIf="isPaymentMethodPopupOpen" class="popup-overlay popup-settle">
+  <div class="popup" >
+    <div class="popup-header">
+      <span>Select Payment Method</span>
+      <button (click)="closePaymentMethodPopup()" class="close-btn">X</button>
+    </div>
+
+    <div class="popup-content">
+      <p>How do you want to settle all pending amounts?</p>
+
+      <!-- Toggle Button Group -->
+      <div class="payment-toggle">
+        <label [class.active]="selectedPaymentMethodId === 1">
+          <input type="radio" name="paymentMethod" [value]="1" [(ngModel)]="selectedPaymentMethodId" />
+          💰 Cash
+        </label>
+
+        <label [class.active]="selectedPaymentMethodId === 2">
+          <input type="radio" name="paymentMethod" [value]="2" [(ngModel)]="selectedPaymentMethodId" />
+          📲 UPI
+        </label>
+      </div>
+    </div>
+
+    <div class="popup-footer">
+      <button class="btn" [disabled]="!selectedPaymentMethodId" (click)="finishSettleAll()">Finish</button>
+      <button class="btn" (click)="closePaymentMethodPopup()">Cancel</button>
     </div>
   </div>
 </div>
 
 
+
    
    <!-- Confirmation Popup -->
-<div *ngIf="isPopupOpen && selectedOrderDetails" class="popup-overlay">
+<div *ngIf="isPopupOpen && selectedOrderDetails && canEdit" class="popup-overlay">
   <div class="popup">
     <div class="popup-header">
       <span>Confirm Payment</span>
@@ -744,6 +818,18 @@
         <span>{{ (selectedOrderDetails.total - selectedOrderDetails.paidAmount) | currency: 'INR' }}</span>
 
         <!-- <span>${{ (selectedOrderDetails.total.toFixed(2)-selectedOrderDetails.total.toFixed(2)) | currency: 'INR'}}</span> -->
+      </div>
+      
+      <!-- Payment Method Toggle -->
+      <div class="payment-toggle">
+        <label [class.active]="selectedPaymentMethodId === 1">
+          <input type="radio" name="paymentMethod" [value]="1" [(ngModel)]="selectedPaymentMethodId" />
+          💰 Cash
+        </label>
+        <label [class.active]="selectedPaymentMethodId === 2">
+          <input type="radio" name="paymentMethod" [value]="2" [(ngModel)]="selectedPaymentMethodId" />
+          📲 UPI
+        </label>
       </div>
     </div>
     <div class="popup-footer">
