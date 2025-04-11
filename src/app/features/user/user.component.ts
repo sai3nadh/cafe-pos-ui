@@ -31,6 +31,9 @@ interface Category {
   name: string;
 }
 
+export interface DisplayItem extends Item {
+  imagePath: string;
+}
 interface Item {
   id: number;
   name: string;
@@ -179,6 +182,7 @@ export class UserComponent {
     ,private cdr: ChangeDetectorRef
     ,private notifcationService : NotificationApiService
   ) {}
+  items: DisplayItem[] = [];
 
   // private sub!: Subscription;
   private notifSub!: Subscription;
@@ -352,17 +356,28 @@ toggleSittingArea(sittingArea: string) {
         console.log('Categories loaded:', this.categories);
 
 
-        // ✅ Step 2: Extract and Store Items from API
+        // // ✅ Step 2: Extract and Store Items from API
+        // this.items = data.flatMap(cat =>
+        //   cat.menuItems.map(item => ({
+        //     id: item.menuItemId,
+        //     name: item.name,
+        //     category: cat.categoryId, // Assign the correct category
+        //     price: item.price,
+        //     kitchen: item.kitchenItem
+        //   }))
+        // );
+
         this.items = data.flatMap(cat =>
           cat.menuItems.map(item => ({
             id: item.menuItemId,
             name: item.name,
-            category: cat.categoryId, // Assign the correct category
+            category: cat.categoryId,
             price: item.price,
-            kitchen: item.kitchenItem
+            kitchen: item.kitchenItem,
+            imagePath: item.imagePath  // only in DisplayItem
           }))
         );
-
+        
         console.log('Items loaded:', this.items);
 
         
@@ -505,7 +520,7 @@ toggleSittingArea(sittingArea: string) {
     console.log('Selected category:', this.selectedCategory);
   }
   
-  items: Item[] = [];
+  // items: Item[] = [];
   // itemsKitchen: ItemKitchen[] = [];
 
  // Define showUsers to control the visibility of user list
@@ -836,7 +851,7 @@ closeUsersModal(){
   //   this.selectedCategory = category;
   // }
 
-  getItemsByCategory(categoryId: number): Item[] {
+  getItemsByCategory(categoryId: number): DisplayItem[] {
     return this.items.filter(item => item.category === categoryId);
   }
 

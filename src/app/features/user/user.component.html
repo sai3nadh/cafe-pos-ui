@@ -67,8 +67,11 @@
               <!-- <p>₹{{ item.price.toFixed(2) }}</p> -->
               <!-- <img class="item-icons" src="../../../assets/icons/tea1.png" alt="Avatar" (click)="toggleDropdown()" /> -->
               <!-- <img class="item-icons" [src]="'../../../assets/icons/' + item.id + '.png'" alt="item.name" (click)="toggleDropdown()" /> -->
-              <img class="item-icons" 
+              <!-- <img class="item-icons" 
               [src]="imageBaseUrl + item.id + '.png'" loading="lazy"
+              alt="item.name"  /> -->
+              <img class="item-icons" 
+              [src]="imageBaseUrl + item.imagePath " loading="lazy"
               alt="item.name"  />
 
               <!-- <img class="item-icons" src="../../../assets/icons/i.png https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" /> -->
