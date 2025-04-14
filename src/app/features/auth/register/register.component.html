@@ -1,5 +1,5 @@
 <!-- <p>register works!</p> -->
-<div class="register-page">
+<!-- <div class="register-page">
     <div class="card">
       <div class="card-header">
         <h2>Register</h2>
@@ -55,15 +55,95 @@
       <div class="card-footer">
         <button (click)="handleRegister()">Register</button>
        
-        <!-- <p class="toggle-text">
+        <p class="toggle-text">
           Already have an account? <a [routerLink]="'/login'">Login</a>
-        </p> -->
+        </p>
       </div><div class="card-footer">
-        <!-- <button (click)="handleRegister()">Register</button> -->
+        <button (click)="handleRegister()">Register</button>
         <button (click)="cancel()" style="background-color: rgb(190, 114, 93);">Cancel</button>
-        <!-- <p class="toggle-text">
+         <p class="toggle-text">
           Already have an account? <a [routerLink]="'/login'">Login</a>
-        </p> -->
+        </p> 
+      </div>
+    </div>
+  </div> -->
+  
+  
+
+  <div class="register-page">
+    <div class="card">
+      <div class="card-header">
+        <h2>Register</h2>
+      </div>
+  
+      <div class="card-content">
+        <!-- Staff Info -->
+        <label for="firstName">First Name</label>
+        <input id="firstName" type="text" [(ngModel)]="firstName" placeholder="Enter first name" />
+  
+        <label for="lastName">Last Name</label>
+        <input id="lastName" type="text" [(ngModel)]="lastName" placeholder="Enter last name" />
+  
+        <label for="email">Email</label>
+        <input id="email" type="email" [(ngModel)]="email" placeholder="Enter email" />
+  
+        <label for="phoneNumber">Phone Number</label>
+        <input id="phoneNumber" type="tel" [(ngModel)]="phoneNumber" placeholder="Enter phone number" />
+  
+        <!-- User Account Info -->
+        <label for="username">Username</label>
+        <input id="username" type="text" [(ngModel)]="username" placeholder="Choose a username" />
+  
+        <label for="password">Password</label>
+        <input id="password" type="password" [(ngModel)]="password" placeholder="Enter password" />
+  
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword" placeholder="Confirm password" />
+  
+        <label for="pin">4-Digit PIN</label>
+        <input
+          id="pin"
+          type="text"
+          maxlength="4"
+          pattern="[0-9]*"
+          [(ngModel)]="pin"
+          placeholder="Enter 4-digit PIN"
+        />
+  
+        <label for="confirmPin">Confirm PIN</label>
+        <input
+          id="confirmPin"
+          type="text"
+          maxlength="4"
+          pattern="[0-9]*"
+          [(ngModel)]="confirmPin"
+          placeholder="Confirm your PIN"
+        />
+  
+        <!-- Role Dropdown -->
+        <label for="role">Role</label>
+        <select id="role" [(ngModel)]="selectedRoleId" name="role" style="height: 2em;">
+          <option *ngFor="let role of roles" [value]="role.roleId">{{ role.name }}</option>
+        </select>
+  
+        <!-- Messages -->
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+  
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+      </div>
+  
+      <!-- Footer -->
+      <div class="card-footer">
+        <button (click)="handleRegister()">Register</button>
+        <button (click)="cancel()" style="background-color: rgb(190, 114, 93);">Cancel</button>
+      </div> <!-- Footer -->
+      <div class="card-footer">
+        <button (click)="goToHome()">Home Page</button>
+        
       </div>
     </div>
   </div>
