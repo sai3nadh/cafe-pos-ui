@@ -415,7 +415,6 @@ toggleSittingArea(sittingArea: string) {
   loadPurchaseHistory() {
     this.orderService.fetchPurchaseHistory().subscribe((data) => {
       this.purchaseHistoryData = data;
-      alert("her inuser page");
       console.log('Updated Purchase History:', this.purchaseHistoryData);
     });
   }
