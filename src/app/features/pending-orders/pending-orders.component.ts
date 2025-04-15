@@ -169,7 +169,7 @@ closeKitchenPopup(){
   getOrders(){
    
     if(this.userId == -1){
-      alert("retuned--");
+      // alert("retuned--");
       this.isLoading = false; // Set here in case of early return
       return;
     }

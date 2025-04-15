@@ -18,6 +18,8 @@
     
   <!-- Avatar Section with Dropdown -->
 <div class="avatar-section">
+  <button (click)="goToHome()"  class="lock-btn">Home</button>
+  <button (click)="logout()"  class="lock-btn">Lock</button>
     <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
     
     <!-- Dropdown Menu (Initially Hidden) -->

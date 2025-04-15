@@ -343,7 +343,7 @@ toggleSittingArea(sittingArea: string) {
 
   ngOnDestroy() {
     // this.wsService.disconnect(); // ✅ Disconnect WebSocket when leaving
-    this.loadPurchaseHistory();
+    // this.loadPurchaseHistory();
     
       // this.kitchenSub?.unsubscribe();
       this.notifSub?.unsubscribe();
@@ -415,6 +415,7 @@ toggleSittingArea(sittingArea: string) {
   loadPurchaseHistory() {
     this.orderService.fetchPurchaseHistory().subscribe((data) => {
       this.purchaseHistoryData = data;
+      alert("her inuser page");
       console.log('Updated Purchase History:', this.purchaseHistoryData);
     });
   }
