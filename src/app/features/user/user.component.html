@@ -560,6 +560,18 @@
         </button>
         <hr/>
       </div>
+      <div class="payment-toggle" style="margin: 15px;">
+        <label [class.active]="selectedPaymentMethodId === 1">
+          <input type="radio" name="paymentMethod" [value]="1" [(ngModel)]="selectedPaymentMethodId" />
+          Cash
+        </label>
+
+        <label [class.active]="selectedPaymentMethodId === 2">
+          <input type="radio" name="paymentMethod" [value]="2" [(ngModel)]="selectedPaymentMethodId" />
+          UPI
+        </label>
+      </div>
+  
        <!-- Toggle Buttons for Payment Type -->
        <!-- <div class="payment-toggle">
         <button 

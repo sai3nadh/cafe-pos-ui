@@ -723,6 +723,7 @@ toggleSittingArea(sittingArea: string) {
       this.guestName="";
       this.editOrderId=-1;
       this.alreadyPaidAmount = 0;
+      this.partialPayAmount =0;
       this.selectedUser =null;
       this.previousCart =[];
       this.purchaseHistory= [];
@@ -732,7 +733,13 @@ toggleSittingArea(sittingArea: string) {
     handlePayment(paymentType: string) {
       switch(paymentType) {
         case 'full':
-          this.partialPayAmount = this.getTotal();
+          if(this.editOrderId !== -1){
+            // set -1 for the order editing
+            this.partialPayAmount = -1;// this value calculated in the confirm full pay
+          }else{
+            // new order for full payment it whole amount is getting paid
+            this.partialPayAmount = this.getTotal();
+          }
           console.log("amount paid"+ this.partialPayAmount);
           this.confirmFullPay();
           break;
@@ -1139,17 +1146,38 @@ closeUsersModal(){
     const totalAmount = this.getTotal();
     console.log(`Payment Confirmed: ${totalAmount}, Type: ${this.selectedPaymentType}`);
     
-   
+   //updating existing 
     if(this.editOrderId != -1){
+      const remainingAmount = totalAmount - this.alreadyPaidAmount;
 
+      if((totalAmount - this.alreadyPaidAmount)<0){
+        alert("Paid extra amount. refund amount is RS:"+(totalAmount - this.alreadyPaidAmount)+"/-");
+        // return;
+      }
+      if(this.partialPayAmount == -1){
+        this.partialPayAmount = totalAmount - this.alreadyPaidAmount;
+        console.log("partial amount is:"+this.partialPayAmount);
+      }
+      else if(this.partialPayAmount>0){
+        const remainingAmount = totalAmount - this.alreadyPaidAmount;
+  
+        if (this.partialPayAmount > remainingAmount) {
+          console.error("Error: Partial payment exceeds the remaining amount.");
+          alert("Partial payment exceeds the remaining amount. \n remaining amount is :"+remainingAmount);
+          // You can also trigger a form error or show a toast here
+          this.isLoading = false;
+          return;
+        }
+      }
         // Create the order object with the required format
       const editOrderData = {
         orderId:this.editOrderId,
         userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
         status: 'Pending', // Status can be adjusted based on your system's logic
         total:  totalAmount,
-        amountPaid:((totalAmount) - (this.alreadyPaidAmount) -( this.partialPayAmount)),
-        paymentMethodId:1,
+        // amountPaid:((totalAmount) - (this.alreadyPaidAmount) -( this.partialPayAmount)),
+        amountPaid:( ( this.partialPayAmount)),
+        paymentMethodId:this.selectedPaymentMethodId,
         customAmount :this.customAmount,
         sittingArea: this.selectedSittingArea,
         // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
@@ -1183,6 +1211,7 @@ closeUsersModal(){
           this.guestName='';
           this.alreadyPaidAmount = 0;
     }else{
+      alert("else");
     // Create the order object with the required format
     const orderData = {
       userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
@@ -1192,7 +1221,7 @@ closeUsersModal(){
       customAmount: this.customAmount,
       sittingArea:  this.selectedSittingArea,
       // amountPaid : this.partialPayAmount > 0 ? this.partialPayAmount : totalAmount,
-      paymentMethodId:1,
+      paymentMethodId: this.selectedPaymentMethodId,
       // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
       customerId: this.selectedUser ? this.selectedUser.id : undefined,
       orderItems: this.cart.map(item => ({
@@ -1551,6 +1580,7 @@ closeUsersModal(){
 
   // Handle Partial Pay
   confirmPartialPay() {
+    this.partialPayAmount =0;
     this.partialPayMode = !this.partialPayMode;    
   }
 
