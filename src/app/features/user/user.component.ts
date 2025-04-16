@@ -1211,7 +1211,6 @@ closeUsersModal(){
           this.guestName='';
           this.alreadyPaidAmount = 0;
     }else{
-      alert("else");
     // Create the order object with the required format
     const orderData = {
       userId: this.storageService.getLocalVariable('userId'),//this.selectedUser?.id, // You'll need to replace this with the logged-in user's ID if applicable
