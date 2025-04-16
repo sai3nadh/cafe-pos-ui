@@ -43,7 +43,7 @@ interface Item {
   kitchen: boolean;
 }
 
-interface cartItem{
+export interface cartItem{
   id: number;
   name: string;
   category: number;
@@ -51,6 +51,8 @@ interface cartItem{
   qty?: number;
   kitchen: boolean;
   itemNote: string;
+  itemStatus?: 'pending' | 'preparing' | 'ready' | 'delivered' | 'cancelled' | null;
+  statusUpdated?: string; // ISO timestamp string
 }
 
 

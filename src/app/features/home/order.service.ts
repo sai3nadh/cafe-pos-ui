@@ -15,6 +15,8 @@ export interface OrderItemDto {
   qty: number;        // Quantity ordered
   kitchen: boolean;
   itemNote: string;
+  itemStatus?: 'pending' | 'preparing' | 'ready' | 'delivered' | 'cancelled' | null;
+  statusUpdated?: string; // ISO timestamp string
 }
 
 export interface OrderDto {

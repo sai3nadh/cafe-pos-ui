@@ -106,7 +106,8 @@
               
                       <div class="items-wrapper">
                         <div class="sssitem" *ngFor="let item of order.items">
-                            <div class="item" *ngIf="item.kitchen">
+                            <!-- <div class="item" *ngIf="item.kitchen"> -->
+                          <div class="item" *ngIf="item.kitchen && (item.itemStatus === 'pending' || item.itemStatus === null)">
                           <div class="item-name">{{ item.name }}</div>
                           <div class="item-qty"> &nbsp;{{ item.qty }}</div>
                           <!-- <div class="item-price">₹{{ item.price }}</div> -->
@@ -141,7 +142,14 @@
           <div class="order-popup-items">
             <div class="item" *ngFor="let item of selectedOrder.items">
               <div class="item-name">{{ item.name }}</div>
-              <div class="item-qty">x{{ item.qty }}</div>
+              <div class="item-qty" style="padding-right: 10px; font-size: larger;">x{{ item.qty }}</div>
+ <!-- 👇 Add the "Mark Ready" button only if status is 'pending' -->
+ <button 
+ *ngIf="item.itemStatus === 'pending' && false" 
+ class="mark-ready-btn" 
+ (click)="readyItem(item, selectedOrder)"
+>mark ready
+</button>
             </div>
           </div>
       

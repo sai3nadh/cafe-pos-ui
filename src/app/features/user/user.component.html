@@ -465,7 +465,7 @@
             </ul> -->
             <div *ngFor="let item of selectedOrder.items" class="item-row">
               <span class="item-name">{{ item.name }}</span>
-              <span class="item-qty"> - {{ item.qty }}</span>
+              <span class="item-qty"> - {{ item.qty }}-- {{ item.itemStatus }}</span><br>
             </div>
 
             <div class="order-summary" style="text-align: right; font-weight: bold;">

@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxImageCompressService } from 'ngx-image-compress';  // Import the Image Compress Service
 import { OrderDto, OrderItemDto , OrderService } from '../home/order.service';
-import { Order } from '../user/user.component';
+import { cartItem, Order } from '../user/user.component';
 import { UserComponent } from '../user/user.component';
 import { WebSocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
@@ -194,6 +194,32 @@ closeKitchenPopup(){
         console.log('Notification sent -- order ready');
         });
     }
+
+    // need to fix this method still pending
+    readyItem(item: cartItem, selectedOrder: Order) {
+      console.log("Marking item as ready:", item);
+    
+      // First, update the status of the current item
+      item.itemStatus = 'ready';
+      item.statusUpdated = new Date().toISOString();
+    
+      // Now check if all kitchen items are ready
+      const pendingItems = selectedOrder.items.filter(i => 
+        i.kitchen && i.itemStatus === 'pending'
+        &&
+        i.id !== item.id // ignore the current item
+      );
+    
+      if (pendingItems.length === 0) {
+        console.log("All items ready – calling readyOrder()");
+        // this.readyOrder(selectedOrder);  // All items are done – mark order as ready
+      } else {
+        console.log("Item marked ready – more items left to finish.");
+        // optionally update the backend here for this one item only if needed
+      }
+    }
+    
+
     //move order to the finished state
     readyOrder(selectedOrder: Order){
       // alert("se"+selectedOrder);
