@@ -1615,6 +1615,11 @@ closeUsersModal(){
     this.closeDropdown();
   }
 
+  viewReports() {
+    this.router.navigate(['/report']);
+    this.closeDropdown();
+  }
+
   registerUser(){
     this.router.navigate(['/register']);
     this.closeDropdown();

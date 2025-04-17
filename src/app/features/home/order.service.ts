@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Customer, PurchaseHistoryResponse, PurchaseRecord } from '../user/user.component';
 import { map } from 'rxjs/operators';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
+import { DailySales, ReportDTO } from '../report/report.component';
 
 export interface OrderItemDto {
   id: number;         // Unique identifier for the menu item
@@ -47,6 +48,8 @@ export class OrderService {
   private apiUrlGetCustomers = `${environment.apiUrl}/customers`; // Change this to your actual API endpoint
   private url = `${environment.apiUrl}/orders/printOrder/`;
   private undpaidOrders = `${environment.apiUrl}/orders/orders/unpaid-grouped-by-customer`;
+  private readonly reportUrl = `${environment.apiUrl}/reports`;
+  
 
   constructor(private http: HttpClient
     , private storageService: StorageService
@@ -151,6 +154,23 @@ export class OrderService {
       map((response) => {
         return response; // No transformation needed
       })
+    );
+  }
+
+
+  // below method for report generation
+  getSalesReport(from: string, to: string): Observable<ReportDTO> {
+    const params = new HttpParams()
+      .set('from', from)
+      .set('to', to);
+
+    return this.http.get<ReportDTO>(`${this.reportUrl}/sales`, { params });
+  }
+
+  //this method returns the daily sales grouped by date  
+  getDailySales(fromDate: string, toDate: string): Observable<DailySales[]> {
+    return this.http.get<DailySales[]>(
+      `${this.reportUrl}/sales/daily?from=${fromDate}&to=${toDate}`
     );
   }
 }

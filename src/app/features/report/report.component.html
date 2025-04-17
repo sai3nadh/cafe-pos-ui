@@ -1,0 +1,288 @@
+<!-- <p>report works!</p> -->
+
+<div class="container">
+    <!-- <div *ngIf="showTopBar" class="top-bar"> -->
+
+    <!-- Top Navigation Bar -->
+    <div *ngIf="true" class="top-bar">
+      <div class="nav-buttons">
+        <button (click)="goToHome()">Cafe-SISILI</button>
+         <!-- Orders Button -->
+         <button>
+          <!-- (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
+          Orders</button>
+      <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded">
+          Users
+        </button>
+        <!-- <button (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();">Orders-Icon</button> -->
+      </div>
+    
+  <!-- Avatar Section with Dropdown -->
+<div class="avatar-section">
+  <button (click)="goToHome()"  class="lock-btn">Home</button>
+  <button (click)="logout()"  class="lock-btn">Lock</button>
+    <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar" (click)="toggleDropdown()" />
+    
+    <!-- Dropdown Menu (Initially Hidden) -->
+<div *ngIf="dropdownVisible" class="dropdown-popup-overlay" (click)="closeDropdownPopup()">
+    <div *ngIf="dropdownVisible" class="dropdown-menu">
+        <!-- <button (click)="viewOrders()">View Orders</button>
+        <button (click)="viewReports()">View Reports</button> -->
+        <button >View Orders</button>
+        <button >View Reports</button>
+           <!-- Zoom Settings Button -->
+           <button (click)="openZoomSettings()" class="bg-green-500 text-white px-4 py-2 rounded">Zoom Settings</button>
+ 
+          <hr />
+      <button (click)="logout()">Logout</button>
+    </div>
+</div>
+  </div>
+  
+    <!-- </div> -->
+
+    </div>
+    <!-- Zoom Modal (Initially Hidden) -->
+    <div *ngIf="zoomModalVisible" class="zoom-modal-overlay">
+    <div class="zoom-modal">
+        <h2>Set Zoom Level</h2>
+        <label for="zoomSlider">Zoom Level: </label>
+        
+        <!-- Left and Right Buttons -->
+        <div class="zoom-buttons">
+        <button (click)="changeZoom(-0.05)">-</button>
+        <input
+            id="zoomSlider"
+            type="range"
+            min="0.5"
+            max="2"
+            step="0.05"
+            [(ngModel)]="zoomLevel"
+            (input)="adjustZoom($event)"
+        />
+        <button (click)="changeZoom(0.05)">+</button>
+        </div>
+        
+        <span>{{ (zoomLevel * 100).toFixed(0) }}%</span>
+        
+        <button (click)="closeZoomSettings()">Close</button>
+    </div>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="main-content">
+     
+        <!-- 📅 Date Filter -->
+<!-- <div class="report-filter">
+    <label for="report-date"><strong>Select Date:</strong></label>
+    <input type="date" id="report-date" [(ngModel)]="reportDate">
+    <button (click)="fetchReport()">Get Report</button>
+  </div> -->
+    <div style=" margin-top: 20px;
+  ALIGN-ITEMS: flex-start;
+  JUSTIFY-CONTENT: center;
+  DISPLAY: grid;">
+  <div class="report-filter">
+    <label><strong>From:</strong></label>
+    <input type="date" [(ngModel)]="fromDate">
+  
+    <label style="margin-left: 10px;"><strong>To:</strong></label>
+    <input type="date" [(ngModel)]="toDate">
+  
+    <button (click)="fetchReport(); fetchDailySales();" style="margin-left: 10px;">Get Report</button>
+  </div>
+
+  <div>
+    
+    <p><strong>📆 Report generated for:</strong> {{ reportFromDate }} to {{ reportToDate }}</p>
+<p><strong>🕒 Generated at:</strong> {{ lastGenerated | date:'short' }}</p>
+
+  </div>
+  <hr class="strong-divider">
+
+  <!-- 📊 Summary Cards -->
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="card-title">Total Sales</div>
+      <div class="card-value sales">{{ totalSales | currency: 'INR' }}</div>
+    </div>
+    <div class="summary-card">
+      <div class="card-title">Total Orders</div>
+      <div class="card-value orders">{{ totalOrders }}</div>
+    </div>
+    <div class="summary-card">
+      <div class="card-title">Avg. Order Value</div>
+      <div class="card-value">{{ avgOrderValue | currency: 'INR' }}</div>
+    </div>
+  </div>
+  <hr class="strong-divider">
+
+
+<h2>Day wise Sales</h2>
+  <!-- <table  class="report-table"> -->
+    
+  <p *ngIf="dailySales && dailySales.length === 0">No Data available.</p>
+  <table class="report-table" *ngIf="dailySales && dailySales.length > 0">
+    <thead style="text-align: center;">
+      <tr>
+        <th>Date</th>
+        <th>Orders</th>
+        <th>Total Sales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of dailySales">
+        <td>{{ row.date }}</td>
+        <td>{{ row.orderCount }}</td>
+        <td class="amount">{{ row.totalSales | currency: 'INR' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr class="strong-divider">
+
+  <!-- <div style="
+  ALIGN-ITEMS: flex-start;
+  JUSTIFY-CONTENT: center;
+  DISPLAY: grid;"> -->
+    
+  <!-- 💳 Payment Method Breakdown -->
+  <h2>Payment Method Breakdown</h2>
+  
+<p *ngIf="paymentBreakdown && paymentBreakdown.length === 0">No payment methods available.</p>
+  <table class="report-table" *ngIf="paymentBreakdown && paymentBreakdown.length > 0">
+    <thead>
+      <tr>
+        <th>PAY_MODE</th>
+        <th>Transactions</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr *ngFor="let method of paymentBreakdown">
+        <td>{{ method.method }}</td>
+        <td>{{ method.count }}</td>
+        <td class="amount">{{ method.total | currency: 'INR' }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr class="strong-divider">
+
+  <!-- 📁 Category Sales -->
+  <h2>Sales by Category</h2>
+  <p *ngIf="categorySales && categorySales.length === 0">No Data available.</p>
+  <table class="report-table" *ngIf="categorySales && categorySales.length > 0">
+
+  <!-- <table class="report-table"> -->
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Total Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cat of categorySales">
+        <td>{{ cat.name }}</td>
+        <td class="amount">{{ cat.total | currency: 'INR' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="strong-divider">
+
+  <!-- 📦 Top Selling Items -->
+  <h2>Top Selling Items</h2>
+  <!-- <table class="report-table"> -->
+  <p *ngIf="topItems && topItems.length === 0">No Data available.</p>
+  <table class="report-table" *ngIf="topItems && topItems.length > 0">
+  
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity Sold</th>
+        <th>Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of topItems">
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td class="amount">{{ item.revenue | currency: 'INR' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="strong-divider">
+
+
+   <!-- 🧾 Full Item-wise Sales -->
+<h2>Item-wise Sales Details</h2>
+<!-- <table class="report-table"> -->
+  <p *ngIf="allItemSales && allItemSales.length === 0">No Data available.</p>
+  <table class="report-table" *ngIf="allItemSales && allItemSales.length > 0">
+ 
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Total Quantity Sold</th>
+      <th>Total Revenue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of allItemSales">
+      <td>{{ item.name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td class="amount">{{ item.revenue | currency: 'INR' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+<!-- new section -->
+
+<!-- 📦 Top Selling Items -->
+<!-- <h2>Top Selling Items</h2>
+<div class="scroll-table-container">
+  <table class="report-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity Sold</th>
+        <th>Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of topItems">
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.revenue | currency: 'INR' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+<!-- 🧾 Full Item-wise Sales -->
+<!-- <h2>Item-wise Sales Details</h2>
+<div class="scroll-table-container">
+  <table class="report-table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Total Quantity Sold</th>
+        <th>Total Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of allItemSales">
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.revenue | currency: 'INR' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+    </div>
+
+      
+  </div>
