@@ -439,6 +439,7 @@
         <button class="btn-filter" [class.active]="selectedStatus === 'Pending'" (click)="handleFilterChange('Pending')">Kitchen</button>
         <button class="btn-filter" [class.active]="selectedStatus === 'Ready'" (click)="handleFilterChange('Ready')">Ready</button>
         <button class="btn-filter" [class.active]="selectedStatus === 'Completed'" (click)="handleFilterChange('Completed')">Completed</button>
+        <button class="btn-filter" [class.active]="selectedStatus === 'unpaid'" (click)="handleFilterChange('unpaid')">Unpaid</button>
       </div>
     
       <div class="order-bottom-section">

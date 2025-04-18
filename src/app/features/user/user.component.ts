@@ -628,7 +628,11 @@ toggleSittingArea(sittingArea: string) {
     this.selectedOrder = null;
     if (status === 'All') {
       this.filteredOrders = this.allOrders;
-    } else {
+    }
+    else if(status === 'unpaid'){
+      this.filteredOrders = this.allOrders.filter(order => (order.total - order.paidAmount) !== 0);
+    }
+        else {
       this.filteredOrders = this.allOrders.filter(order => order.status === status);
     }
       // Set selectedOrder to the first item of filteredOrders if it exists
