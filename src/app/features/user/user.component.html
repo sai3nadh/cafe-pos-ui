@@ -449,18 +449,27 @@
         <div class="bottom-left">
           <div class="order-grid-responsive">
             <div *ngFor="let order of filteredOrders" class="order-item-responsive" (click)="showOrderDetails(order)" [ngClass]="{'selected-order': selectedOrder?.orderNumber === order.orderNumber}">
-              <div class="order-circle" [ngClass]="{'text-red-500': order.status === 'Pending', 'text-green-500': order.status === 'Completed'}">
+              <!-- <div class="order-circle" [ngClass]="{'text-red-500': order.status === 'Pending', 'text-green-500': order.status === 'Completed'}">
                 <div class="order-text">
                   <span>{{ order.orderNumber | slice: -3 }}</span>
                   <span class="order-status">{{ order.status }}</span>
                 </div>
-              </div>
+              </div> -->
+
+              <div class="order-circle" 
+     [ngClass]="getOrderCircleClass(order)">
+  <div class="order-text">
+    <span>{{ order.orderNumber | slice: -3 }}</span>
+    <span class="order-status">{{ order.status }}</span>
+  </div>
+</div>
+
             </div>
           </div>
         </div>
         <div class="bottom-right">
           <div class="order-details-fixed" *ngIf="selectedOrder">
-            <h3 style="margin-bottom: 10px;">Order Items - #{{ selectedOrder.orderNumber | slice: -3}}</h3>
+            <h3 style="margin-bottom: 10px; font-size: 1.5em;">Order Items - #{{ selectedOrder.orderNumber | slice: -3}}</h3>
             <h5 style="margin-top: 10px; margin-bottom: 5px; text-align: justify;">Time: {{selectedOrder.time}}</h5>
             <!-- <ul>
               <li *ngFor="let item of selectedOrder.items">

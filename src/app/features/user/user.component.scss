@@ -1259,6 +1259,7 @@ i.fas.fa-trash-alt {
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
   margin-right: 20px;
+  padding: 20px;
 }
 
 .btn-filter:hover {
@@ -1387,7 +1388,7 @@ i.fas.fa-trash-alt {
 }
 
 .order-status {
-  font-size: 0.85rem;
+  font-size: 1rem;
   margin-top: 0.25rem;
 }
 
@@ -1396,6 +1397,19 @@ i.fas.fa-trash-alt {
   margin-top: 2rem;
   gap: 2rem;
 }
+
+
+.order-circle.paid-completed {
+  background: linear-gradient(to right, #0f9d58, #1db954); /* green gradient */
+}
+
+.order-circle.warning-payment {
+  background: linear-gradient(to right, #ce8a0b, #ff6347); /* orange-red warning */
+}
+.order-circle.ready {
+  background: linear-gradient(to right, #6a00ff, #8e2de2); /* Purple */
+}
+
 
 // .bottom-left, .bottom-right {
 //   flex: 1;

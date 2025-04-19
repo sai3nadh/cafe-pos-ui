@@ -79,6 +79,7 @@ reportToDate: any;
         this.isLoading=true;
         this.orderService.checkLogin();
         this.fetchReport();
+        this.fetchDailySales();
       }
  //below header functions
  goToHome() {

@@ -833,7 +833,7 @@ console.log(matchedSummary?.customerName?.toString() ?? 'No customer found');
   
     // Function to handle the order click and show details
     showOrderDetails(order: any): void {
-      if (this.selectedOrder === order) {
+      if (this.selectedOrder === order && false) {
         this.selectedOrder = null;  // Close the order details if clicked again
       } else {
         this.selectedOrder = order;  // Show the order details
@@ -2172,6 +2172,26 @@ openPaymentMethodPopup() {
           console.error('Error processing multiple payments:', error);
         }
       );
+    }
+    
+    getOrderCircleClass(order: Order): string {
+      console.log("++"+order.total+"==="+order.paidAmount);
+      const isCompleted = order.status === 'Completed';
+      const isReady = order.status === 'Ready';
+      const isPaid = order.paidAmount >= order.total;
+    // console.log("--"+isCompleted+"==dd=="+isPaid);
+      if (isCompleted && !isPaid) {
+        console.log("warinng");
+        return 'order-circle warning-payment'; // partial payment
+      } else if (isCompleted && isPaid) {
+        console.log("else if -- paid");
+        return 'order-circle paid-completed'; // fully paid
+      } else if (isReady) {
+        return 'order-circle ready'; // ready to collect
+      }
+      else {
+        return 'order-circle'; // default for Pending, Ready, etc.
+      }
     }
     
     getCustomerOrdersToday(){
