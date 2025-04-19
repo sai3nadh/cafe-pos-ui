@@ -2175,16 +2175,16 @@ openPaymentMethodPopup() {
     }
     
     getOrderCircleClass(order: Order): string {
-      console.log("++"+order.total+"==="+order.paidAmount);
+      // console.log("++"+order.total+"==="+order.paidAmount);
       const isCompleted = order.status === 'Completed';
       const isReady = order.status === 'Ready';
       const isPaid = order.paidAmount >= order.total;
     // console.log("--"+isCompleted+"==dd=="+isPaid);
       if (isCompleted && !isPaid) {
-        console.log("warinng");
+        // console.log("warinng");
         return 'order-circle warning-payment'; // partial payment
       } else if (isCompleted && isPaid) {
-        console.log("else if -- paid");
+        // console.log("else if -- paid");
         return 'order-circle paid-completed'; // fully paid
       } else if (isReady) {
         return 'order-circle ready'; // ready to collect
