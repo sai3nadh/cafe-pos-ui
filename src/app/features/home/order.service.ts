@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Customer, PurchaseHistoryResponse, PurchaseRecord } from '../user/user.component';
+import { Customer, OrderSummary, PurchaseHistoryResponse, PurchaseRecord } from '../user/user.component';
 import { map } from 'rxjs/operators';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
@@ -172,5 +172,9 @@ export class OrderService {
     return this.http.get<DailySales[]>(
       `${this.reportUrl}/sales/daily?from=${fromDate}&to=${toDate}`
     );
+  }
+
+  getTodayOrders(): Observable<OrderSummary[]> {
+    return this.http.get<OrderSummary[]>(`${this.apiUrlCompleteOrder}/summary-with-customer`);
   }
 }

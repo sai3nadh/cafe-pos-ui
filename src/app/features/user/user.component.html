@@ -12,7 +12,7 @@
       <button (click)="toggleUsers()" class="bg-blue-500 text-white px-4 py-2 rounded">
           Users
         </button>
-        <button (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();">Orders-Icon</button>
+        <button (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();getCustomerOrdersToday();">Orders-Icon</button>
       </div>
     
         <!-- Avatar Section with Dropdown -->
@@ -440,6 +440,9 @@
         <button class="btn-filter" [class.active]="selectedStatus === 'Ready'" (click)="handleFilterChange('Ready')">Ready</button>
         <button class="btn-filter" [class.active]="selectedStatus === 'Completed'" (click)="handleFilterChange('Completed')">Completed</button>
         <button class="btn-filter" [class.active]="selectedStatus === 'unpaid'" (click)="handleFilterChange('unpaid')">Unpaid</button>
+        <button class="btn-filter" 
+                [class.active]="selectedStatus === 'CustomerOrders'" 
+                (click)="handleFilterChange('CustomerOrders')"> Customer Orders</button>
       </div>
     
       <div class="order-bottom-section">
@@ -464,11 +467,22 @@
                 {{ item.name }} - {{ item.qty }}
               </li>
             </ul> -->
+            <h4 *ngIf="selectedOrderCustomerName" style="margin-bottom: 5px; text-align: justify;
+                COLOR: blue;
+    margin-bottom: 5px;
+    text-align: justify;
+    MARGIN-TOP: 10PX;
+">
+              👤 Customer: <strong>{{ selectedOrderCustomerName }}</strong>
+            </h4>
             <div *ngFor="let item of selectedOrder.items" class="item-row">
               <span class="item-name">{{ item.name }}</span>
               <span class="item-qty"> - {{ item.qty }}-- {{ item.itemStatus }}</span><br>
             </div>
-
+            <!-- <h5 *ngIf="selectedOrderCustomerName" style="margin-bottom: 5px; text-align: justify;">
+              👤 Customer: <strong>{{ selectedOrderCustomerName }}</strong>
+            </h5> -->
+            
             <div class="order-summary" style="text-align: right; font-weight: bold;">
               <hr/>
             <p><strong>Total:</strong> {{ selectedOrder.total | currency: 'INR' }}</p>
@@ -482,14 +496,77 @@
               
               >Finish</button>
               <!-- [disabled]="selectedOrder.status !== 'Pending'" -->
-              <br/>
+              <br/><br/>
+              <!-- *ngIf="selectedOrder.total - selectedOrder.paidAmount !== 0"               -->
+              <button class="btn-reprint" 
+ 
+              [disabled]="selectedOrder.total - selectedOrder.paidAmount === 0"
+              (click)="openPaymentMethodPop(selectedOrder)">PayPop</button>
+              
+              <!-- (click)="updatePendingPayment(selectedOrder)">pay</button> -->
+
               <button class="btn-reprint" (click)="reprintOrder(selectedOrder)">Reprint</button>
+              <!--               -->
+              <br><br>
+              <button class="btn-reprint" *ngIf="selectedOrder.total - selectedOrder.paidAmount !== 0 &&
+                selectedOrder.status !== 'Completed'" 
+ 
+              [disabled]="selectedOrder.total - selectedOrder.paidAmount === 0"
+              (click)="openPaymentPopupForFinish(selectedOrder); ">Finish & pay</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
+   
+    <!-- Pay and close the order -->
+    <!-- Finish & Pay - Payment Method Popup -->
+    <div *ngIf="isPaymentPopupOpen && selectedPaymentOrder" class="popup-overlay"  (click)="isPaymentPopupOpen = !isPaymentPopupOpen;$event.stopPropagation();">
+
+
+      <div class="popup" (click)="$event.stopPropagation()">
+        <div class="popup-header">
+          <span>Select Payment Method</span>
+          <button (click)="isPaymentPopupOpen = false; isFinishFlow = false;" class="close-btn">X</button>
+        </div>
+        <div class="popup-content">
+
+          <div class="popup-row">
+            <span>Order Number</span>
+            <span>#{{ selectedPaymentOrder.orderNumber | slice: -3 }}</span>
+          </div>
+
+          <div class="popup-row">
+            <span>Total Amount</span>
+            <span>{{ selectedPaymentOrder.total | currency: 'INR' }}</span>
+          </div> 
+          <div class="popup-row">
+            <span>Paid Amount</span>
+            <span>{{selectedPaymentOrder.paidAmount | currency: 'INR' }}</span>
+          </div> 
+          <div class="popup-row">
+            <span>Pending Amount</span>
+            <span>{{ selectedPaymentOrder.total - selectedPaymentOrder.paidAmount | currency: 'INR' }}</span>
+          </div>
+
+          <div class="payment-toggle">
+            <label [class.active]="selectedPaymentMethodId === 1">
+              <input type="radio" name="paymentMethod" [value]="1" [(ngModel)]="selectedPaymentMethodId" />
+              💰 Cash
+            </label>
+            <label [class.active]="selectedPaymentMethodId === 2">
+              <input type="radio" name="paymentMethod" [value]="2" [(ngModel)]="selectedPaymentMethodId" />
+              📲 UPI
+            </label>
+          </div>
+        </div>
+
+        <div class="popup-footer">
+          <button class="btn" (click)="updatePendingPayment(selectedPaymentOrder)">Pay</button>
+          <button class="btn" (click)="isPaymentPopupOpen = false; isFinishFlow = false;">Cancel</button>
+        </div>
+      </div>
+    </div>
   <!-- </div> -->
 </div>
 

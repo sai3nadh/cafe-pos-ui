@@ -1254,11 +1254,11 @@ i.fas.fa-trash-alt {
   background-color: #5b5d70 !important;
   color: #ffffff !important;
   padding: 0.6rem 1.2rem;
-  font-size: 2.0rem;
+  font-size: 1.8em;
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .btn-filter:hover {
@@ -1364,8 +1364,8 @@ i.fas.fa-trash-alt {
 }
 
 .order-circle {
-  width: 6rem;
-  height: 6rem;
+  width: 8rem;
+  height: 8rem;
   background: linear-gradient(to right, #1c016d, #042f74);
   border-radius: 50%;
   display: flex;
@@ -1383,6 +1383,7 @@ i.fas.fa-trash-alt {
   color: white;
   font-weight: bold;
   text-align: center;
+  font-size: 3.5rem;
 }
 
 .order-status {
@@ -1667,6 +1668,8 @@ i.fas.fa-trash-alt {
   display: flex;
   justify-content: space-between;
   margin: 6px 0;
+  margin-top: 10px;
+  font-size: 1.4em;
 }
 
 .popup-footer {

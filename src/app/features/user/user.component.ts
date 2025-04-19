@@ -55,6 +55,13 @@ export interface cartItem{
   statusUpdated?: string; // ISO timestamp string
 }
 
+// src/app/models/order-summary.model.ts
+export interface OrderSummary {
+  orderId: number;
+  orderNumber: string;
+  customerId: number;
+  customerName: string;
+}
 
 // interface ItemKitchen {
 //   id: number;
@@ -120,6 +127,25 @@ interface Modifier {
   qty: number;
 }
 
+
+export function isCustomerAssignedForOrder(
+  order: Order,
+  orderSummaries: OrderSummary[]
+): boolean {
+  const match = orderSummaries.find(
+    summary => summary.orderNumber === order.orderNumber
+  );
+  return !!(match && match.customerId); // returns true if customerId exists
+}
+
+export function getMatchingOrderSummary(
+  order: Order,
+  orderSummaries: OrderSummary[]
+): OrderSummary | undefined {
+  return orderSummaries.find(
+    summary => summary.orderNumber === order.orderNumber
+  );
+}
 type CustomizingItem = cartItem & { modifiers: Modifier[] };
 
 
@@ -176,7 +202,8 @@ export class UserComponent {
   selectedItem: CustomizingItem | null = null;
   canEdit: boolean = false;
 
-   
+  todayCustomerOrders: OrderSummary[] = [];
+
   //pending order
   constructor(private router: Router, private orderService: OrderService
     , private storageService: StorageService, private categoryService : CategoryService
@@ -622,6 +649,7 @@ toggleSittingArea(sittingArea: string) {
   }
   toggleOrdersModalClose(){
     this.showOrdersIcon = false;
+    this.isFinishFlow = false;
   }
   handleFilterChange(status: string): void {
     this.selectedStatus = status;
@@ -631,6 +659,10 @@ toggleSittingArea(sittingArea: string) {
     }
     else if(status === 'unpaid'){
       this.filteredOrders = this.allOrders.filter(order => (order.total - order.paidAmount) !== 0);
+    }else if (status === 'CustomerOrders') {
+      this.filteredOrders = this.allOrders.filter(order =>
+        isCustomerAssignedForOrder(order, this.todayCustomerOrders)
+      );
     }
         else {
       this.filteredOrders = this.allOrders.filter(order => order.status === status);
@@ -641,6 +673,74 @@ toggleSittingArea(sittingArea: string) {
     }
   }
 
+
+  isPaymentPopupOpen: boolean = true;
+  selectedPaymentOrder: Order | null = null;
+  openPaymentMethodPop(order: Order): void {
+    console.log('Finish & Pay clicked for order:', order.orderNumber); // ✅ check console
+    this.selectedPaymentOrder = order;
+    this.isPaymentPopupOpen = true;
+    this.selectedPaymentMethodId = 1;
+  }
+  isFinishFlow: boolean = false;
+
+  openPaymentPopupForFinish(order: Order): void {
+    const pendingAmount = order.total - order.paidAmount;
+  
+    if (pendingAmount > 0) {
+      this.selectedPaymentOrder = order;
+      this.isPaymentPopupOpen = true;
+      this.selectedPaymentMethodId = 1; // default to Cash
+      this.isFinishFlow = true;
+    } else {
+      // If nothing is pending, just finish the order directly
+      this.finishOrder(order);
+    }
+  }
+  handlePaymentConfirmation(): void {
+    if (this.selectedPaymentOrder) {
+      this.updatePendingPayment(this.selectedPaymentOrder); // 💰 pay first
+  
+      if (this.isFinishFlow) {
+        this.finishOrder(this.selectedPaymentOrder); // ✅ then finish if needed
+        this.isFinishFlow = false; // reset the flow
+      }
+  
+      this.isPaymentPopupOpen = false;
+      this.selectedPaymentOrder = null;
+    }
+  }
+  
+  
+  updatePendingPayment(order: Order): void {
+    // this.showOrdersIcon= false;
+// this.isPopupOpen = true;
+    this.isLoading = true;
+    const paymentData = {
+      orderId: order?.id,
+      amount: (order?.total ?? 0) - (order?.paidAmount ?? 0),
+      paymentMethodId: this.selectedPaymentMethodId
+    };
+  
+    this.orderService.updateOrderPayment(paymentData).subscribe(
+      (response: any) => {
+        this.isLoading = false;
+        this.isPaymentPopupOpen = false;
+        console.log('Order payment updated successfully:', response);
+      },
+      error => {
+        this.isLoading = true;
+        this.isPaymentPopupOpen = false;
+        console.error('Error updating payment:', error);
+      }
+    );
+  }
+  
+  get selectedOrderCustomerName(): string | null {
+    const matched = getMatchingOrderSummary(this.selectedOrder, this.todayCustomerOrders);
+    return matched?.customerName ?? null;
+  }
+  
   //move order to the finished state
   finishOrder(selectedOrder: Order){
     // alert("se"+selectedOrder);
@@ -652,38 +752,63 @@ toggleSittingArea(sittingArea: string) {
         this.isLoading = false; 
         return;
       }
+      // if(true){
+      //   console.log("stopppp");
+      //   console.log(selectedOrder);
+        
+      //   //return;
+      // }
 
       // if(!this.selectedUser){
             // Check if the order has a pending balance
-        if (selectedOrder.total - selectedOrder.paidAmount !== 0  ) {
+            console.log("printing matching");
+            //  console.log(getMatchingOrderSummary(selectedOrder,this.todayCustomerOrders)?.customerName.toString());
+            
+const matchedSummary = getMatchingOrderSummary(selectedOrder, this.todayCustomerOrders);
+
+console.log(matchedSummary?.customerName?.toString() ?? 'No customer found');
+
+             console.log("printing matching---"+(!isCustomerAssignedForOrder(selectedOrder, this.todayCustomerOrders)));
+        if ((selectedOrder.total - selectedOrder.paidAmount !== 0 )&& (!isCustomerAssignedForOrder(selectedOrder, this.todayCustomerOrders) )) {
           const confirmation = window.confirm("The full amount has not been paid. Are you sure you want to finish the order?");
           if (!confirmation) {
             // User clicked "No", return to avoid further actions
-            //working on select of cancel
-            // alert("111");
-            // return;
+            //working on select of cancel \
+            // CANCEL
+            // alert("if block");
+            this.isLoading = false;
+            return;
           }
           else{
             //this is working on select of ok
-            // alert("222");
+            //OK button
+           
             // return;
           }
         }
+        
+        // if(true){
+        //   console.log("stopppp-- found customer");
+        //   console.log(selectedOrder);
+        //   this.isLoading = false;
+        //   return;
+        // }
 
-  const paymentData = {
-    orderId: this.selectedOrder?.id,
-    amount: (this.selectedOrder?.total ?? 0) -( this.selectedOrder?.paidAmount ?? 0),
-    paymentMethodId:1
-  }
+        // remove amount settlement
+  // const paymentData = {
+  //   orderId: this.selectedOrder?.id,
+  //   amount: (this.selectedOrder?.total ?? 0) -( this.selectedOrder?.paidAmount ?? 0),
+  //   paymentMethodId:1
+  // }
 
-  this.orderService.updateOrderPayment(paymentData).subscribe(
-    (response: any) => {
-      console.log('Order payment updated successfully:', response);
-    },
-    error => {
-      console.error('Error updating payment:', error);
-    }
-  );
+  // this.orderService.updateOrderPayment(paymentData).subscribe(
+  //   (response: any) => {
+  //     console.log('Order payment updated successfully:', response);
+  //   },
+  //   error => {
+  //     console.error('Error updating payment:', error);
+  //   }
+  // );
 
   // above block for the adding the pending amount
       // }
@@ -2049,7 +2174,12 @@ openPaymentMethodPopup() {
       );
     }
     
-    
+    getCustomerOrdersToday(){
+      this.orderService.getTodayOrders().subscribe({
+        next: (data) => this.todayCustomerOrders = data,
+        error: (err) => console.error('Failed to load orders:', err)
+      });
+    }
     
 
 }
