@@ -812,23 +812,68 @@ console.log(matchedSummary?.customerName?.toString() ?? 'No customer found');
 
   // above block for the adding the pending amount
       // }
-  this.orderService.completeOrder(selectedOrder.id).subscribe(
-    response => {
-      console.log('Order completed successfully', response);
-      // Optionally, you can update the orders or handle UI changes here
-      this.toggleOrdersModal();
-      this.filterOrders(this.selectedStatus); // To reapply any filters you have
-      // this.toggleOrdersModal();
-      this.isLoading = false;
-      this.selectedOrder = null;
-      this.NotifyKitchen();
-    },
-    error => {
-      console.error('Error completing the order', error);
-      this.isLoading = false;
-      // You can display a message or handle the error accordingly
+  if(selectedOrder.status === 'Pending'){
+    this.orderService.completeOrder(selectedOrder.id).subscribe(
+      response => {
+        console.log('Order completed successfully', response);
+        // Optionally, you can update the orders or handle UI changes here
+        this.toggleOrdersModal();
+        this.filterOrders(this.selectedStatus); // To reapply any filters you have
+        // this.toggleOrdersModal();
+        this.isLoading = false;
+        this.selectedOrder = null;
+        this.NotifyKitchen();
+      },
+      error => {
+        console.error('Error completing the order', error);
+        this.isLoading = false;
+        // You can display a message or handle the error accordingly
+      }
+    );
     }
-  );
+      else if(selectedOrder.status.toLocaleLowerCase() === 'ready'){
+    // this.readyOrder(selectedOrder);
+    this.deliverOrder(selectedOrder);
+        // this.orderService.updateOrderStatus(selectedOrder.id, 'Ready').subscribe(
+        //   response => {
+        //     console.log('Order status updated successfully', response);
+        //     // Optionally, you can update the orders or handle UI changes here
+        //     this.isLoading = false;
+        //     this.selectedOrder = null;
+        //     // this.NotifyKitchen();
+        //     // Notify user here if needed
+        //     // this.NotifyUser();
+        //   },
+        //   error => {
+        //     console.error('Error updating the order status', error);
+        //     this.isLoading = false;
+        //     // You can display a message or handle the error accordingly
+        //   }
+        // );
+    }
+  }
+
+  readyOrder(selectedOrder: Order){
+    this.isLoading = true;
+    this.orderService.updateOrderStatus(selectedOrder.id, 'Ready').subscribe(
+      response => {
+        console.log('Order status updated successfully', response);
+        // Optionally, you can update the orders or handle UI changes here
+        this.selectedOrder = null;
+        this.NotifyKitchen();
+        this.toggleOrdersModal();
+        this.filterOrders(this.selectedStatus); // To reapply any filters you have
+        this.isLoading = false;
+       
+        // Notify user here if needed
+        // this.NotifyUser();
+      },
+      error => {
+        console.error('Error updating the order status', error);
+        this.isLoading = false;
+        // You can display a message or handle the error accordingly
+      }
+    );
   }
   
     // Function to handle the order click and show details
@@ -1709,13 +1754,14 @@ closeUsersModal(){
   // Handle Partial Pay
   confirmPartialPay() {
     this.partialPayAmount =0;
-    this.partialPayMode = !this.partialPayMode;    
+    this.partialPayMode = !this.partialPayMode; 
+    this.isPartialAmountValid = true;   
   }
 
   // Validate Partial Payment Amount
   validatePartialPayAmount() {
     const totalAmount = this.getTotal();
-    this.isPartialAmountValid = this.partialPayAmount > 0 && this.partialPayAmount <= totalAmount;
+    this.isPartialAmountValid = this.partialPayAmount >= 0 && this.partialPayAmount <= totalAmount;
   }
 
   // Submit Partial Pay
@@ -2201,5 +2247,58 @@ openPaymentMethodPopup() {
       });
     }
     
+        //move order to the finished state
+        deliverOrder(selectedOrder: Order){
+          // alert("se"+selectedOrder);
+          // console.log("seee--",selectedOrder);
+            // Assuming selectedOrder is the ID of the order to complete
+            this.isLoading = true; 
+            if(selectedOrder.status == 'Completed'){
+              // alert("already completed..!!")
+              this.isLoading = false; 
+              return;
+            }
+      
+            // if(!this.selectedUser){
+                  // Check if the order has a pending balance
+              if (selectedOrder.total - selectedOrder.paidAmount !== 0  ) {
+                const confirmation = window.confirm("The full amount has not been paid. Are you sure you want to finish the order?");
+                if (!confirmation) {
+                  // User clicked "No", return to avoid further actions
+                  //working on select of cancel
+                  // alert("111");
+                  this.isLoading = false;
+                  return;
+                }
+                else{
+                  //this is working on select of ok
+                  // alert("222");
+                  // return;
+                }
+              }
+      
+      
+       
+    
+        this.orderService.deliverOrder(selectedOrder.id).subscribe(
+          response => {
+            console.log('Order status updated successfully', response);
+            // Optionally, you can update the orders or handle UI changes here
+            this.toggleOrdersModal();
+            this.filterOrders(this.selectedStatus); // To reapply any filters you have
+        
+            this.isLoading = false;
+            this.selectedOrder = null;
+            this.NotifyKitchen();
+            // Notify user here if needed
+            // this.NotifyUser();
+          },
+          error => {
+            console.error('Error updating the order status', error);
+            this.isLoading = false;
+            // You can display a message or handle the error accordingly
+          }
+        );
+      }
 
 }

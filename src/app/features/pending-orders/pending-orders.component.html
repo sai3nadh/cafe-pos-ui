@@ -93,7 +93,10 @@
       
               <div class="orders-wrapper">
                 <div *ngIf="orders.length === 0" class="no-orders-message">
-                    <h1>No orders available. Please check back later.</h1>
+                    <!-- <h1>No orders available. Please check back later.</h1> -->
+                    <h1 *ngIf="activeFilter !== 'all'">No {{ activeFilter }} orders. Showing all shortly...</h1>
+                    <h1 *ngIf="activeFilter === 'all'">No orders available. Please check back later.</h1>
+                  
                   </div>
                 <div class="columns">
                   <div *ngFor="let order of orders" >
@@ -110,6 +113,7 @@
                           <div class="item" *ngIf="item.kitchen && (item.itemStatus === 'pending' || item.itemStatus === null)">
                           <div class="item-name">{{ item.name }}</div>
                           <div class="item-qty"> &nbsp;{{ item.qty }}</div>
+                          <!-- <div class="item-qty"> &nbsp;{{ item.qty }}-{{item.itemStatus}}</div> -->
                           <!-- <div class="item-price">₹{{ item.price }}</div> -->
                            </div>
                         </div>
@@ -145,14 +149,16 @@
               <div class="item-qty" style="padding-right: 10px; font-size: larger;">x{{ item.qty }}</div>
  <!-- 👇 Add the "Mark Ready" button only if status is 'pending' -->
  <button 
- *ngIf="item.itemStatus === 'pending' && false" 
+ *ngIf="item.itemStatus === 'pending'" 
  class="mark-ready-btn" 
  (click)="readyItem(item, selectedOrder)"
 >mark ready
 </button>
             </div>
           </div>
-      
+          <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+          </div>
           <div class="order-popup-footer">
             <!-- <button class="finish" (click)="finishOrder()">Finish</button> -->
             <button class="finish" (click)="readyOrder(selectedOrder)">Ready</button>

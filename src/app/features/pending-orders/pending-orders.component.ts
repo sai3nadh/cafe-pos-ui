@@ -13,6 +13,15 @@ import { WebSocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
 import { NotificationApiService } from '../services/notification-api.service';
 
+
+export interface ItemReadyResponse {
+  orderId: number;
+  orderItemId: number;
+  itemStatus: string;
+  menuItemName: string;
+  orderStatus: string;
+}
+
 // export interface OrderItem {
 //   id: number;
 //   name: string;
@@ -103,14 +112,20 @@ toggleTopBar() {
     filterOrdersBySittingArea(allOrders: OrderDto[]): void {
       this.frontOrders = allOrders.filter(order => order.sittingArea === 'front');
       this.backOrders = allOrders.filter(order => order.sittingArea === 'back' );
-      this.orders = this.allOrders.filter(order => order.status === 'Pending');
+      this.orders = this.allOrders;//this.allOrders.filter(order => order.status === 'Pending');
     }
     activeFilter: string = 'all';
+    noOrdersTimer: any; // Add this at the top of your component
 
     filterOrders(area: 'all' | 'front' | 'back') {
       this.filterOrdersBySittingArea(this.pendingOrders);
       this.activeFilter = area;
       this.isLoading = true;
+
+      
+  // Clear any previous auto-switch timeout
+  clearTimeout(this.noOrdersTimer);
+
       switch (area) {
         case 'front':
           this.orders =this.frontOrders;
@@ -127,6 +142,13 @@ toggleTopBar() {
           break;
       }
       this.isLoading = false;
+      
+  // 🌟 Logic to auto-switch if no orders in current filter but there ARE orders overall
+  if (this.orders.length === 0 && this.pendingOrders.length > 0 && area !== 'all') {
+    this.noOrdersTimer = setTimeout(() => {
+      this.filterOrders('all');
+    }, 5000); // 3 seconds delay
+  }
     }
     
 
@@ -147,17 +169,26 @@ generateKitchenSummary() {
   const summaryMap = new Map<string, number>();
 console.log("generating kitchen--kitchen");
 
-  this.allOrders
-    .filter(order => order.status === 'Pending')
-    .forEach(order => {
-      order.items.forEach(item => {
-        if (item.kitchen) {
-          const currentQty = summaryMap.get(item.name) || 0;
-          summaryMap.set(item.name, currentQty + item.qty);
-        }
-      });
-    });
+  // this.allOrders
+  //   .filter(order => order.status === 'Pending')
+  //   .forEach(order => {
+  //     order.items.forEach(item => {
+  //       if (item.kitchen) {
+  //         const currentQty = summaryMap.get(item.name) || 0;
+  //         summaryMap.set(item.name, currentQty + item.qty);
+  //       }
+  //     });
+  //   });
 
+    
+  this.allOrders.forEach(order => {
+    order.items.forEach(item => {
+      if (item.kitchen && item.itemStatus === 'pending') {
+        const currentQty = summaryMap.get(item.name) || 0;
+        summaryMap.set(item.name, currentQty + item.qty);
+      }
+    });
+  });
   this.kitchenSummary = Array.from(summaryMap.entries()).map(([name, qty]) => ({ name, qty }));
 }
 
@@ -173,18 +204,45 @@ closeKitchenPopup(){
       this.isLoading = false; // Set here in case of early return
       return;
     }
-    this.orderService.getOrdersForUserToday(this.userId).subscribe((ordersData: OrderDto[]) => {
+
+    
+  this.orderService.getOrdersForUserToday(this.userId).subscribe(
+    (ordersData: OrderDto[]) => {
       this.allOrders = ordersData;
-      this.orders = this.allOrders.filter(order => order.status === 'Pending');
+
+      // ✅ Filter orders if **any item** has status 'pending'
+      this.orders = this.allOrders.filter(order => 
+        order.items.some(item => item.itemStatus === 'pending')
+      );
+      console.log("all order before-- aa =="+this.allOrders);
+      console.log(this.allOrders);
+console.log("back order before-- =="+this.allOrders);
       this.pendingOrders = this.orders;
-      this.filterOrdersBySittingArea(this.allOrders);
-      this.isLoading = false; // Set here in case of early return 
+this.allOrders=this.pendingOrders;
+console.log(this.allOrders);
+      // this.filterOrdersBySittingArea(this.orders);
+    // 👇 Only now filter by area
+    this.filterOrdersBySittingArea(this.pendingOrders);
+    this.filterOrders('all');
+      this.isLoading = false;
     },
     error => {
       console.error("Error fetching orders", error);
-      this.isLoading = false; // ✅ Set false on error too
+      this.isLoading = false;
     }
-  );   
+  );
+  //   this.orderService.getOrdersForUserToday(this.userId).subscribe((ordersData: OrderDto[]) => {
+  //     this.allOrders = ordersData;
+  //     this.orders = this.allOrders.filter(order => order.status === 'Pending');
+  //     this.pendingOrders = this.orders;
+  //     this.filterOrdersBySittingArea(this.allOrders);
+  //     this.isLoading = false; // Set here in case of early return 
+  //   },
+  //   error => {
+  //     console.error("Error fetching orders", error);
+  //     this.isLoading = false; // ✅ Set false on error too
+  //   }
+  // );   
     
   }
   
@@ -198,27 +256,85 @@ closeKitchenPopup(){
     // need to fix this method still pending
     readyItem(item: cartItem, selectedOrder: Order) {
       console.log("Marking item as ready:", item);
-    
+      const orderItemId = (item as any).orderItemId;
+      if (!orderItemId) {
+        console.error("❌ orderItemId missing for item:", orderItemId);
+        return;
+      }
+      // console.log("orderItemId for item:", orderItemId);
+        
       // First, update the status of the current item
+      // item.itemStatus = 'ready';
+      // item.statusUpdated = new Date().toISOString();
+    
+      // // Now check if all kitchen items are ready
+      // const pendingItems = selectedOrder.items.filter(i => 
+      //   i.kitchen && i.itemStatus === 'pending'
+      //   &&
+      //   i.id !== item.id // ignore the current item
+      // );
+    
+      // if (pendingItems.length === 0) {
+      //   console.log("All items ready – calling readyOrder()");
+      //   // this.readyOrder(selectedOrder);  // All items are done – mark order as ready
+      // } else {
+      //   console.log("Item marked ready – more items left to finish.");
+      //   // optionally update the backend here for this one item only if needed
+      // }
+
+      
+  this.orderService.markItemAsReady(orderItemId).subscribe({
+    next: (res) => {
+      console.log("✅ Backend updated item:", res);
+
+      // Update local item status
       item.itemStatus = 'ready';
       item.statusUpdated = new Date().toISOString();
-    
-      // Now check if all kitchen items are ready
+// ✅ Show a quick success message
+this.successMessage = `${item.name} marked as ready ✅`;
+
+// // ⏳ Clear message after 1 second
+// setTimeout(() => {
+//   this.successMessage = '';
+//   this.selectedOrder = null;
+// }, 1000);
+
+      // Check if all kitchen items are now ready
       const pendingItems = selectedOrder.items.filter(i => 
         i.kitchen && i.itemStatus === 'pending'
-        &&
-        i.id !== item.id // ignore the current item
       );
-    
+
       if (pendingItems.length === 0) {
-        console.log("All items ready – calling readyOrder()");
-        // this.readyOrder(selectedOrder);  // All items are done – mark order as ready
-      } else {
-        console.log("Item marked ready – more items left to finish.");
-        // optionally update the backend here for this one item only if needed
+        console.log("🎉 All items ready – removing order from list");
+
+        this.orders = this.orders.filter(order => order.id !== selectedOrder.id);
+        this.pendingOrders = this.pendingOrders.filter(order => order.id !== selectedOrder.id);
+        this.allOrders = this.allOrders.filter(order => order.id !== selectedOrder.id);
+        this.frontOrders = this.frontOrders.filter(order => order.id !== selectedOrder.id);
+        this.backOrders = this.backOrders.filter(order => order.id !== selectedOrder.id);
+      }else{
+        const pendingItems = selectedOrder.items.filter(i => 
+        i.kitchen && i.itemStatus === 'pending'
+        &&
+        i.id !== item.id
+      );
       }
+// ⏳ Clear message after 1 second
+setTimeout(() => {
+  this.successMessage = '';
+  this.selectedOrder = null;
+}, 1000);
+      this.isLoading = false;
+      this.NotifyUser();
+    },
+    error: (err) => {
+      console.error("❌ Failed to mark item ready:", err);
+      this.isLoading = false;
+    }
+  });
     }
     
+    successMessage: string = '';
 
     //move order to the finished state
     readyOrder(selectedOrder: Order){

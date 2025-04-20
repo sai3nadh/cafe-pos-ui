@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { StorageService } from '../services/storage.service';
 import { Router } from '@angular/router';
 import { DailySales, ReportDTO } from '../report/report.component';
+import { ItemReadyResponse } from '../pending-orders/pending-orders.component';
 
 export interface OrderItemDto {
   id: number;         // Unique identifier for the menu item
@@ -103,6 +104,12 @@ export class OrderService {
     });
   }
 
+   // Method to update the status of an order by ID
+   deliverOrder(orderId: number): Observable<any> {
+    // Make a PUT request to complete the order
+    return this.http.put(`${this.apiUrlCompleteOrder}/${orderId}/deliver`, {});
+  }
+
   // // ✅ New method to print order
   // printOrder(orderId: number): Observable<any> {
   //   console.log(`${this.apiUrlPrintOrder}/${orderId}`);
@@ -176,5 +183,9 @@ export class OrderService {
 
   getTodayOrders(): Observable<OrderSummary[]> {
     return this.http.get<OrderSummary[]>(`${this.apiUrlCompleteOrder}/summary-with-customer`);
+  }
+
+  markItemAsReady(orderItemId: number) {
+    return this.http.put<ItemReadyResponse>(`${this.apiUrlCompleteOrder}/order-items/${orderItemId}/mark-ready`, {});
   }
 }

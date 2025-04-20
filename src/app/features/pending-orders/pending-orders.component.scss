@@ -494,3 +494,14 @@ body {
     margin-bottom: -30px !important;
     cursor: pointer;
   }
+
+  .success-message {
+    text-align: center;
+    background-color: #e0ffe0;
+    color: #2e7d32;
+    font-weight: bold;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    animation: fadeInOut 1s ease-in-out;
+  }

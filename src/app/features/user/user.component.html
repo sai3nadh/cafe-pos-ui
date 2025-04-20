@@ -498,30 +498,39 @@
             <p><strong>Pending Amount:</strong> {{ selectedOrder.total - selectedOrder.paidAmount | currency: 'INR' }}</p>
             </div>
             <div class="button-section">
+              <div style="
+              display: flex;
+              justify-content: space-evenly;
+              margin: -50px;
+              margin-top: 0px;">
               <button class="btn-edit" (click)="editOrder(selectedOrder);toggleOrdersModalClose();">Edit</button>
               <button class="btn-finish" 
               (click)="finishOrder(selectedOrder)" 
               [disabled]="selectedOrder.status !== 'Pending' && selectedOrder.status !== 'Ready'"
               
               >Finish</button>
+              </div>
               <!-- [disabled]="selectedOrder.status !== 'Pending'" -->
               <br/><br/>
               <!-- *ngIf="selectedOrder.total - selectedOrder.paidAmount !== 0"               -->
-              <button class="btn-reprint" 
+              <button class="btn-pay" 
  
               [disabled]="selectedOrder.total - selectedOrder.paidAmount === 0"
-              (click)="openPaymentMethodPop(selectedOrder)">PayPop</button>
+              (click)="openPaymentMethodPop(selectedOrder)">Pay</button>
               
               <!-- (click)="updatePendingPayment(selectedOrder)">pay</button> -->
 
               <button class="btn-reprint" (click)="reprintOrder(selectedOrder)">Reprint</button>
               <!--               -->
               <br><br>
-              <button class="btn-reprint" *ngIf="selectedOrder.total - selectedOrder.paidAmount !== 0 &&
+              <button class="btn-complete" *ngIf="selectedOrder.total - selectedOrder.paidAmount !== 0 &&
                 selectedOrder.status !== 'Completed'" 
  
               [disabled]="selectedOrder.total - selectedOrder.paidAmount === 0"
-              (click)="openPaymentPopupForFinish(selectedOrder); ">Finish & pay</button>
+              (click)="openPaymentPopupForFinish(selectedOrder); ">Finish-pay</button>
+
+              <button class="btn-ready" *ngIf="selectedOrder.status === 'Pending'" 
+               (click)="readyOrder(selectedOrder)">Ready</button>
             </div>
           </div>
         </div>

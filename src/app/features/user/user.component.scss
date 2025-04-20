@@ -1050,7 +1050,7 @@ i.fas.fa-trash-alt {
 .btn-reprint {
   font-size: xxx-large; /* Set text size to xx-large */
   background-color: #2196F3; /* Blue color for Reprint */
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 10px 20px;
   margin-top: 15px;
   border: none;
@@ -1441,10 +1441,27 @@ i.fas.fa-trash-alt {
   overflow-y: auto; /* In case the content overflows */
   min-width: 350px;
 }
-.btn-edit, .btn-finish{
+.btn-edit, .btn-finish,.btn-pay, .btn-ready, .btn-reprint{
   // padding-top: 10px;
+  // padding: inherit;
+  font-size: 1.7em; /* Set text size to xx-large */
+  padding: 0.8em;
+  width: max-content;
+}
+.btn-pay{
+  background-color: chocolate;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+.btn-complete, .btn-finish{
+  // padding-top: 10px;
+  // padding: inherit;
+  font-size: 1.7em !important; /* Set text size to xx-large */
+  background-color: #0f9d58;
+  padding: 0.8em;
   font-size: xxx-large; /* Set text size to xx-large */
 }
+
 .button-section{
   padding-top: 25px;
 }
