@@ -138,7 +138,7 @@ export class OrderService {
 
   // Remove '/api' if it's in the URL
   requestUrl = requestUrl.replace('/api', '');
-    alert("url"+requestUrl);
+    // alert("url"+requestUrl);
 
     return this.http.post<any>(requestUrl, {});  // Making the POST request with empty body
   }
