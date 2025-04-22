@@ -618,17 +618,18 @@ toggleSittingArea(sittingArea: string) {
   role: string = ""; // example user id
   
   // Call this method when you want to open the modal
-  openModal(): void {
-    this.showOrders = true;
-    // Load orders only if they haven't been loaded before
-    // if (this.allOrders.length === 0) {
-      this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
-        this.allOrders = orders;
-        // Apply default filter (for example, "Pending")
-        this.filterOrders(this.selectedStatus);
-      });
-    // }
-  }
+  // cmmnted this methos for the =============== no longer required
+  // openModal(): void {
+  //   this.showOrders = true;
+  //   // Load orders only if they haven't been loaded before
+  //   // if (this.allOrders.length === 0) {
+  //     this.orderService.getOrdersForUserTodayAll(this.userId).subscribe((orders: OrderDto[]) => {
+  //       this.allOrders = orders;
+  //       // Apply default filter (for example, "Pending")
+  //       this.filterOrders(this.selectedStatus);
+  //     });
+  //   // }
+  // }
 
 
   // Call this method when you want to open the modal
@@ -637,7 +638,7 @@ toggleSittingArea(sittingArea: string) {
     // Load orders only if they haven't been loaded before
     // if (this.allOrders.length === 0) {
       // this.selectedStatus= "Pending";
-      this.orderService.getOrdersForUserToday(this.userId).subscribe((orders: OrderDto[]) => {
+      this.orderService.getOrdersForUserTodayAll(this.userId).subscribe((orders: OrderDto[]) => {
         this.allOrders = orders;
         // Apply default filter (for example, "Pending")
         // this.filterOrders(this.selectedStatus);

@@ -87,8 +87,13 @@ export class OrderService {
   // getOrdersForUserToday(userId: number): Observable<OrderDto[]> {
   //   return this.http.get<OrderDto[]>(this.apiUrlGet+userId+"/today");
   // }
+  // this methods returns only orders specific to user. not all
   getOrdersForUserToday(userId: number): Observable<OrderDto[]> {
     return this.http.get<OrderDto[]>(this.apiUrlGet+userId+"/todayPayments");
+  }
+
+  getOrdersForUserTodayAll(userId: number): Observable<OrderDto[]> {
+    return this.http.get<OrderDto[]>(this.apiUrlGet+userId+"/todayPayments/all");
   }
 
    // Method to complete an order by ID

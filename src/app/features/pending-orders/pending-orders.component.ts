@@ -206,7 +206,7 @@ closeKitchenPopup(){
     }
 
     
-  this.orderService.getOrdersForUserToday(this.userId).subscribe(
+  this.orderService.getOrdersForUserTodayAll(this.userId).subscribe(
     (ordersData: OrderDto[]) => {
       this.allOrders = ordersData;
 
