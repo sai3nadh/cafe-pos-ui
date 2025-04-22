@@ -7,6 +7,7 @@ import { EditMenuComponent } from './features/edit-menu/edit-menu.component';
 import { AddCustomerComponent } from './features/add-customer/add-customer.component';
 import { PendingOrdersComponent } from './features/pending-orders/pending-orders.component';
 import { ReportComponent } from './features/report/report.component';
+import { DisplayComponent } from './features/display/display.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
     { path: 'pending-orders', component: PendingOrdersComponent },  // New route for add customer
     { path: 'home', component: HomeComponent },
     { path: 'report', component: ReportComponent },
+    { path: 'display', component: DisplayComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' }
     , // Default to Login page
     { path: '**', redirectTo: 'login' } // Wildcard to Login  

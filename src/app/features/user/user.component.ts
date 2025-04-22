@@ -44,11 +44,12 @@ interface Item {
 }
 
 export interface cartItem{
+  orderItemId?: number; 
   id: number;
   name: string;
   category: number;
   price: number;
-  qty?: number;
+  qty: number;
   kitchen: boolean;
   itemNote: string;
   itemStatus?: 'pending' | 'preparing' | 'ready' | 'delivered' | 'cancelled' | null;
@@ -943,13 +944,20 @@ console.log(matchedSummary?.customerName?.toString() ?? 'No customer found');
   }
 
   editOrder(order: Order) {
+console.log("edit ordderrr--");
+console.log(order);
+
 
     this.cart = order.items.map(item => ({
       ...item,
       qty: item.qty || 1,      // Set default qty to 1 if not defined
       category: item.category,  // Ensure category is included
-      itemNote:item.itemNote
+      itemNote:item.itemNote,
+      orderItemId: item.orderItemId ?? undefined
     }));
+    console.log("edit ordderrr-- after cart");
+console.log(this.cart);
+
   this.guestName="edit Order - #"+order.orderNumber.slice(-3);
   this.editOrderId=order.id;
   this.alreadyPaidAmount = order.paidAmount;
@@ -1042,7 +1050,7 @@ closeUsersModal(){
     return this.items.filter(item => item.category === categoryId);
   }
 
-  addToCart(item: Item) {
+  addToCartOld_working(item: Item) {
     // this.closeDropdown();
     const existingItem = this.cart.find(i => i.id === item.id);
     if (existingItem) {
@@ -1058,6 +1066,95 @@ closeUsersModal(){
 
     
   }
+
+  addToCartss(item: Item) {
+    if (this.editOrderId === -1) {
+      // Fresh order
+      const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        this.cart.push({
+          ...item,
+          qty: 1,
+          itemNote: '',
+          itemStatus: 'pending'
+        });
+      }
+    } else {
+      // Edit order mode
+      const existingPending = this.cart.find(i =>
+        i.id === item.id &&
+        i.itemStatus === 'pending' &&
+        i.orderItemId !== undefined // existing row from backend
+      );
+  
+      if (existingPending) {
+        existingPending.qty += 1;
+      } else {
+        // Add a new pending item (new row to be inserted)
+        this.cart.push({
+          ...item,
+          qty: 1,
+          itemNote: '',
+          itemStatus: 'pending',
+          // no orderItemId because it's new
+        });
+      }
+    }
+  
+    console.log('Cart:', this.cart);
+  }
+  addToCart(item: Item) {
+    if (this.editOrderId === -1) {
+      // 🔰 Fresh order
+      const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        this.cart.push({
+          ...item,
+          qty: 1,
+          itemNote: '',
+          itemStatus: 'pending'
+        });
+      }
+    } else {
+      // ✏️ Edit existing order
+  
+      // 1. Update existing PENDING item from backend
+      const existingPending = this.cart.find(i =>
+        i.id === item.id &&
+        i.itemStatus === 'pending' &&
+        i.orderItemId !== undefined
+      );
+  
+      // 2. Or update new local pending item (added during edit)
+      const newPending = this.cart.find(i =>
+        i.id === item.id &&
+        i.itemStatus === 'pending' &&
+        i.orderItemId === undefined
+      );
+  
+      if (existingPending) {
+        existingPending.qty += 1;
+      } else if (newPending) {
+        newPending.qty += 1;
+      } else {
+        // Add new pending item
+        this.cart.push({
+          ...item,
+          qty: 1,
+          itemNote: '',
+          itemStatus: 'pending'
+          // no orderItemId → backend will treat it as new
+        });
+      }
+    }
+  
+    console.log('Cart:', this.cart);
+  }
+  
 
   cancelCartItemNote(){
     this.customizeCartItemModal = false;
@@ -1357,13 +1454,18 @@ closeUsersModal(){
         // customerId: this.selectedUser?.id, // Replace with customer ID, if applicable
         customerId: this.selectedUser ? this.selectedUser.id : undefined,
         orderItems: this.cart.map(item => ({
-          orderId: this.editOrderId, // Set to the appropriate order ID if needed
+          // orderId: this.editOrderId, // Set to the appropriate order ID if needed
+          orderItemId: item.orderItemId ?? undefined,
           menuItemId: item.id,
           quantity: item.qty || 1,
           price: item.price,
-          itemNote:item.itemNote
+          itemNote:item.itemNote,
+          itemStatus: item.itemStatus
         }))
       };
+
+      console.log("Sending edit order data:", JSON.stringify(editOrderData, null, 2));
+
 
       // Call the service to create the order
       this.orderService.editOrder(editOrderData).subscribe(
@@ -1404,7 +1506,8 @@ closeUsersModal(){
         price: item.price,
         kitchen:item.kitchen,
         name:item.name,
-        itemNote:item.itemNote
+        itemNote:item.itemNote,
+        itemStatus: item.kitchen ? 'pending' : 'delivered'
       }))
     };
 

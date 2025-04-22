@@ -10,6 +10,7 @@ import { DailySales, ReportDTO } from '../report/report.component';
 import { ItemReadyResponse } from '../pending-orders/pending-orders.component';
 
 export interface OrderItemDto {
+  orderItemId?: number;
   id: number;         // Unique identifier for the menu item
   name: string;       // Name of the menu item (e.g., "Coffee", "Tea")
   price: number;      // Price of the menu item
