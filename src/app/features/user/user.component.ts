@@ -945,6 +945,9 @@ console.log(matchedSummary?.customerName?.toString() ?? 'No customer found');
   }
 
   editOrder(order: Order) {
+    if(this.selectedUser != null){
+      this.emptyCart();
+    }
 console.log("edit ordderrr--");
 console.log(order);
 
@@ -1320,7 +1323,7 @@ closeUsersModal(){
     this.showCheckoutModal = false;
   }
 
-  remove(item: Item) {
+  removeOld(item: Item) {
     
     // remove(item: Item) {
       this.closeDropdown();
@@ -1338,6 +1341,50 @@ closeUsersModal(){
     // }
   }
 
+  remove(item: Item) {
+    this.closeDropdown();
+  
+    if (this.editOrderId === -1) {
+      // 🔰 Fresh order logic
+      const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
+      if (existing) {
+        if (existing.qty > 1) {
+          existing.qty -= 1;
+        } else {
+          this.cart = this.cart.filter(i => !(i.id === item.id && i.itemStatus === 'pending'));
+        }
+      }
+    } else {
+      // ✏️ Edit existing order logic
+  
+      // 1. Check for existing pending item from backend
+      const existingPending = this.cart.find(i =>
+        i.id === item.id &&
+        i.itemStatus === 'pending' &&
+        i.orderItemId !== undefined
+      );
+  
+      // 2. Check for new local pending item
+      const newPending = this.cart.find(i =>
+        i.id === item.id &&
+        i.itemStatus === 'pending' &&
+        i.orderItemId === undefined
+      );
+  
+      const target = existingPending || newPending;
+  
+      if (target) {
+        if (target.qty > 1) {
+          target.qty -= 1;
+        } else {
+          this.cart = this.cart.filter(i => i !== target);
+        }
+      }
+    }
+  
+    console.log('Cart after removal:', this.cart);
+  }
+  
 
    // Method to show the confirmation modal
    confirmDeleteItem(index: number) {

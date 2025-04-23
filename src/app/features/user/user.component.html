@@ -96,12 +96,12 @@
           </div>
         </div>
       </div>
-      <div class="right-section">
+      <div class="right-section" [ngClass]="{ 'user-selected': selectedUser !== null }">
 
         <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" [disabled]="guestName.startsWith('edit Order - #')"/>
   
                  
-              <div class="cart-items">
+              <div class="cart-items" [ngClass]="{ 'with-bg': selectedUser !== null }">
 
                 <!-- PART 1: New Items (TOP) -->
                 <div>
@@ -119,7 +119,7 @@
                         <!-- Item Name and Delete Button on the same row -->
                         <div class="cart-item-header">
                             <h3>{{ item.name }}</h3>
-                            <i class="fas fa-trash-alt" (click)="confirmDeleteItem(i)"></i>
+                            <i *ngIf="item.itemStatus !== 'delivered'"  class="fas fa-trash-alt" (click)="confirmDeleteItem(i)"></i>
                         </div>
                 
                         <!-- Cart Item Details (Quantity, Price) in the next row -->

@@ -194,6 +194,9 @@ body {
     border-radius: 10px;
     overflow-y: scroll; /* Make it scrollable if content overflows */
     // max-height: 90vh; /* Ensure the cart content does not exceed the viewport height */
+    &.user-selected {
+      background-color: #92f5f2a1; 
+    }
   }
   
   /* Cart Total Section */
