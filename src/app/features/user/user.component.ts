@@ -726,8 +726,12 @@ toggleSittingArea(sittingArea: string) {
   
     this.orderService.updateOrderPayment(paymentData).subscribe(
       (response: any) => {
-        this.isLoading = false;
+        // this.isLoading = false;
         this.isPaymentPopupOpen = false;
+        this.toggleOrdersModal();
+        this.filterOrders(this.selectedStatus); // To reapply any filters you have
+        this.isLoading = false;
+       
         console.log('Order payment updated successfully:', response);
       },
       error => {
