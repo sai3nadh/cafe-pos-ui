@@ -19,7 +19,13 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'report', component: ReportComponent },
     { path: 'display', component: DisplayComponent },
-    { path: '', redirectTo: 'login', pathMatch: 'full' }
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    {
+        path: 'inventory',
+        loadChildren: () =>
+          import('./features/inventory/inventory.module').then(m => m.InventoryModule),
+      }
+      
     , // Default to Login page
     { path: '**', redirectTo: 'login' } // Wildcard to Login  
 ];
