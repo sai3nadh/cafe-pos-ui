@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { OrderService } from '../home/order.service';
 import { interval, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { WebSocketService } from '../services/websocket.service';
+import { NotificationApiService } from '../services/notification-api.service';
 
 @Component({
   selector: 'app-ready-orders-display',
@@ -16,8 +18,12 @@ export class ReadyOrdersDisplayComponent {
   visibleOrders: string[] = [];
   currentPage = 0;
   intervalSubscription!: Subscription;
+  private notifSub!: Subscription;
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService
+        ,private wsService: WebSocketService
+        ,private notifcationService : NotificationApiService // to send the notifications
+  ) {}
 
   ngOnInit(): void {
     this.fetchReadyOrders();
@@ -25,13 +31,26 @@ export class ReadyOrdersDisplayComponent {
     this.intervalSubscription = interval(5000).subscribe(() => {
       this.nextPage();
     });
+    this.wsService.connect(); // ✅ Ensure WebSocket connects on init
 
     window.addEventListener('resize', this.handleResize);
+
+    this.notifSub = this.wsService.subscribeToTopic('/topic/order-display').subscribe(msg => {
+      const order = typeof msg.body === 'string' ? JSON.parse(msg.body) : msg.body;
+      // this.displayOrders.unshift(order); // add new orders to top
+      console.log("new received--"+order);
+      console.log('🔔 Raw message:', msg);
+
+      this.fetchReadyOrders();
+    });
   }
 
   ngOnDestroy(): void {
     if (this.intervalSubscription) {
       this.intervalSubscription.unsubscribe();
+    }
+    if (this.notifSub) {
+      this.notifSub.unsubscribe();
     }
     window.removeEventListener('resize', this.handleResize);
   }
@@ -55,23 +74,19 @@ export class ReadyOrdersDisplayComponent {
     }
   }
 
-  // nextPage() {
-  //   this.currentPage++;
-  //   this.updateVisibleOrders();
+  // nextPageww() {
+  //   const grid = document.querySelector('.orders-grid');
+  //   if (grid) grid.classList.add('fade-out');
+  
+  //   setTimeout(() => {
+  //     this.currentPage++;
+  //     this.updateVisibleOrders();
+  
+  //     if (grid) {
+  //       grid.classList.remove('fade-out');
+  //     }
+  //   }, 300); // Slightly less than the transition duration (400ms)
   // }
-  nextPageww() {
-    const grid = document.querySelector('.orders-grid');
-    if (grid) grid.classList.add('fade-out');
-  
-    setTimeout(() => {
-      this.currentPage++;
-      this.updateVisibleOrders();
-  
-      if (grid) {
-        grid.classList.remove('fade-out');
-      }
-    }, 300); // Slightly less than the transition duration (400ms)
-  }
   
 
   nextPage() {
@@ -106,40 +121,6 @@ export class ReadyOrdersDisplayComponent {
     return Math.max(cols * rows, 1);
   }
 
-  // calculateItemsPerPage(): number {
-  //   const grid = document.querySelector('.orders-grid') as HTMLElement;
-  //   const header = document.querySelector('.header') as HTMLElement;
-  
-  //   if (!grid || !header) return 6;
-  
-  //   // Create a temporary test box to measure actual size
-  //   const testBox = document.createElement('div');
-  //   testBox.className = 'order-box';
-  //   testBox.innerText = '#000';
-  //   testBox.style.visibility = 'hidden';
-  //   testBox.style.position = 'absolute';
-  //   testBox.style.pointerEvents = 'none';
-  
-  //   document.body.appendChild(testBox);
-  
-  //   const boxWidth = testBox.offsetWidth;
-  //   const boxHeight = testBox.offsetHeight;
-  
-  //   document.body.removeChild(testBox);
-  
-  //   const screenWidth = window.innerWidth;
-  //   const screenHeight = window.innerHeight;
-  //   const headerHeight = header.offsetHeight;
-  
-  //   const verticalGap = 20;   // Adjust if your .orders-grid uses different gap
-  //   const horizontalGap = 20;
-  
-  //   const cols = Math.floor((screenWidth + horizontalGap) / (boxWidth + horizontalGap));
-  //   const rows = Math.floor((screenHeight - headerHeight + verticalGap) / (boxHeight + verticalGap));
-  
-  //   return Math.max(cols * rows, 1);
-  // }
-  
 
   handleResize = () => {
     this.updateVisibleOrders();
@@ -148,104 +129,3 @@ export class ReadyOrdersDisplayComponent {
   
 }
 
-
-
-  // constructor(private orderService: OrderService) {}
-
-  // fetchReadyOrders() {
-  //   this.orderService.getReadyOrdersToday().subscribe(data => {
-  //     this.allOrders = data.map(order => '#' + order.orderNumber.slice(-3));
-  //     this.updateVisibleOrders();
-  //   });
-  // }
-
-  // allOrders: string[] = [];
-  // visibleOrders: string[] = [];
-  // currentPage = 0;
-  // ordersPerPage = 6;
-  // intervalSubscription!: Subscription;
-
-
-  // // ngOnInit(): void {
-  // //   this.fetchReadyOrders();
-  // //   this.intervalSubscription = interval(5000).subscribe(() => {
-  // //     this.nextPage();
-  // //   });
-  // // }
-
-  // // fetchReadyOrders() {
-  // //   this.http.get<any[]>('http://localhost:8083/api/orders/today/ready/display')
-  // //     .subscribe(data => {
-  // //       this.allOrders = data.map(order => '#' + order.orderNumber.slice(-3));
-  // //       this.updateVisibleOrders();
-  // //     });
-  // // }
-
-  // // updateVisibleOrders() {
-  // //   const start = this.currentPage * this.ordersPerPage;
-  // //   const end = start + this.ordersPerPage;
-  // //   this.visibleOrders = this.allOrders.slice(start, end);
-
-  // //   if (this.visibleOrders.length === 0) {
-  // //     this.currentPage = 0;
-  // //     this.updateVisibleOrders();
-  // //   }
-  // // }
-
-  // updateVisibleOrders() {
-  //   const itemsPerPage = this.calculateItemsPerPage(); // 👈 NEW
-  //   const start = this.currentPage * itemsPerPage;
-  //   const end = start + itemsPerPage;
-  //   this.visibleOrders = this.allOrders.slice(start, end);
-  
-  //   if (this.visibleOrders.length === 0) {
-  //     this.currentPage = 0;
-  //     this.updateVisibleOrders();
-  //   }
-  // }
-
-  // calculateItemsPerPage(): number {
-  //   const screenWidth = window.innerWidth;
-  //   const screenHeight = window.innerHeight;
-  
-  //   const minBoxWidth = 300; // px
-  //   const minBoxHeight = 300; // px
-  
-  //   const cols = Math.floor(screenWidth / minBoxWidth);
-  //   const rows = Math.floor(screenHeight / minBoxHeight);
-  
-  //   return cols * rows;
-  // }
-  
-  
-
-  // nextPage() {
-  //   this.currentPage++;
-  //   this.updateVisibleOrders();
-  // }
-
-  // // ngOnDestroy(): void {
-  // //   if (this.intervalSubscription) {
-  // //     this.intervalSubscription.unsubscribe();
-  // //   }
-  // // }
-
-  // ngOnInit(): void {
-  //   this.fetchReadyOrders();
-  //   this.intervalSubscription = interval(5000).subscribe(() => {
-  //     this.nextPage();
-  //   });
-  
-  //   window.addEventListener('resize', () => {
-  //     this.updateVisibleOrders();
-  //   });
-  // }
-  
-  // ngOnDestroy(): void {
-  //   if (this.intervalSubscription) {
-  //     this.intervalSubscription.unsubscribe();
-  //   }
-  //   window.removeEventListener('resize', this.updateVisibleOrders);
-  // }
-  
-// }

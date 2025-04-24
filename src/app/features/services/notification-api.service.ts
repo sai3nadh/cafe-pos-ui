@@ -29,4 +29,12 @@ export class NotificationApiService {
       responseType: 'text'
     });
   }
+
+    // 🟡 Order Display Screen Update
+    sendOrderDisplayUpdate(orderDisplayData: string) {
+      return this.http.post(`${this.backendUrl}/order-display`, orderDisplayData, {
+        responseType: 'text'
+      });
+    }
+  
 }

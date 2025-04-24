@@ -667,7 +667,7 @@ toggleSittingArea(sittingArea: string) {
       );
     }
         else {
-      this.filteredOrders = this.allOrders.filter(order => order.status === status);
+      this.filteredOrders = this.allOrders.filter(order => order.status.toLocaleLowerCase() === status.toLocaleLowerCase());
     }
       // Set selectedOrder to the first item of filteredOrders if it exists
     if (this.filteredOrders.length > 0) {
