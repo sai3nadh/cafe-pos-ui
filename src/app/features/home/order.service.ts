@@ -194,4 +194,9 @@ export class OrderService {
   markItemAsReady(orderItemId: number) {
     return this.http.put<ItemReadyResponse>(`${this.apiUrlCompleteOrder}/order-items/${orderItemId}/mark-ready`, {});
   }
+
+  // for the display the orders
+  getReadyOrdersToday(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrlCompleteOrder}/today/ready/display`);
+  }
 }

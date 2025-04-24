@@ -7,13 +7,15 @@ import { StorageService } from '../services/storage.service';
 import { OrderService } from '../home/order.service';
 import { WebSocketService } from '../services/websocket.service';
 import { NotificationApiService } from '../services/notification-api.service';
+import { ReadyOrdersDisplayComponent } from "../ready-orders-display/ready-orders-display.component";
 
 @Component({
   selector: 'app-display',
-  imports: [RouterModule
-      , CommonModule
-              ,FormsModule // To enable ngModel for form binding
-      ,ReactiveFormsModule],
+  imports: [RouterModule,
+    CommonModule,
+    FormsModule // To enable ngModel for form binding
+    ,
+    ReactiveFormsModule, ReadyOrdersDisplayComponent],
   templateUrl: './display.component.html',
   styleUrl: './display.component.scss'
 })
