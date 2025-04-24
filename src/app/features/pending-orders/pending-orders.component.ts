@@ -389,6 +389,8 @@ setTimeout(() => {
         // Optionally, you can update the orders or handle UI changes here
         this.isLoading = false;
         this.selectedOrder = null;
+        this.isLoading = true;
+        this.getOrders();
         // this.NotifyKitchen();
         // Notify user here if needed
         this.NotifyUser();
