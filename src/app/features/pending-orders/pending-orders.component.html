@@ -3,7 +3,7 @@
     <!-- <div *ngIf="showTopBar" class="top-bar"> -->
 
     <!-- Top Navigation Bar -->
-    <div *ngIf="showTopBar" class="top-bar">
+    <div *ngIf="showTopBar && false"  class="top-bar">
       <div class="nav-buttons">
         <button (click)="goToHome()">Cafe-SISILI</button>
          <!-- Orders Button -->
@@ -72,7 +72,12 @@
     <div class="main-content">
      
       <!-- Left Sidebar -->
-    <div class="sidebar" [style.height]="showTopBar ? '90vh' : '100vh'">
+    <!-- <div class="sidebar" > -->
+       <!-- 'margin-top.px': showTopBar ? topBarHeight : 0, -->
+      <div class="sidebar" [ngStyle]="{     
+          'height': showTopBar ? 'calc(100vh - ' + topBarHeight + 'px)' : '100vh'
+          }">
+    <!-- [style.height]="showTopBar ? '90vh' : '100vh'"> -->
         <!-- <button (click)="filterOrders('all')">All Orders</button>
         <button (click)="filterOrders('front')">Front Orders</button>
         <button (click)="filterOrders('back')">Back Orders</button>
@@ -91,7 +96,8 @@
           </div>
       </div>
       
-              <div class="orders-wrapper">
+              <div class="orders-wrapper"
+              [ngStyle]="{ 'height': showTopBar ? 'calc(100vh - ' + topBarHeight + 'px)' : '100vh'}">
                 <div *ngIf="orders.length === 0" class="no-orders-message">
                     <!-- <h1>No orders available. Please check back later.</h1> -->
                     <h1 *ngIf="activeFilter !== 'all'">No {{ activeFilter }} orders. Showing all shortly...</h1>

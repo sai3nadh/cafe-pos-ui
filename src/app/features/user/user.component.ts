@@ -25,6 +25,7 @@ import { WebSocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
 import { NotificationApiService } from '../services/notification-api.service';
 import { environment } from '../../../environments/environment';
+import { HeaderEventsService } from '../services/header-events.service';
 
 interface Category {
   id: number;
@@ -212,6 +213,7 @@ export class UserComponent {
     ,private wsService: WebSocketService
     ,private cdr: ChangeDetectorRef
     ,private notifcationService : NotificationApiService
+    ,private headerEvents: HeaderEventsService
   ) {}
   items: DisplayItem[] = [];
 
@@ -229,6 +231,30 @@ export class UserComponent {
     if(this.role.toLocaleLowerCase() == "admin" || this.role.toLocaleLowerCase() == "owner" ){
       this.canEdit = true;
     }
+    this.headerEvents.openOrdersPopup$.subscribe(() => {
+      this.showOrdersIcon = !this.showOrdersIcon; 
+      this.toggleOrdersModal();
+      this.getCustomerOrdersToday();
+    });
+
+    
+    this.headerEvents.openZoomSettings$.subscribe(() => {
+      this.zoomModalVisible = true; // ✅ Show modal when event received
+    });
+    
+  // Listen for Users-Icon click
+  this.headerEvents.openUsersPopup$.subscribe(() => {
+    this.toggleUsers();
+  });
+
+  
+  const savedZoom = localStorage.getItem('zoomLevel');
+  
+  if (savedZoom) {
+    this.zoomLevel = parseFloat(savedZoom);
+    this.applyZoom();
+  }
+
     // const userId = this.storageService.getLocalVariable('userId');
     // const username = this.storageService.getLocalVariable('username');
 

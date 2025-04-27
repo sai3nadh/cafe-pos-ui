@@ -1,0 +1,15 @@
+<!-- <p>main-layout works!</p> -->
+<!-- <app-top-bar></app-top-bar>  -->
+ <!-- 🧠 Your header -->
+<!-- <div class="main-container"> -->
+  <!-- <router-outlet></router-outlet> -->
+   <!-- 💡 your pages go here -->
+<!-- </div> --> 
+
+<app-top-bar *ngIf="showTopBar" (heightReady)="onTopBarHeight($event)"></app-top-bar>
+<!-- <div class="main-content" [ngStyle]="{'margin-top.px': topBarHeight}"> -->
+<div class="main-content"  [ngStyle]="{'margin-top.px': showTopBar ? topBarHeight : 0}">
+
+
+    <router-outlet></router-outlet>
+  </div>

@@ -12,6 +12,7 @@ import { UserComponent } from '../user/user.component';
 import { WebSocketService } from '../services/websocket.service';
 import { Subscription } from 'rxjs';
 import { NotificationApiService } from '../services/notification-api.service';
+import { HeaderEventsService } from '../services/header-events.service';
 
 
 export interface ItemReadyResponse {
@@ -65,6 +66,7 @@ export class PendingOrdersComponent {
     //   ,private elRef: ElementRef
       ,private wsService: WebSocketService
       ,private notifcationService : NotificationApiService
+      ,private headerEventsService: HeaderEventsService
     ) {
     }
       private notifSub!: Subscription;
@@ -89,6 +91,10 @@ export class PendingOrdersComponent {
           }
       });
       // this.isLoading=false;
+      this.headerEventsService.topBarHeight$.subscribe(height => {
+        this.topBarHeight = height;
+        console.log('TopBar height in PendingOrdersComponent:', height);
+      });
     }
 
     allOrders: OrderDto[] =[];
@@ -104,9 +110,24 @@ export class PendingOrdersComponent {
 
 
     showTopBar: boolean = true;
+    topBarHeight: number = 0;
 
 toggleTopBar() {
   this.showTopBar = !this.showTopBar;
+  if(this.showTopBar){
+    this.showTopBar1();
+  }else{
+    this.hideTopBar();
+  }
+}
+
+
+hideTopBar() {
+  this.headerEventsService.triggerHideTopBar();
+}
+
+showTopBar1() {
+  this.headerEventsService.triggerShowTopBar();
 }
 
     filterOrdersBySittingArea(allOrders: OrderDto[]): void {

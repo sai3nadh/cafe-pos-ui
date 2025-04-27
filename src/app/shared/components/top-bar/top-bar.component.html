@@ -1,0 +1,49 @@
+<!-- <p>top-bar works!</p> -->
+
+<div  #topBar class="top-bar">
+    <div class="nav-buttons">
+      <button (click)="goToHome()">Cafe-SISILI-new</button>
+       <!-- Orders Button -->
+       <button *ngIf="isUserPage()">
+        <!-- (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
+        Orders</button>
+    <!-- <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
+    <!-- <button *ngIf="isUserPage()" (click)="toggleUsers()" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Users
+      </button> -->
+      <button *ngIf="isUserPage()" (click)="toggleUsersPopUp()" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Users
+      </button>
+   <button *ngIf="isUserPage()" (click)="openOrdersPopup();">Orders-Icon</button>
+
+      <!-- <button *ngIf="isUserPage()" (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();getCustomerOrdersToday();">Orders-Icon</button> -->
+    </div>
+  
+      <!-- Avatar Section with Dropdown -->
+    <div class="avatar-section">
+        <button *ngIf="isUserPage()" (click)="pendingOrders()"  class="lock-btn">Kitchen</button>
+        <button *ngIf="isKitchenPage()" (click)="goToHome()"  class="lock-btn">Home</button>
+        <button *ngIf="isUserPage() || isKitchenPage()" (click)="logout()"  class="lock-btn">Lock</button>
+      <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar"  (click)="toggleDropdown()" />
+        
+        <!-- Dropdown Menu (Initially Hidden) -->
+        <div *ngIf="dropdownVisible && canEdit" class="modal-overlay" (click)="closeCheckoutModal()">
+        <div *ngIf="dropdownVisible" class="dropdown-menu">
+            <!-- <button (click)="viewOrders()">View Orders</button>
+            <button (click)="viewReports()">View Reports</button> -->
+            <button >View Orders</button>
+            <button (click)="viewReports()" >View Reports</button>
+            <!-- Zoom Settings Button -->
+            <button (click)="openZoomSettings()" class="bg-green-500 text-white px-4 py-2 rounded">Zoom Settings</button>
+            <button (click)="addCustomer()">Add Customer</button>
+            <button (click)="registerUser()">Register User</button>
+            <button (click)="editItems()">Edit Items</button>
+            <button (click)="editItems()">Inventory</button>
+            <button (click)="pendingOrders()">Pending Orders</button>
+    
+              <hr />
+          <button (click)="logout()">Logout</button>
+        </div></div>
+      </div>
+
+  </div>

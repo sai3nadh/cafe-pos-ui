@@ -8,8 +8,10 @@ import { AddCustomerComponent } from './features/add-customer/add-customer.compo
 import { PendingOrdersComponent } from './features/pending-orders/pending-orders.component';
 import { ReportComponent } from './features/report/report.component';
 import { DisplayComponent } from './features/display/display.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { EmptyLayoutComponent } from './layouts/empty-layout/empty-layout.component';
 
-export const routes: Routes = [
+export const routaaes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'user', component: UserComponent },
     { path: 'register', component: RegisterComponent },
@@ -29,3 +31,39 @@ export const routes: Routes = [
     , // Default to Login page
     { path: '**', redirectTo: 'login' } // Wildcard to Login  
 ];
+
+
+export const routes: Routes = [
+    {
+      path: '',
+      component: MainLayoutComponent,
+      children: [
+        { path: 'user', component: UserComponent },
+        { path: 'edit-menu', component: EditMenuComponent },
+        { path: 'add-customer', component: AddCustomerComponent },
+        { path: 'pending-orders', component: PendingOrdersComponent },
+        { path: 'register', component: RegisterComponent },
+      
+        { path: 'home', component: HomeComponent },
+        { path: 'report', component: ReportComponent },
+        {
+          path: 'inventory',
+          loadChildren: () =>
+            import('./features/inventory/inventory.module').then(m => m.InventoryModule)
+        }
+      ]
+    },
+    {
+      path: '',
+      component: EmptyLayoutComponent,
+      children: [
+    //    { path: 'user', component: UserComponent },
+       { path: 'login', component: LoginComponent },
+        // { path: 'register', component: RegisterComponent },
+        // { path: 'pending-orders', component: PendingOrdersComponent },
+        { path: 'display', component: DisplayComponent }
+      ]
+    },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '**', redirectTo: 'login' }
+  ];
