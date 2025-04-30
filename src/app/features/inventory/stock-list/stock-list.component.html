@@ -1,6 +1,52 @@
 <!-- Container: Entire viewport -->
 <div class="container">
     
-    <p>stock-list works!</p>
-<h1>page not ready yet</h1>
+  <div class="stock-list">
+    <h2>Ingredient Stock</h2>
+  
+    <div *ngIf="isLoading">Loading ingredients...</div>
+    <div *ngIf="error" class="error">{{ error }}</div>
+  
+    <table *ngIf="!isLoading && ingredients.length" class="stock-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Unit</th>
+          <th>Current Stock</th>
+          <th>Internal?</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of ingredients">
+          <td>{{ item.name }}</td>
+          <td>{{ item.unit }}</td>
+          <td>{{ item.currentStock }}</td>
+          <td>{{ item.isInternal ? 'Yes' : 'No' }}</td>
+          <td [ngClass]="{ inactive: item.status === 'inactive' }">{{ item.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  
+  
+  <!-- <p>stock-list works!</p>
+<h1>page not ready yet</h1> -->
+<!-- <div class="stock-list-header">
+    <button (click)="openAddStockForm()">➕ Add New Stock</button>
+  </div> -->
+  
+  <!-- Show the AddStockComponent when user clicks -->
+  <!-- <div *ngIf="showAddStockForm" class="add-stock-form">
+    <app-add-stock></app-add-stock>
+    <button (click)="closeAddStockForm()">❌ Close</button>
+  </div> -->
+  
+  <!-- Stock Table Section -->
+  <!-- <div class="stock-table">
+    <p>stock table</p> -->
+    <!-- Your stock list table will come here -->
+  <!-- </div> -->
+  
 </div>

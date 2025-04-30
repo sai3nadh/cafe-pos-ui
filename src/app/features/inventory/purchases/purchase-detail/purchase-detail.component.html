@@ -1,0 +1,22 @@
+<!-- <p>purchase-detail works!</p> -->
+<h3>Purchase #{{ purchaseId }}</h3>
+
+<p><strong>Supplier:</strong> {{ purchase.supplier }}</p>
+
+<h4>Items</h4>
+<ul>
+  <li *ngFor="let i of purchase.items">
+    {{ i.name }} - {{ i.qty }} x ₹{{ i.price }}
+  </li>
+</ul>
+
+<h4>Payments</h4>
+<ul>
+  <li *ngFor="let p of purchase.payments">
+    {{ p.method }} - ₹{{ p.amount }}
+  </li>
+</ul>
+
+<h4>Total: ₹{{ purchase.total }}</h4>
+
+<button (click)="close.emit()">⬅ Back</button>

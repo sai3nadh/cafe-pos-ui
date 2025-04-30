@@ -1,0 +1,107 @@
+<!-- <p>purchase-form works!</p> -->
+<!-- <div class="purchase-form">
+    <h2>Create Purchase</h2>
+  
+    <label>Supplier:</label>
+    
+  
+    <select [(ngModel)]="selectedSupplierId" required>
+        <option value="" disabled selected>Select a supplier</option>
+        <option *ngFor="let s of suppliers" [value]="s.supplierId">{{ s.name }}</option>
+      </select>
+      
+    <br/><br/>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>Ingredient</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of purchaseItems; let i = index">
+          <td>
+            <select [(ngModel)]="item.ingredientId">
+              <option *ngFor="let ing of ingredients" [value]="ing.ingredientId">{{ ing.name }}</option>
+            </select>
+          </td>
+          <td><input type="number" [(ngModel)]="item.quantity" /></td>
+          <td><input type="number" [(ngModel)]="item.unitPrice" /></td>
+          <td>{{ item.quantity * item.unitPrice | number: '1.2-2' }}</td>
+          <td><button (click)="removeItem(i)">Remove</button></td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <button (click)="addItem()">+ Add Item</button>
+  
+    <br/><br/>
+  
+    <label>Note:</label><br/>
+    <textarea [(ngModel)]="note" rows="3"></textarea>
+  
+    <h3>Total: {{ totalAmount | number: '1.2-2' }}</h3>
+  
+    <button (click)="submit()">Submit Purchase</button>
+  </div>
+   -->
+
+   <div class="purchase-form">
+    <h2>Create Purchase</h2>
+  
+    <label>Supplier:</label>
+    <select [(ngModel)]="selectedSupplierId" required>
+      <option [ngValue]="null" disabled>Select a supplier</option>
+      <option *ngFor="let s of suppliers" [ngValue]="s.supplierId">
+        {{ s.name }}
+      </option>
+    </select>
+  
+    <br /><br />
+  
+    <table>
+      <thead>
+        <tr>
+          <th>Ingredient</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of purchaseItems; let i = index">
+          <td>
+            <select [(ngModel)]="item.ingredientId">
+              <option *ngFor="let ing of ingredients" [value]="ing.ingredientId">
+                {{ ing.name }}
+              </option>
+            </select>
+          </td>
+          <td><input type="number" [(ngModel)]="item.quantity" /></td>
+          <td><input type="number" [(ngModel)]="item.unitPrice" /></td>
+          <td>{{ item.quantity * item.unitPrice | number: '1.2-2' }}</td>
+          <td><button (click)="removeItem(i)">Remove</button></td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <button (click)="addItem()">+ Add Item</button>
+  
+    <br /><br />
+  
+    <label>Note:</label><br />
+    <textarea [(ngModel)]="note" rows="3"></textarea>
+  
+    <h3>Total: {{ totalAmount | number: '1.2-2' }}</h3>
+  
+    <div class="form-actions">
+      <button (click)="submit()">💾 Submit</button>
+      <button type="button" (click)="cancel.emit()">❌ Cancel</button>
+    </div>
+  </div>
+  

@@ -1,0 +1,57 @@
+<!-- <p>supplier-detail works!</p> -->
+<h2>Supplier: {{ supplier.name }}</h2>
+<p><strong>Phone:</strong> {{ supplier.phone }}</p>
+<p><strong>Email:</strong> {{ supplier.email }}</p>
+<p><strong>GST:</strong> {{ supplier.gst }}</p>
+<p><strong>Address:</strong> {{ supplier.address }}</p>
+<p><strong>Status:</strong> {{ supplier.status }}</p>
+
+<h3>Ledger</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Reference</th>
+      <th>Debit</th>
+      <th>Credit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let entry of ledger">
+      <td>{{ entry.date }}</td>
+      <td>{{ entry.type }}</td>
+      <td>{{ entry.ref }}</td>
+      <td>{{ entry.debit | currency }}</td>
+      <td>{{ entry.credit | currency }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Total Balance: {{ getBalance() | currency }}</h4>
+
+<button (click)="showPaymentForm = !showPaymentForm" *ngIf="getBalance() > 0">
+    💵 Make Payment
+  </button>
+<button (click)="close.emit()">⬅ Back</button>
+<div *ngIf="showPaymentForm" class="payment-form">
+    <h3>Add Payment</h3>
+  
+    <label>Amount</label>
+    <input type="number" #amountInput />
+  <br>
+    <label>Reference</label>
+    <input type="text" #refInput />
+    <br>
+    <label>Payment Type</label>
+    <select #typeSelect>
+      <option value="cash">Cash</option>
+      <option value="bank">Bank Transfer</option>
+    </select>
+    <br>
+    <button (click)="addPayment(amountInput.value, refInput.value, typeSelect.value)">
+      💾 Save Payment
+    </button>
+    <button (click)="showPaymentForm = false">❌ Cancel</button>
+  </div>
+  

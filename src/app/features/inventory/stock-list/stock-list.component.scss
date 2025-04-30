@@ -1,0 +1,38 @@
+// .add-stock-form {
+//     margin: 20px 0;
+//     padding: 20px;
+//     border: 1px solid #ddd;
+//     background: #f9f9f9;
+//   }
+  
+
+.stock-list {
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  .stock-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    .inactive {
+      color: red;
+      font-weight: bold;
+    }
+  }
+
+  .error {
+    color: crimson;
+    font-weight: bold;
+    margin-top: 1rem;
+  }
+}

@@ -1,1 +1,89 @@
-<p>suppliers works!</p>
+<!-- <p>suppliers works!</p> -->
+<!-- <app-supplier-list 
+  (addSupplier)="openForm()" 
+  (editSupplier)="openForm($event)" 
+  (viewSupplier)="openDetail($event)">
+</app-supplier-list> -->
+
+
+
+<!-- bleow is all good -->
+<!-- <div *ngIf="mode === 'list'">
+    <app-supplier-list
+      (addSupplier)="openForm()"
+      (editSupplier)="openForm($event)"
+      (viewSupplier)="openDetail($event)">
+      || true
+    </app-supplier-list>
+  </div>
+  
+  <div *ngIf="mode === 'form'">
+    <app-supplier-form
+      [supplierId]="selectedSupplierId"
+      (cancel)="goBackToList()"
+      (saved)="goBackToList()">
+    </app-supplier-form>
+  </div>
+  
+  <div *ngIf="mode === 'detail'">
+    <app-supplier-detail
+      [supplierId]="selectedSupplierId"
+      (close)="goBackToList()">
+    </app-supplier-detail>
+  </div>
+   -->
+
+   <!-- new one -->
+    <!-- Always show the list at the base -->
+<!-- <div class="supplier-container">
+    <app-supplier-list
+      (addSupplier)="openForm()"
+      (editSupplier)="openForm($event)"
+      (viewSupplier)="openDetail($event)">
+    </app-supplier-list>
+   -->
+    <!-- Overlay or side panel above list -->
+    <!-- <div *ngIf="mode === 'form'" class="overlay-panel">
+      <app-supplier-form
+        [supplierId]="selectedSupplierId"
+        (cancel)="goBackToList()"
+        (saved)="goBackToList()">
+      </app-supplier-form>
+    </div>
+  
+    <div *ngIf="mode === 'detail'" class="overlay-panel">
+      <app-supplier-detail
+        [supplierId]="selectedSupplierId"
+        (close)="goBackToList()">
+      </app-supplier-detail>
+    </div>
+  </div>
+   -->
+
+   <!-- Always visible: the supplier list -->
+<app-supplier-list
+(addSupplier)="openForm()"
+(editSupplier)="openForm($event)"
+(viewSupplier)="openDetail($event)">
+</app-supplier-list>
+
+<!-- Form Modal -->
+<div *ngIf="mode === 'form'" class="overlay-panel" (click)="goBackToList();">
+<div class="popup" (click)="$event.stopPropagation()">
+  <app-supplier-form
+    [supplierId]="selectedSupplierId"
+    (cancel)="goBackToList()"
+    (saved)="goBackToList()">
+  </app-supplier-form>
+</div>
+</div>
+
+<!-- Detail Modal -->
+<div *ngIf="mode === 'detail'" class="overlay-panel" (click)="goBackToList();">
+<div class="popup" (click)="$event.stopPropagation()">
+  <app-supplier-detail
+    [supplierId]="selectedSupplierId"
+    (close)="goBackToList()">
+  </app-supplier-detail>
+</div>
+</div>

@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="purchase-section">
+      <h2>Purchases</h2>
+  
+      <!-- Main List -->
+      <app-purchase-list
+        (addPurchase)="openForm()"
+        (viewPurchase)="openDetail($event)">
+      </app-purchase-list>
+    </div>
+  
+    <!-- (click)="goBackToList();"> -->
+<!-- <div class="popup" (click)="$event.stopPropagation()"> -->
+    <!-- Add/Edit Form Popup -->
+    <div *ngIf="mode === 'form'" class="overlay-panel" (click)="goBack();">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <app-purchase-form
+          (saved)="goBack()"
+          (cancel)="goBack()">
+        </app-purchase-form>
+      </div>
+    </div>
+  
+    <!-- Detail View Popup -->
+    <div *ngIf="mode === 'detail'" class="overlay-panel" (click)="goBack();">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <div *ngIf="mode === 'detail' && selectedPurchaseId !== undefined">
+
+        <app-purchase-detail
+          [purchaseId]="selectedPurchaseId"
+          (close)="goBack()">
+        </app-purchase-detail>
+        </div>
+      </div>
+    </div>
+  </div>
+  

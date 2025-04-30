@@ -1,0 +1,33 @@
+<p>add-stock works!</p>
+
+<div class="header">
+    <button (click)="openAddStockForm()">➕ Add New Stock</button>
+  </div>
+  
+  <!-- Add Stock Form -->
+  <div *ngIf="showAddStockForm">
+    <!-- <app-add-stock (saveStock)="addStock($event)" (cancel)="closeAddStockForm()"></app-add-stock> -->
+  </div>
+  
+  <!-- Stock Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Unit</th>
+        <th>Quantity</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let stock of stocks; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ stock.name }}</td>
+        <td>{{ stock.unit }}</td>
+        <td>{{ stock.quantity }}</td>
+        <!-- <td><button (click)="deleteStock(stock.id)">❌ Delete</button></td> -->
+      </tr>
+    </tbody>
+  </table>
+  

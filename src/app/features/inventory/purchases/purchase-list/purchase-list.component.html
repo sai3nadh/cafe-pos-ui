@@ -1,0 +1,26 @@
+<!-- <p>purchase-list works!</p> -->
+<div class="purchase-list-header">
+    <button (click)="onAdd()">➕ Add Purchase</button>
+  </div>
+  
+  <table class="purchase-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Supplier</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of purchases">
+        <td>{{ p.id }}</td>
+        <td>{{ p.supplier }}</td>
+        <td>₹{{ p.total }}</td>
+        <td>{{ p.status }}</td>
+        <td><button (click)="onView(p.id)">👁 View</button></td>
+      </tr>
+    </tbody>
+  </table>
+  

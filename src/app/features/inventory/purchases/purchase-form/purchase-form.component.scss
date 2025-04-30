@@ -1,0 +1,24 @@
+.purchase-form {
+    h2 {
+      margin-bottom: 1rem;
+    }
+  
+    select, input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    table {
+      width: 100%;
+      margin-bottom: 1rem;
+      th, td {
+        padding: 6px;
+        border: 1px solid #ccc;
+      }
+    }
+  
+    button {
+      margin-top: 10px;
+    }
+  }
+  

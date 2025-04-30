@@ -1,0 +1,30 @@
+<!-- <p>supplier-list works!</p> -->
+<div class="supplier-list-wrapper">
+    <h2>Supplier List</h2>
+    <button (click)="onAdd()">➕ Add Supplier</button>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let supplier of suppliers; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ supplier.name }}</td>
+          <td>{{ supplier.phone }}</td>
+          <td>{{ supplier.status }}</td>
+          <td>
+            <button (click)="onView(supplier.id)">View</button>
+            <button (click)="onEdit(supplier.id)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
