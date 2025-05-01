@@ -28,4 +28,26 @@ export class PurchaseDetailComponent {
       { method: 'UPI', amount: 200 }
     ]
   };
+
+  showPaymentForm:boolean = false;
+
+  // purchase-detail.component.ts
+getTotalPaid(): number {
+  return this.purchase.payments.reduce((sum, payment) => sum + payment.amount, 0);
+}
+
+addPayment(amount: string, ref: string, method: string) {
+  const numericAmount = +amount;
+  if (numericAmount <= 0) return;
+
+  // this.purchase.payments.push({
+  //   method,
+  //   amount: numericAmount,
+  //   ref
+  // });
+
+  this.showPaymentForm = false;
+}
+
+
 }

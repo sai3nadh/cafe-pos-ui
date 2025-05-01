@@ -49,7 +49,7 @@
     <button (click)="submit()">Submit Purchase</button>
   </div>
    -->
-
+<!-- 
    <div class="purchase-form">
     <h2>Create Purchase</h2>
   
@@ -102,6 +102,213 @@
     <div class="form-actions">
       <button (click)="submit()">💾 Submit</button>
       <button type="button" (click)="cancel.emit()">❌ Cancel</button>
+    </div>
+  </div>
+   -->
+
+   <!-- below is working without the is manual -->
+   <!-- <div class="page-container">
+    <div class="purchase-form-container">
+      <h2>Create Purchase</h2>
+  
+      <div class="form-group">
+        <label for="supplier">Supplier:</label>
+        <select id="supplier" [(ngModel)]="selectedSupplierId" required>
+          <option [ngValue]="null" disabled>Select a supplier</option>
+          <option *ngFor="let s of suppliers" [ngValue]="s.supplierId">
+            {{ s.name }}
+          </option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="purchaseDate">Purchase Date:</label>
+        <input id="purchaseDate" type="date" [(ngModel)]="purchaseDate" name="purchaseDate" required />
+      </div>
+      
+      <table class="purchase-item-table">
+        <thead>
+          <tr>
+            <th>Ingredient</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of purchaseItems; let i = index">
+            <td>
+              <select [(ngModel)]="item.ingredientId">
+                <option *ngFor="let ing of ingredients" [value]="ing.ingredientId">
+                  {{ ing.name }}
+                </option>
+              </select>
+            </td>
+            <td><input type="number" [(ngModel)]="item.quantity" /></td>
+            <td><input type="number" [(ngModel)]="item.unitPrice" /></td>
+            <td>{{ item.quantity * item.unitPrice | number: '1.2-2' }}</td>
+            <td>
+              <button class="danger" (click)="removeItem(i)">🗑 Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <button class="secondary" (click)="addItem()">+ Add Item</button>
+  
+      <div class="form-group">
+        <label for="note">Note:</label>
+        <textarea id="note" [(ngModel)]="note" rows="3"></textarea>
+      </div>
+  
+      <h3>Total: ₹{{ totalAmount | number: '1.2-2' }}</h3>
+
+      <div class="payment-section">
+        <label>Payment Method:</label>
+        <div class="payment-toggle">
+          <label [class.active]="selectedPaymentMethodId === 1">
+            <input type="radio" name="paymentMethod" [value]="1" [(ngModel)]="selectedPaymentMethodId" />
+            Cash
+          </label>
+      
+          <label [class.active]="selectedPaymentMethodId === 2">
+            <input type="radio" name="paymentMethod" [value]="2" [(ngModel)]="selectedPaymentMethodId" />
+            UPI
+          </label>
+        </div>
+      
+        <div class="form-group">
+          <label>Amount Paid:</label>
+          <input type="number" [(ngModel)]="amountPaid" [max]="totalAmount" min="0" />
+        </div>
+      
+        <div class="payment-summary">
+          <p><strong>Total:</strong> ₹{{ totalAmount | number: '1.2-2' }}</p>
+          <p><strong>Paid:</strong> ₹{{ amountPaid | number: '1.2-2' }}</p>
+          <p><strong>Due:</strong> ₹{{ (totalAmount - amountPaid) | number: '1.2-2' }}</p>
+        </div>
+      </div>
+  
+      <div class="form-actions">
+        <button (click)="submit()" [disabled]="totalAmount <= 0">💾 Submit</button>
+        <button class="cancel" type="button" (click)="cancel.emit()">❌ Cancel</button>
+      </div>
+     
+      
+    </div>
+  </div> -->
+  
+  <div class="page-container">
+    <div class="purchase-form-container">
+      <h2>Create Purchase</h2>
+  
+      <!-- Manual purchase toggle -->
+      <div class="form-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="isManual" /> Manual Purchase
+        </label>
+      </div>
+  
+      <!-- Supplier dropdown or custom name -->
+      <div class="form-group" *ngIf="!isManual">
+        <label for="supplier">Supplier:</label>
+        <select id="supplier" [(ngModel)]="selectedSupplierId">
+          <option [ngValue]="null" disabled>Select a supplier</option>
+          <option *ngFor="let s of suppliers" [ngValue]="s.supplierId">
+            {{ s.name }}
+          </option>
+        </select>
+      </div>
+  
+      <div class="form-group" *ngIf="isManual">
+        <label>Custom Supplier Name:</label>
+        <input class="supplier-name" type="text" [(ngModel)]="customSupplierName" placeholder="Enter supplier/store name" />
+      </div>
+  
+      <div class="form-group">
+        <label for="purchaseDate">Purchase Date:</label>
+        <input id="purchaseDate" type="date" [(ngModel)]="purchaseDate" name="purchaseDate" required />
+      </div>
+  
+      <!-- Item Table -->
+      <table class="purchase-item-table">
+        <thead>
+          <tr>
+            <th>Ingredient</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of purchaseItems; let i = index">
+            <td>
+              <select [(ngModel)]="item.ingredientId">
+                <option *ngFor="let ing of ingredients" [value]="ing.ingredientId">
+                  {{ ing.name }}
+                </option>
+              </select>
+            </td>
+            <td><input type="number" [(ngModel)]="item.quantity" /></td>
+            <td><input type="number" [(ngModel)]="item.unitPrice" /></td>
+            <td>{{ item.quantity * item.unitPrice | number: '1.2-2' }}</td>
+            <td>
+              <button class="danger" (click)="removeItem(i)">🗑 Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <button class="secondary" (click)="addItem()">+ Add Item</button>
+  
+      <!-- Manual Amount if no items -->
+      <div class="form-group" *ngIf="isManual && purchaseItems.length === 0">
+        <label>Manual Amount:</label>
+        <input type="number" [(ngModel)]="manualAmount" min="0" />
+      </div>
+  
+      <div class="form-group">
+        <label for="note">Note:</label>
+        <textarea id="note" [(ngModel)]="note" rows="3"></textarea>
+      </div>
+  
+      <h3>Total: ₹{{ (isManual && purchaseItems.length === 0) ? manualAmount : totalAmount | number: '1.2-2' }}</h3>
+  
+      <div class="payment-section">
+        <label>Payment Method:</label>
+        <div class="payment-toggle">
+          <label [class.active]="selectedPaymentMethodId === 1">
+            <input type="radio" name="paymentMethod" [value]="1" [(ngModel)]="selectedPaymentMethodId" /> Cash
+          </label>
+          <label [class.active]="selectedPaymentMethodId === 2">
+            <input type="radio" name="paymentMethod" [value]="2" [(ngModel)]="selectedPaymentMethodId" /> UPI
+          </label>
+        </div>
+  
+        <div class="form-group">
+          <label>Amount Paid:</label>
+          <input type="number"
+                 [(ngModel)]="amountPaid"
+                 [max]="(isManual && purchaseItems.length === 0) ? manualAmount : totalAmount"
+                 min="0" />
+        </div>
+  
+        <div class="payment-summary">
+          <p><strong>Total:</strong> ₹{{ (isManual && purchaseItems.length === 0) ? manualAmount : totalAmount | number: '1.2-2' }}</p>
+          <p><strong>Paid:</strong> ₹{{ amountPaid | number: '1.2-2' }}</p>
+          <p><strong>Due:</strong> ₹{{ ((isManual && purchaseItems.length === 0) ? manualAmount : totalAmount) - amountPaid | number: '1.2-2' }}</p>
+        </div>
+      </div>
+  
+      <div class="form-actions">
+        <button (click)="submit()"
+                [disabled]="((isManual && purchaseItems.length === 0) ? manualAmount : totalAmount) <= 0">
+          💾 Submit
+        </button>
+        <button class="cancel" type="button" (click)="cancel.emit()">❌ Cancel</button>
+      </div>
     </div>
   </div>
   

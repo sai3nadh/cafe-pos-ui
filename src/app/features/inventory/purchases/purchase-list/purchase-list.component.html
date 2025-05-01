@@ -1,5 +1,5 @@
 <!-- <p>purchase-list works!</p> -->
-<div class="purchase-list-header">
+<!-- <div class="purchase-list-header">
     <button (click)="onAdd()">➕ Add Purchase</button>
   </div>
   
@@ -23,4 +23,69 @@
       </tr>
     </tbody>
   </table>
+   -->
+<!-- 
+   <div class="page-container">
+    <div class="purchase-section">
+      <div class="section-header">
+        <h2>Purchases</h2>
+        <button (click)="onAdd()">➕ Add Purchase</button>
+      </div>
+  
+      <table class="purchase-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Supplier</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of purchases">
+            <td>{{ p.id }}</td>
+            <td>{{ p.supplier }}</td>
+            <td>₹{{ p.total }}</td>
+            <td>{{ p.status }}</td>
+            <td><button (click)="onView(p.id)">👁 View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+   -->
+
+   
+   <div class="page-container">
+    <div class="purchase-section">
+      <div class="section-header">
+        <h2>Purchases</h2>
+        <button (click)="onAdd()">➕ Add Purchase</button>
+      </div>
+  
+      <table class="purchase-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Supplier</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of purchases">
+            <td data-label="#"> {{ p.id }} </td>
+            <td data-label="Supplier"> {{ p.supplier }} </td>
+            <td data-label="Total"> ₹{{ p.total }} </td>
+            <td data-label="Status"> {{ p.status }} </td>
+            <td data-label="Action">
+              <button (click)="onView(p.id)">👁 View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   

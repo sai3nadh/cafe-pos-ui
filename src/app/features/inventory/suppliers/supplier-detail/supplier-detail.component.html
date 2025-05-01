@@ -30,7 +30,8 @@
 
 <h4>Total Balance: {{ getBalance() | currency }}</h4>
 
-<button (click)="showPaymentForm = !showPaymentForm" *ngIf="getBalance() > 0">
+<!-- disable the payment from the supplier -->
+<button (click)="showPaymentForm = !showPaymentForm" *ngIf="getBalance() > 0 && false">
     💵 Make Payment
   </button>
 <button (click)="close.emit()">⬅ Back</button>

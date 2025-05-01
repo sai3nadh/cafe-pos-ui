@@ -1,12 +1,12 @@
 <!-- <p>purchase-detail works!</p> -->
-<h3>Purchase #{{ purchaseId }}</h3>
+<!-- <h3>Purchase #{{ purchaseId }}</h3>
 
 <p><strong>Supplier:</strong> {{ purchase.supplier }}</p>
 
 <h4>Items</h4>
 <ul>
   <li *ngFor="let i of purchase.items">
-    {{ i.name }} - {{ i.qty }} x ₹{{ i.price }}
+    {{ i.name }} - {{ i.qty }} x ₹{{ i.price }} = {{i.qty * i.price }}
   </li>
 </ul>
 
@@ -19,4 +19,96 @@
 
 <h4>Total: ₹{{ purchase.total }}</h4>
 
+<button (click)="close.emit()">⬅ Back</button> -->
+
+<!-- purchase-detail.component.html -->
+<!-- <h2>Purchase #{{ purchaseId }}</h2>
+
+<h3><strong>Supplier:</strong> {{ purchase.supplier }}</h3>
+
+<h4>Items:</h4>
+<ul>
+  <li *ngFor="let i of purchase.items">
+    • {{ i.name }} - {{ i.qty }} x ₹{{ i.price }} = ₹{{ i.qty * i.price }}
+  </li>
+</ul>
+
+<h4>Payments:</h4>
+<ul>
+  <li *ngFor="let p of purchase.payments">
+    • {{ p.method }} - ₹{{ p.amount }}
+  </li>
+</ul>
+
+<hr />
+
+<div class="summary">
+    <p><strong>Total Amount:</strong> ₹{{ purchase.total }}</p>
+    <p><strong>Amount Paid:</strong> ₹{{ getTotalPaid() }}</p>
+    <p><strong>Amount Due:</strong> ₹{{ purchase.total - getTotalPaid() }}</p>
+  </div>
+  
+<button (click)="close.emit()">⬅ Back</button> -->
+
+<h2>Purchase #{{ purchaseId }}</h2>
+
+<h3><strong>Supplier:</strong> {{ purchase.supplier }}</h3>
+
+<h4>Items:</h4>
+<ul>
+  <li *ngFor="let i of purchase.items">
+    • {{ i.name }} - {{ i.qty }} x ₹{{ i.price }} = ₹{{ i.qty * i.price }}
+  </li>
+</ul>
+
+<h4>Payments:</h4>
+<ul>
+  <li *ngFor="let p of purchase.payments">
+    • {{ p.method }} - ₹{{ p.amount }}
+  </li>
+</ul>
+
+<hr />
+
+<div class="summary">
+  <p><strong>Total Amount:</strong> ₹{{ purchase.total }}</p>
+  <p><strong>Amount Paid:</strong> ₹{{ getTotalPaid() }}</p>
+  <p><strong>Amount Due:</strong> ₹{{ purchase.total - getTotalPaid() }}</p>
+</div>
+
+<!-- Show payment button only if something is still due -->
+<button *ngIf="purchase.total - getTotalPaid() > 0" (click)="showPaymentForm = true">
+  💵 Make Payment
+</button>
+
 <button (click)="close.emit()">⬅ Back</button>
+
+<!-- Payment form -->
+<div *ngIf="showPaymentForm" class="payment-form">
+  <h3>Add Payment</h3>
+
+  <label>Amount</label>
+  <input type="number" #amountInput />
+  <br />
+
+  <label>Reference</label>
+  <input type="text" #refInput />
+  <br />
+
+  <label>Payment Type</label>
+  <select #typeSelect>
+    <option value="cash">Cash</option>
+    <option value="upi">UPI</option>
+    <option value="bank">Bank Transfer</option>
+  </select>
+  <br />
+    <!-- [disabled]="!amountInput.value || amountInput.value <= 0" -->
+  <button
+
+    [disabled]="!amountInput.value || +amountInput.value <= 0"
+
+    (click)="addPayment(amountInput.value, refInput.value, typeSelect.value)">
+    💾 Save Payment
+  </button>
+  <button (click)="showPaymentForm = false">❌ Cancel</button>
+</div>
