@@ -1,0 +1,37 @@
+<!-- <p>ingredient-list works!</p> -->
+<!-- <h2>Ingredients</h2> -->
+<div class="ingredient-header">
+    <h2>Ingredients</h2>
+    <button class="add-ingredient" (click)="onAdd()">+ Add Ingredient</button>
+  </div>
+
+<div class="ingredient-container">
+<!-- <button class="add-ingredient" (click)="onAdd()">+ Add Ingredient</button> -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Unit</th>
+      <th>Current Stock</th>
+      <th>Internal?</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ing of ingredients">
+      <td>{{ ing.name }}</td>
+      <td>{{ ing.unit }}</td>
+      <td>{{ ing.currentStock }}</td>
+      <td>{{ ing.isInternal ? 'Yes' : 'No' }}</td>
+      <td>{{ ing.status }}</td>
+      <td>
+        <button (click)="onEdit(ing.ingredientId)">Edit</button>
+        <button (click)="onView(ing.ingredientId)">View</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>

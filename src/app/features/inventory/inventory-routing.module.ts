@@ -11,6 +11,10 @@
   import { SupplierFormComponent } from './suppliers/supplier-form/supplier-form.component';
   import { SupplierListComponent } from './suppliers/supplier-list/supplier-list.component';
 import { PurchasesComponent } from './purchases/purchases.component';
+import { IngredientListComponent } from './ingredients/ingredient-list/ingredient-list.component';
+import { IngredientsDetailComponent } from './ingredients/ingredients-detail/ingredients-detail.component';
+import { IngredientsFormComponent } from './ingredients/ingredients-form/ingredients-form.component';
+import { IngredientsComponent } from './ingredients/ingredients.component';
 
   const routesOld: Routes = [
     { path: '', redirectTo: 'stock-list', pathMatch: 'full' },
@@ -27,16 +31,23 @@ import { PurchasesComponent } from './purchases/purchases.component';
     { path: 'stock-movements', component: StockMovementListComponent }, // optional
 
     // Suppliers
-    { path: 'suppliers/dashboard', component: SuppliersComponent },
-    { path: 'suppliers', component: SupplierListComponent },
+    { path: 'suppliers', component: SuppliersComponent },
+    { path: 'suppliers-list', component: SupplierListComponent },
     { path: 'suppliers/add', component: SupplierFormComponent },
     { path: 'suppliers/:id', component: SupplierDetailComponent },
 
     // Purchases
-    { path: 'purchases/dashboard', component: PurchasesComponent },
-    { path: 'purchases', component: PurchaseListComponent },
+    { path: 'purchases', component: PurchasesComponent },
+    { path: 'purchases-list', component: PurchaseListComponent },
     { path: 'purchases/add', component: PurchaseFormComponent },
-    { path: 'purchases/:id', component: PurchaseDetailComponent }
+    { path: 'purchases/:id', component: PurchaseDetailComponent },
+
+    // ingredients
+    { path: 'ingredients', component: IngredientsComponent },
+    { path: 'ingredients-list', component: IngredientListComponent },
+    { path: 'ingredients/add', component: IngredientsFormComponent },
+    { path: 'ingredients/:id', component: IngredientsDetailComponent },
+
   ];
 
   @NgModule({

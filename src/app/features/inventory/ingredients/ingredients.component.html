@@ -1,0 +1,47 @@
+<!-- <p>ingredients works!</p> -->
+
+<div *ngIf="mode === 'list' || true">
+    <app-ingredient-list
+      (addIngredient)="openForm()"
+      (editIngredient)="openForm($event)"
+      (viewIngredient)="openDetail($event)">
+    </app-ingredient-list>
+  </div>
+
+  <!-- Form Modal -->
+<div *ngIf="mode === 'form'" class="overlay-panel" (click)="goBack()">
+    <div class="popup" (click)="$event.stopPropagation()">
+      <app-ingredients-form
+        [ingredientId]="selectedIngredientId"
+        (saved)="goBack()"
+        (cancel)="goBack()">
+      </app-ingredients-form>
+    </div>
+  </div>
+  
+  <!-- Detail Modal -->
+  <div *ngIf="mode === 'detail'" class="overlay-panel" (click)="goBack()">
+    <div class="popup" (click)="$event.stopPropagation()">
+      <app-ingredients-detail
+        [ingredientId]="selectedIngredientId"
+        (close)="goBack()">
+      </app-ingredients-detail>
+    </div>
+  </div>
+  
+<!--   
+  <div *ngIf="mode === 'form'">
+    <app-ingredients-form
+      [ingredientId]="selectedIngredientId"
+      (saved)="goBack()"
+      (cancel)="goBack()">
+    </app-ingredients-form>
+  </div>
+  
+  <div *ngIf="mode === 'detail'">
+    <app-ingredients-detail
+      [ingredientId]="selectedIngredientId"
+      (close)="goBack()">
+    </app-ingredients-detail>
+  </div>
+   -->

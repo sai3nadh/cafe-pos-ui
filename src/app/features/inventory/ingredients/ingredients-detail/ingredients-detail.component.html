@@ -1,0 +1,65 @@
+<!-- <p>ingredients-detail works!</p>
+<div *ngIf="ingredient">
+    <h2>Ingredient Details</h2>
+  
+    <p><strong>Name:</strong> {{ ingredient.name }}</p>
+    <p><strong>Unit:</strong> {{ ingredient.unit }}</p>
+    <p><strong>Current Stock:</strong> {{ ingredient.currentStock }}</p>
+    <p><strong>Internal Item:</strong> {{ ingredient.isInternal ? 'Yes' : 'No' }}</p>
+    <p><strong>Status:</strong> {{ ingredient.status }}</p>
+  
+    <button (click)="close.emit()">Close</button>
+  </div>
+  
+  <div *ngIf="!ingredient">
+    <p>Loading ingredient details...</p>
+  </div>
+   -->
+   <!-- <div *ngIf="ingredient" class="ingredient-details-card">
+    <div class="card-header">
+      <h2>Ingredient Details</h2>
+      <button (click)="close.emit()" class="close-btn">×</button>
+    </div>
+  
+    <div class="detail-row"><strong>Name:</strong> {{ ingredient.name }}</div>
+    <div class="detail-row"><strong>Unit:</strong> {{ ingredient.unit }}</div>
+    <div class="detail-row"><strong>Current Stock:</strong> {{ ingredient.currentStock }}</div>
+    <div class="detail-row"><strong>Internal Item:</strong> {{ ingredient.isInternal ? 'Yes' : 'No' }}</div>
+    <div class="detail-row"><strong>Status:</strong> {{ ingredient.status }}</div>
+  
+    <div class="actions">
+      <button (click)="close.emit()">Close</button>
+    </div>
+  </div>
+  
+  <div *ngIf="!ingredient" class="loading-msg">
+    <p>Loading ingredient details...</p>
+  </div>
+   -->
+
+
+   <div *ngIf="ingredient" class="ingredient-details-card">
+    <div class="card-header">
+      <h2>Ingredient Details</h2>
+      <button (click)="close.emit()" class="close-btn">×</button>
+    </div>
+  
+    <div class="details-list">
+      <div class="detail-item">• <strong>Name:</strong> {{ ingredient.name }}</div>
+      <div class="detail-item">• <strong>Unit:</strong> {{ ingredient.unit }}</div>
+      <div class="detail-item">• <strong>Current Stock:</strong> {{ ingredient.currentStock }}</div>
+      <div class="detail-item">• <strong>Internal Item:</strong> {{ ingredient.isInternal ? 'Yes' : 'No' }}</div>
+      <div class="detail-item">• <strong>Status:</strong> {{ ingredient.status }}</div>
+    </div>
+  
+    <div class="actions">
+      <button (click)="close.emit()">Close</button>
+    </div>
+  </div>
+  
+  <div *ngIf="!ingredient" class="loading-msg">
+    <p>Loading ingredient details...</p>
+  </div>
+  
+
+  

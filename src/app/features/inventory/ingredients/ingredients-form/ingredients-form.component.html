@@ -1,0 +1,63 @@
+<!-- <p>ingredients-form works!</p> -->
+<!-- <h2>{{ ingredientId ? 'Edit Ingredient' : 'Add Ingredient' }}</h2>
+
+<label>Name:</label>
+<input [(ngModel)]="ingredient.name" />
+
+<label>Unit:</label>
+<input [(ngModel)]="ingredient.unit" />
+
+<label>Current Stock:</label>
+<input type="number" [(ngModel)]="ingredient.currentStock" />
+
+<label>
+  <input type="checkbox" [(ngModel)]="ingredient.isInternal" /> Internal Use Item
+</label>
+
+<label>Status:</label>
+<select [(ngModel)]="ingredient.status">
+  <option value="active">Active</option>
+  <option value="inactive">Inactive</option>
+</select>
+
+<br/><br/>
+
+<button (click)="submit()">Save</button>
+<button (click)="cancel.emit()">Cancel</button> -->
+<h2>{{ ingredientId ? 'Edit Ingredient' : 'Add Ingredient' }}</h2>
+
+<div class="ingredient-form">
+  <div class="form-group">
+    <label>Name:</label>
+    <input [(ngModel)]="ingredient.name" />
+  </div>
+
+  <div class="form-group">
+    <label>Unit:</label>
+    <input [(ngModel)]="ingredient.unit" />
+  </div>
+
+  <div class="form-group">
+    <label>Current Stock:</label>
+    <input type="number" [(ngModel)]="ingredient.currentStock" />
+  </div>
+
+  <div class="form-group checkbox-group">
+    <label>
+      <input type="checkbox" [(ngModel)]="ingredient.isInternal" /> Internal Use Item
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label>Status:</label>
+    <select [(ngModel)]="ingredient.status">
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+  </div>
+
+  <div class="form-actions">
+    <button (click)="submit()">Save</button>
+    <button class="cancel-btn" (click)="cancel.emit()">Cancel</button>
+  </div>
+</div>

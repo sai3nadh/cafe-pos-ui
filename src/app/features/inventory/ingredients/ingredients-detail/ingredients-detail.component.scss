@@ -1,0 +1,325 @@
+// // // h2 {
+// // //     font-size: 24px;
+// // //     margin-bottom: 20px;
+// // //     color: #222;
+// // //     text-align: center;
+// // //   }
+  
+// // //   div[ngif] {
+// // //     width: 60%;
+// // //     margin: 0 auto;
+// // //     padding: 20px;
+// // //     background-color: #fff;
+// // //     border-radius: 8px;
+// // //     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+// // //   }
+  
+// // //   p {
+// // //     font-size: 16px;
+// // //     margin: 10px 0;
+  
+// // //     strong {
+// // //       font-weight: 600;
+// // //       color: #333;
+// // //     }
+// // //   }
+  
+// // //   button {
+// // //     display: inline-block;
+// // //     background-color: #007bff;
+// // //     color: #fff;
+// // //     border: none;
+// // //     padding: 10px 18px;
+// // //     border-radius: 5px;
+// // //     font-size: 14px;
+// // //     cursor: pointer;
+// // //     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+// // //     margin-top: 15px;
+  
+// // //     &:hover {
+// // //       background-color: #0056b3;
+// // //       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+// // //     }
+// // //   }
+  
+// // //   /* Responsive for smaller screens */
+// // //   @media (max-width: 768px) {
+// // //     div[ngif] {
+// // //       width: 90%;
+// // //       padding: 15px;
+// // //     }
+  
+// // //     p {
+// // //       font-size: 14px;
+// // //     }
+// // //   }
+  
+// // .ingredient-details-card {
+// //     width: 60%;
+// //     margin: 40px auto;
+// //     padding: 20px 30px;
+// //     background-color: #fff;
+// //     border-radius: 10px;
+// //     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+// //     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+// //     color: #333;
+// //     position: relative;
+// //   }
+  
+// //   .card-header {
+// //     display: flex;
+// //     justify-content: space-between;
+// //     align-items: center;
+  
+// //     h2 {
+// //       margin: 0;
+// //       font-size: 24px;
+// //       color: #222;
+// //     }
+  
+// //     .close-btn {
+// //       background: none;
+// //       border: none;
+// //       font-size: 24px;
+// //       color: #888;
+// //       cursor: pointer;
+// //       transition: color 0.3s ease;
+  
+// //       &:hover {
+// //         color: #222;
+// //       }
+// //     }
+// //   }
+  
+// //   .detail-row {
+// //     font-size: 16px;
+// //     margin: 12px 0;
+// //     padding: 8px 0;
+// //     border-bottom: 1px solid #eee;
+  
+// //     strong {
+// //       width: 150px;
+// //       display: inline-block;
+// //       font-weight: 600;
+// //       color: #555;
+// //     }
+// //   }
+  
+// //   .actions {
+// //     text-align: right;
+// //     margin-top: 20px;
+  
+// //     button {
+// //       background-color: #007bff;
+// //       color: #fff;
+// //       border: none;
+// //       padding: 10px 18px;
+// //       border-radius: 5px;
+// //       font-size: 14px;
+// //       cursor: pointer;
+// //       transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  
+// //       &:hover {
+// //         background-color: #0056b3;
+// //         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+// //       }
+// //     }
+// //   }
+  
+// //   .loading-msg {
+// //     text-align: center;
+// //     font-size: 16px;
+// //     color: #555;
+// //     margin-top: 50px;
+// //   }
+  
+// //   /* Responsive */
+// //   @media (max-width: 768px) {
+// //     .ingredient-details-card {
+// //       width: 90%;
+// //       padding: 15px 20px;
+// //     }
+  
+// //     .detail-row {
+// //       font-size: 14px;
+// //     }
+// //   }
+  
+// .ingredient-details-card {
+//     width: 60%;
+//     margin: 40px auto;
+//     padding: 20px 30px;
+//     background-color: #fdfdfd;  // very light off-white
+//     border-radius: 10px;
+//     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+//     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+//     color: #222;  // dark but soft
+//     position: relative;
+//   }
+  
+//   .card-header {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+  
+//     h2 {
+//       margin: 0;
+//       font-size: 24px;
+//       color: #222;
+//     }
+  
+//     .close-btn {
+//       background: none;
+//       border: none;
+//       font-size: 24px;
+//       color: #aaa;  // softer gray
+//       cursor: pointer;
+//       transition: color 0.3s ease;
+  
+//       &:hover {
+//         color: #555;
+//       }
+//     }
+//   }
+  
+//   .detail-row {
+//     font-size: 22px;
+//     margin: 12px 0;
+//     padding: 8px 0;
+//     border-bottom: 1px solid #e0e0e0;  // softer border
+  
+//     strong {
+//       width: 150px;
+//       display: inline-block;
+//       font-weight: 600;
+//       color: #333;
+//     }
+//   }
+  
+//   .actions {
+//     text-align: right;
+//     margin-top: 20px;
+  
+//     button {
+//       background-color: #0d6efd;  // modern bootstrap blue
+//       color: #fff;
+//       border: none;
+//       padding: 10px 18px;
+//       border-radius: 5px;
+//       font-size: 14px;
+//       cursor: pointer;
+//       transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  
+//       &:hover {
+//         background-color: #0b5ed7;
+//         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+//       }
+//     }
+//   }
+  
+//   .loading-msg {
+//     text-align: center;
+//     font-size: 16px;
+//     color: #555;
+//     margin-top: 50px;
+//   }
+  
+//   @media (max-width: 768px) {
+//     .ingredient-details-card {
+//       width: 90%;
+//       padding: 15px 20px;
+//     }
+  
+//     .detail-row {
+//       font-size: 14px;
+//     }
+//   }
+.ingredient-details-card {
+    width: 50%;
+    margin: 40px auto;
+    padding: 20px 30px;
+    background-color: #fafafa;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #222;
+    }
+  
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #888;
+      cursor: pointer;
+  
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+  
+  .details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .detail-item {
+    background-color: #fff;
+    border-left: 4px solid #28a745;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    font-size: 16px;
+  
+    strong {
+      font-weight: 600;
+      color: #333;
+    }
+  }
+  
+  .actions {
+    text-align: right;
+    margin-top: 20px;
+  
+    button {
+      background-color: #0d6efd;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+  
+      &:hover {
+        background-color: #0b5ed7;
+      }
+    }
+  }
+  
+  .loading-msg {
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+    margin-top: 50px;
+  }
+  
+  @media (max-width: 768px) {
+    .ingredient-details-card {
+      width: 90%;
+      padding: 15px 20px;
+    }
+  }
+  
+
+  
