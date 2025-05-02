@@ -1,16 +1,18 @@
 // import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
+import { SupplierService } from '../../services/supplier.service';
+import { Supplier } from '../../models/supplier.model';
 
 
-interface Supplier {
-  id: number;
-  name: string;
-  phone: string;
-  email?: string;
-  gst_number?: string;
-  status: 'active' | 'inactive';
-}
+// interface Supplier {
+//   id: number;
+//   name: string;
+//   phone: string;
+//   email?: string;
+//   gst_number?: string;
+//   status: 'active' | 'inactive';
+// }
 
 @Component({
   selector: 'app-supplier-list',
@@ -27,30 +29,59 @@ export class SupplierListComponent {
 @Output() editSupplier = new EventEmitter<number>();
 @Output() viewSupplier = new EventEmitter<number>();
 
-// Mock data (replace with API later)
-suppliers: Supplier[] = [
-  {
-    id: 1,
-    name: 'ABC Foods',
-    phone: '9876543210',
-    email: 'abc@foods.com',
-    gst_number: 'GST1234ABC',
-    status: 'active'
-  },
-  {
-    id: 2,
-    name: 'Fresh Farms',
-    phone: '9123456789',
-    status: 'active'
-  },
-  {
-    id: 3,
-    name: 'BulkMart Ltd',
-    phone: '9988776655',
-    status: 'inactive'
-  }
-];
+constructor(private supplierService: SupplierService) {}
 
+// // Mock data (replace with API later)
+// suppliers: Supplier[] = [
+//   {
+//     id: 1,
+//     name: 'ABC Foods',
+//     phone: '9876543210',
+//     email: 'abc@foods.com',
+//     gst_number: 'GST1234ABC',
+//     status: 'active'
+//   },
+//   {
+//     id: 2,
+//     name: 'Fresh Farms',
+//     phone: '9123456789',
+//     status: 'active'
+//   },
+//   {
+//     id: 3,
+//     name: 'BulkMart Ltd',
+//     phone: '9988776655',
+//     status: 'inactive'
+//   }
+// ];
+
+
+
+suppliers: Supplier[] = [];
+loading: boolean = false;
+error: string | null = null;
+
+ngOnInit(): void {
+  this.loadSuppliers();
+}
+
+loadSuppliers(): void {
+  this.loading = true;
+  this.error = null;
+
+  this.supplierService.getAllSuppliers().subscribe({
+    next: (data) => {
+      console.log('Suppliers fetched from API:', data);
+      this.suppliers = data;
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error('Error fetching suppliers:', err);
+      this.error = 'Failed to load suppliers';
+      this.loading = false;
+    }
+  });
+}
 // Emitters
 onAdd() {
   console.log('Add clicked'); // add this log

@@ -17,4 +17,13 @@ export class SupplierService {
   getSupplierById(id: number): Observable<Supplier> {
     return this.http.get<Supplier>(`${this.apiUrl}/${id}`);
   }
+
+  createSupplier(supplier: any): Observable<Supplier> {
+    return this.http.post<Supplier>(this.apiUrl, supplier);
+  }
+  
+  updateSupplier(id: number, supplier: any): Observable<Supplier> {
+    return this.http.put<Supplier>(`${this.apiUrl}/${id}`, supplier);
+  }
+  
 }

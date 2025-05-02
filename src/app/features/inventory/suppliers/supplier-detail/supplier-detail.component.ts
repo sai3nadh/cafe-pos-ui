@@ -1,6 +1,8 @@
 // import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Supplier } from '../../models/supplier.model';
+import { SupplierService } from '../../services/supplier.service';
 
 @Component({
   selector: 'app-supplier-detail',
@@ -16,58 +18,133 @@ export class SupplierDetailComponent {
   @Input() supplierId?: number;
   @Output() close = new EventEmitter<void>();
 
-  supplier: any;
+
+  supplier?: Supplier;
   ledger: any[] = [];
+  loading = false;
+  error: string | null = null;
+
+  // Payment form
+  showPaymentForm = false;
+  newPayment = {
+    amount: 0,
+    ref: '',
+    type: 'cash'
+  };
+
+  constructor(private supplierService: SupplierService) {}
 
   ngOnInit(): void {
-    // Replace with API calls later
-    this.supplier = {
-      name: 'ABC Foods',
-      phone: '9876543210',
-      gst: 'GST1234ABC',
-      address: '123 Market St',
-      email: 'abc@foods.com',
-      status: 'active'
-    };
+    if (this.supplierId) {
+      this.loadSupplierAndLedger(this.supplierId);
+    } else {
+      console.error('No supplierId provided to SupplierDetailComponent');
+    }
+  }
 
-    this.ledger = [
-      { date: '2024-04-01', type: 'Purchase', ref: 'P001', debit: 1000, credit: 0 },
-      { date: '2024-04-02', type: 'Payment', ref: 'Cash', debit: 0, credit: 500 },
-      { date: '2024-04-04', type: 'Purchase', ref: 'P002', debit: 700, credit: 0 }
-    ];
+  loadSupplierAndLedger(id: number): void {
+    this.loading = true;
+    this.error = null;
+
+    // Fetch supplier (real API)
+    this.supplierService.getSupplierById(id).subscribe({
+      next: (data) => {
+        console.log('Supplier loaded:', data);
+        this.supplier = data;
+        // 🚨 TODO: Replace this with a real ledger API call once available.
+        this.ledger = [
+          { date: '2024-04-01', type: 'Purchase', ref: 'P001', debit: 1000, credit: 0 },
+          { date: '2024-04-02', type: 'Payment', ref: 'Cash', debit: 0, credit: 500 },
+          { date: '2024-04-04', type: 'Purchase', ref: 'P002', debit: 700, credit: 0 }
+        ];
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error loading supplier:', err);
+        this.error = 'Failed to load supplier data.';
+        this.loading = false;
+      }
+    });
   }
 
   getBalance(): number {
     return this.ledger.reduce((bal, row) => bal + (row.debit - row.credit), 0);
   }
 
+  addPayment(amountStr: string, ref: string, type: string) {
+    const amount = parseFloat(amountStr);
+    if (isNaN(amount) || amount <= 0) {
+      console.log('Invalid amount entered');
+      return;
+    }
 
-  // payment adding
-  showPaymentForm = false;
+    const entry = {
+      date: new Date().toISOString().split('T')[0],
+      type: 'Payment',
+      ref: ref,
+      debit: 0,
+      credit: amount,
+      paymentMethod: type
+    };
 
-newPayment = {
-  amount: 0,
-  ref: '',
-  type: 'cash'
-};
+    this.ledger.push(entry);
+    this.showPaymentForm = false;
 
-addPayment(amount: string, ref: string, type: string) {
-  if(true){
-    console.log("amount not added");
-    
-    return;
+    console.log('New payment added:', entry);
   }
-  const entry = {
-    date: new Date().toISOString().split('T')[0],
-    type: 'payment',
-    ref: ref,
-    debit: 0,
-    credit: parseFloat(amount),
-    paymentMethod: type // optional: if you want to store this
-  };
 
-  this.ledger.push(entry); // Add to the ledger
-  this.showPaymentForm = false;
-}
+//   supplier: any;
+//   ledger: any[] = [];
+
+//   ngOnInit(): void {
+//     // Replace with API calls later
+//     this.supplier = {
+//       name: 'ABC Foods',
+//       phone: '9876543210',
+//       gst: 'GST1234ABC',
+//       address: '123 Market St',
+//       email: 'abc@foods.com',
+//       status: 'active'
+//     };
+
+//     this.ledger = [
+//       { date: '2024-04-01', type: 'Purchase', ref: 'P001', debit: 1000, credit: 0 },
+//       { date: '2024-04-02', type: 'Payment', ref: 'Cash', debit: 0, credit: 500 },
+//       { date: '2024-04-04', type: 'Purchase', ref: 'P002', debit: 700, credit: 0 }
+//     ];
+//   }
+
+//   getBalance(): number {
+//     return this.ledger.reduce((bal, row) => bal + (row.debit - row.credit), 0);
+//   }
+
+
+//   // payment adding
+//   showPaymentForm = false;
+
+// newPayment = {
+//   amount: 0,
+//   ref: '',
+//   type: 'cash'
+// };
+
+// addPayment(amount: string, ref: string, type: string) {
+//   if(true){
+//     console.log("amount not added");
+    
+//     return;
+//   }
+//   const entry = {
+//     date: new Date().toISOString().split('T')[0],
+//     type: 'payment',
+//     ref: ref,
+//     debit: 0,
+//     credit: parseFloat(amount),
+//     paymentMethod: type // optional: if you want to store this
+//   };
+
+//   this.ledger.push(entry); // Add to the ledger
+//   this.showPaymentForm = false;
+// }
 
 }
