@@ -1,20 +1,21 @@
-  import { NgModule } from '@angular/core';
-  import { RouterModule, Routes } from '@angular/router';
-  // import { AddStockComponent } from './stock-list/add-stock/add-stock.component';
-  import { StockListComponent } from './stock-list/stock-list.component';
-  import { SuppliersComponent } from './suppliers/suppliers.component';
-  import { PurchaseDetailComponent } from './purchases/purchase-detail/purchase-detail.component';
-  import { PurchaseFormComponent } from './purchases/purchase-form/purchase-form.component';
-  import { PurchaseListComponent } from './purchases/purchase-list/purchase-list.component';
-  import { StockMovementListComponent } from './stock-movements/stock-movement-list/stock-movement-list.component';
-  import { SupplierDetailComponent } from './suppliers/supplier-detail/supplier-detail.component';
-  import { SupplierFormComponent } from './suppliers/supplier-form/supplier-form.component';
-  import { SupplierListComponent } from './suppliers/supplier-list/supplier-list.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+// import { AddStockComponent } from './stock-list/add-stock/add-stock.component';
+import { StockListComponent } from './stock-list/stock-list.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { PurchaseDetailComponent } from './purchases/purchase-detail/purchase-detail.component';
+import { PurchaseFormComponent } from './purchases/purchase-form/purchase-form.component';
+import { PurchaseListComponent } from './purchases/purchase-list/purchase-list.component';
+import { StockMovementListComponent } from './stock-movements/stock-movement-list/stock-movement-list.component';
+import { SupplierDetailComponent } from './suppliers/supplier-detail/supplier-detail.component';
+import { SupplierFormComponent } from './suppliers/supplier-form/supplier-form.component';
+import { SupplierListComponent } from './suppliers/supplier-list/supplier-list.component';
 import { PurchasesComponent } from './purchases/purchases.component';
 import { IngredientListComponent } from './ingredients/ingredient-list/ingredient-list.component';
 import { IngredientsDetailComponent } from './ingredients/ingredients-detail/ingredients-detail.component';
 import { IngredientsFormComponent } from './ingredients/ingredients-form/ingredients-form.component';
 import { IngredientsComponent } from './ingredients/ingredients.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
   const routesOld: Routes = [
     { path: '', redirectTo: 'stock-list', pathMatch: 'full' },
@@ -48,6 +49,9 @@ import { IngredientsComponent } from './ingredients/ingredients.component';
     { path: 'ingredients/add', component: IngredientsFormComponent },
     { path: 'ingredients/:id', component: IngredientsDetailComponent },
 
+    // dashboard
+    { path: 'dashboard', component: DashboardComponent },
+  
   ];
 
   @NgModule({

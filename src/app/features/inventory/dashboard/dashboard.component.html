@@ -1,0 +1,76 @@
+<!-- <p>dashboard works!</p> -->
+ 
+<div class="dashboard-container">
+    <h1>Inventory - Dashboard</h1>
+  
+    <!-- KPI Cards -->
+    <div class="cards-container">
+      <div class="dashboard-card">
+        <h2>Total Stock Items</h2>
+        <p>1240</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Low Stock</h2>
+        <p>5</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Suppliers</h2>
+        <p>8</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Purchases This Month</h2>
+        <p>12</p>
+      </div>
+    </div>
+  
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button (click)="openPurchaseForm()">Add New Purchase</button>
+      <button (click)="openSupplierForm()">Add New Supplier</button>
+      <button (click)="openIngredientForm()">Add New Ingredient</button>
+    </div>
+  
+    <!-- Quick Links -->
+    <div class="links-container">
+      <h3>Quick Links</h3>
+      <a routerLink="/inventory/stock-list">Stock List</a> |
+      <a routerLink="/inventory/stock-movements">Stock Movements</a> |
+      <a routerLink="/inventory/purchases">Purchases</a> |
+      <a routerLink="/inventory/suppliers">Suppliers</a> |
+      <a routerLink="/inventory/ingredients">Ingredients</a>
+    </div>
+  
+    <!-- Purchase Form Modal -->
+    <div *ngIf="mode === 'purchase-form'" class="overlay-panel" (click)="goBack()">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <app-purchase-form
+          (saved)="goBack()"
+          (cancel)="goBack()">
+        </app-purchase-form>
+      </div>
+    </div>
+  
+    <!-- Supplier Form Modal -->
+    <div *ngIf="mode === 'supplier-form'" class="overlay-panel" (click)="goBack()">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <app-supplier-form
+          [supplierId]="selectedSupplierId"
+          (saved)="goBack()"
+          (cancel)="goBack()">
+        </app-supplier-form>
+      </div>
+    </div>
+  
+    <!-- Ingredient Form Modal -->
+    <div *ngIf="mode === 'ingredient-form'" class="overlay-panel" (click)="goBack()">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <app-ingredients-form
+          [ingredientId]="selectedIngredientId"
+          (saved)="goBack()"
+          (cancel)="goBack()">
+        </app-ingredients-form>
+      </div>
+    </div>
+  
+  </div>
+  

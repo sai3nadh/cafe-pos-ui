@@ -76,6 +76,14 @@ isKitchenPage(): boolean {
 }
 
 
+ isInven(): boolean {
+  return this.currentUrl.includes('/inventory');
+}
+ 
+ goToInvnDash(){
+  this.router.navigate(['/inventory/dashboard']);
+ }
+
 viewReports() {
   this.router.navigate(['/report']);
   // this.closeDropdown();
