@@ -93,6 +93,10 @@ registerUser(){
   this.router.navigate(['/register']);
   // this.closeDropdown();
 }
+orderDisplay(){
+  this.router.navigate(['/display']);
+  // this.closeDropdown();
+}
 
 addCustomer() {
 
@@ -125,7 +129,9 @@ showOrdersIcon: any;
 
   // Toggle dropdown visibility
    toggleDropdown() {
+    if(this.canEdit){
     this.dropdownVisible = !this.dropdownVisible;
+    }
   }
 closeCheckoutModal() {
   this.dropdownVisible = !this.dropdownVisible;
