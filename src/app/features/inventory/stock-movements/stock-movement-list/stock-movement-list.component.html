@@ -1,1 +1,38 @@
-<p>stock-movement-list works!</p>
+<!-- <p>stock-movement-list works!</p> -->
+
+<!-- <div class="page-container"> -->
+    <div class="purchase-section">
+      <div class="section-header">
+        <h2>Stock Movements</h2>
+        <div *ngIf="loading">Loading stock movements...</div>
+        <!-- <button (click)="onAdd()">➕ Add Purchase</button> -->
+        <button (click)="adjustStock.emit()">Adjust Stock</button>
+
+      </div>
+  
+      <!-- <table  class="purchase-table"> -->
+<table *ngIf="!loading" class="stock-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Ingredient</th>
+      <th>Type</th>
+      <th>Reference</th>
+      <th>Quantity</th>
+      <th>Note</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of stockMovements">
+      <td>{{ m.stockMovementId }}</td>
+      <td>{{ m.ingredientName }}</td>
+      <td>{{ m.movementType }}</td>
+      <td>{{ m.reference }}</td>
+      <td>{{ m.quantity }}</td>
+      <td>{{ m.note }}</td>
+      <td>{{ m.createdAt | date:'short' }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

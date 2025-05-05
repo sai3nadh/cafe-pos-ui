@@ -242,6 +242,14 @@
       }
     }
   }
+
+  .purchase-table td.items-column {
+    max-width: 200px;   // Adjust width as needed
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
   
   .purchase-table {
     width: 100%;
@@ -332,6 +340,12 @@
             }
           }
         }
+      }
+      .purchase-table td.items-column {
+        white-space: normal;  
+        max-width: none;
+        overflow: visible;
+        text-overflow: clip;
       }
     }
   }

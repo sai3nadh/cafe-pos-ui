@@ -26,4 +26,20 @@ export class SupplierService {
     return this.http.put<Supplier>(`${this.apiUrl}/${id}`, supplier);
   }
   
+
+  // ✅ Get recent purchases
+getSupplierPurchases(id: number, page: number = 0, size: number = 10): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}/purchases?page=${page}&size=${size}`);
+  }
+  
+  // ✅ Get full ledger
+  getSupplierLedger(id: number, page: number = 0, size: number = 30): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${id}/ledger?page=${page}&size=${size}`);
+  }
+  
+  getSupplierPurchaseSummary(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}/purchases/summary`);
+  }
+  
+  
 }

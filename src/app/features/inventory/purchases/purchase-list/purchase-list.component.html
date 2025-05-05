@@ -64,7 +64,41 @@
         <button (click)="onAdd()">➕ Add Purchase</button>
       </div>
   
-      <table class="purchase-table">
+      <table  class="purchase-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Supplier</th>
+            <th>Total</th>
+            <th>Paid</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th class="items-column">Items</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of purchases">
+            <!-- <td>{{ p.purchaseNumber }}</td> -->
+             <td>{{ getShortPurchaseNumber( p.purchaseNumber) }}</td>
+           <td>{{ p.supplierName }}</td>
+            <td>{{ p.totalAmount | number:'1.2-2' }}</td>
+            <td>{{ p.paidAmount | number:'1.2-2' }}</td>
+            <td>{{ p.status }}</td>
+            <!-- <td>{{ p.purchaseDate | date:'shortDate' }}</td> -->
+            <td>{{ p.purchaseDate | date:'dd MMM y' }}</td>
+            <td class="items-column">{{ getItemSummary(p) }}</td>
+            <td>
+              <button (click)="onView(p.purchaseId)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div *ngIf="loading">Loading purchases...</div>
+      <div *ngIf="error">{{ error }}</div>
+      
+      <!-- <table class="purchase-table">
         <thead>
           <tr>
             <th>#</th>
@@ -85,7 +119,7 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
     </div>
   </div>
   

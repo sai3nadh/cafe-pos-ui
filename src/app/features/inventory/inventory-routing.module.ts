@@ -16,6 +16,7 @@ import { IngredientsDetailComponent } from './ingredients/ingredients-detail/ing
 import { IngredientsFormComponent } from './ingredients/ingredients-form/ingredients-form.component';
 import { IngredientsComponent } from './ingredients/ingredients.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { StockMovementsComponent } from './stock-movements/stock-movements.component';
 
   const routesOld: Routes = [
     { path: '', redirectTo: 'stock-list', pathMatch: 'full' },
@@ -25,11 +26,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   ];
 
   const routes: Routes = [
-    { path: '', redirectTo: 'stock-list', pathMatch: 'full' },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
     // Stock
     { path: 'stock-list', component: StockListComponent },
-    { path: 'stock-movements', component: StockMovementListComponent }, // optional
+    { path: 'stock-movements', component: StockMovementsComponent }, 
+
+    { path: 'stock-movements/list', component: StockMovementListComponent }, // optional
 
     // Suppliers
     { path: 'suppliers', component: SuppliersComponent },

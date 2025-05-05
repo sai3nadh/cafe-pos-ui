@@ -13,7 +13,7 @@
       <th>Date</th>
       <th>Type</th>
       <th>Reference</th>
-      <th>Debit</th>
+      <!-- <th>Debit</th> -->
       <th>Credit</th>
     </tr>
   </thead>
@@ -22,20 +22,35 @@
       <td>{{ entry.date }}</td>
       <td>{{ entry.type }}</td>
       <td>{{ entry.ref }}</td>
-      <td>{{ entry.debit | currency }}</td>
-      <td>{{ entry.credit | currency }}</td>
+      <!-- <td>{{ entry.debit | currency:'INR' }}</td> -->
+      <td>{{ entry.credit | currency:'INR' }}</td>
     </tr>
   </tbody>
 </table>
 
-<h4>Total Balance: {{ getBalance() | currency }}</h4>
+<!-- <h4>Total Balance: {{ getBalance() | currency }}</h4> -->
 
+<div *ngIf="purchaseSummary" class="purchase-summary">
+    <h3>Summary</h3>
+    <p><strong style="display: inline;">Total Purchases:</strong> {{ purchaseSummary.totalPurchases | currency:'INR' }}</p>
+    <p><strong>Total Paid:</strong> {{ purchaseSummary.totalPaid | currency:'INR' }}</p>
+    <p><strong style="display: inline;">Pending Amount:</strong> {{ purchaseSummary.pendingAmount | currency:'INR' }}</p>
+    <h4 style="text-align: left;">Amount by Payment Method:</h4>
+    <ul>
+      <li *ngFor="let method of paymentMethods()">
+        {{ method }}: {{ purchaseSummary.amountByPaymentMethod[method] | currency:'INR' }}
+      </li>
+    </ul>
+  </div>
+  
 <!-- disable the payment from the supplier -->
-<button (click)="showPaymentForm = !showPaymentForm" *ngIf="getBalance() > 0 && false">
+ <!-- hide below -- for the avoid full settlement for the supplier -->
+<!-- <button (click)="showPaymentForm = !showPaymentForm" *ngIf="getBalance() > 0 && false">
     💵 Make Payment
-  </button>
+  </button> -->
+  <button (click)="showLedgerPopup()">Detailed Ledger</button> <br>
 <button (click)="close.emit()">⬅ Back</button>
-<div *ngIf="showPaymentForm" class="payment-form">
+<div *ngIf="showPaymentForm && false" class="payment-form">
     <h3>Add Payment</h3>
   
     <label>Amount</label>
@@ -54,5 +69,32 @@
       💾 Save Payment
     </button>
     <button (click)="showPaymentForm = false">❌ Cancel</button>
+  </div>
+  
+  <div *ngIf="showDetailedLedger " class="ledger-popup">
+    <h3>Detailed Ledger</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Reference</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Running Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of detailedLedger">
+          <td>{{ entry.date }}</td>
+          <td>{{ entry.type }}</td>
+          <td>{{ entry.ref }}</td>
+          <td>{{ entry.debit | currency:'INR' }}</td>
+          <td>{{ entry.credit | currency:'INR' }}</td>
+          <td>{{ entry.balance | currency:'INR' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="showDetailedLedger = false">❌ Close</button>
   </div>
   

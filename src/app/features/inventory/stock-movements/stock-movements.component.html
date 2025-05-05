@@ -1,0 +1,14 @@
+<!-- <p>stock-movements works!</p> -->
+<!-- Always show the list -->
+<app-stock-movement-list (adjustStock)="openAdjustment()"></app-stock-movement-list>
+
+<!-- Show the adjust form in a modal/popup -->
+<div *ngIf="mode === 'adjust'" class="overlay-panel" (click)="goBackToList();">
+  <div class="popup" (click)="$event.stopPropagation()">
+    <app-stock-movement-adjust
+      (cancel)="goBackToList()"
+      (saved)="onSaved($event)">
+      <!-- (saved)="goBackToList()"> -->
+    </app-stock-movement-adjust>
+  </div>
+</div>

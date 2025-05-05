@@ -36,4 +36,42 @@
     unitPrice: number;
   }
 
+// this interface is to display in the purchase list
+
+  export interface PurchaseResponse {
+    purchaseId: number;
+    purchaseNumber: string;     // 👈 NEW field
+    supplierId?: number; // Optional because it can be null for manual suppliers
+    supplierName: string;
+    totalAmount: number;
+    paidAmount: number;
+    status: 'unpaid' | 'partial' | 'paid';
+    note: string;
+    // createdAt: string;  // ISO string (convert to Date if needed)
+    // updatedAt: string;  // ISO string
+    purchaseDate: string;
+    items: ItemDetail[];
+    payments: PaymentDetail[];
+  }
+  
+  export interface ItemDetail {
+    ingredientName: string;
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+  }
+  
+  export interface PaymentDetail {
+    method: string;
+    amount: number;
+    paidAt: string; // ISO string
+  }
+  
+  
+
+  export interface PurchasePaymentRequest {
+    paymentMethodId: number;
+    amount: number;
+    note: string;
+  }
   

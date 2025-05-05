@@ -165,7 +165,7 @@ export class PurchaseFormComponent implements OnInit {
   
     this.purchaseService.createPurchase(payload).subscribe({
       next: () => {
-        alert('Purchase saved!');
+        // alert('Purchase saved!');
         this.saved.emit();
       },
       error: () => alert('Error saving purchase.')
