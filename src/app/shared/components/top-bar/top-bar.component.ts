@@ -4,6 +4,7 @@ import { Component, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit }
 import { Router } from '@angular/router';
 import { StorageService } from '../../../features/services/storage.service';
 import { HeaderEventsService } from '../../../features/services/header-events.service';
+import { PrinterService } from '../../services/printer.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -22,6 +23,7 @@ dropdownVisible: boolean= false;
 canEdit: boolean = true;
 
 currentUrl: string = '';
+printingEnabled: boolean = true;  // default true
 
 
 constructor(
@@ -29,6 +31,7 @@ constructor(
   private storageService : StorageService,
   private elRef: ElementRef,
   private headerEvents: HeaderEventsService
+  ,private printerService: PrinterService
 ) {
 
   this.currentUrl = this.router.url; 
@@ -37,6 +40,42 @@ constructor(
     this.currentUrl = this.router.url;
   });
 }
+ngOnInit() {
+  const saved = localStorage.getItem('printingEnabled');
+
+  if (saved !== null) {
+    // 👉 Use saved value from localStorage (user's previous choice on this device)
+    this.printingEnabled = (saved === 'true');
+  } else {
+    // 👉 No saved value → get from backend
+    this.printerService.getPrinterStatus().subscribe(status => {
+      this.printingEnabled = status;
+      // 👉 Save backend value in localStorage for next time
+      localStorage.setItem('printingEnabled', String(status));
+    });
+  }
+}
+
+togglePrinting() {
+  const newValue = !this.printingEnabled;
+
+  this.printerService.setPrinterStatus(newValue).subscribe({
+    next: (response) => {
+      if (response.success) {
+        this.printingEnabled = newValue;
+        localStorage.setItem('printingEnabled', String(newValue));
+        console.log(response.message);  // Or show a toast/alert to the user
+      } else {
+        alert('Failed to update printing status: ' + response.message);
+      }
+    },
+    error: (err) => {
+      console.error('Server error while updating printer status', err);
+      alert('Server error while updating printer status.');
+    }
+  });
+}
+
 
 
 

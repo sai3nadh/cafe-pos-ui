@@ -26,6 +26,11 @@
   
       <!-- Avatar Section with Dropdown -->
     <div class="avatar-section">
+         <!-- new Printing toggle button -->
+        <button *ngIf="isUserPage()" (click)="togglePrinting()" class="lock-btn"
+        [ngClass]="printingEnabled ? 'printer-on' : 'printer-off'">
+          {{ printingEnabled ? 'Print: ON' : 'Print: OFF' }}
+        </button>
         <button *ngIf="isUserPage()" (click)="pendingOrders()"  class="lock-btn">Kitchen</button>
         <button *ngIf="isKitchenPage()" (click)="goToHome()"  class="lock-btn">Home</button>
         <button *ngIf="isUserPage() || isKitchenPage()" (click)="logout()"  class="lock-btn">Lock</button>
