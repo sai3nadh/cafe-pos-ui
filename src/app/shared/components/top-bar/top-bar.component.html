@@ -9,6 +9,10 @@
       style="background-color: #ffc107; color: #222; border: none; font-size: 18px; padding: 8px 16px; border-radius: 6px; font-weight: bold;">
       Inventory-Dashboard
     </button>
+    <button *ngIf="isMenuMngmt()" (click)="goToMenuMngmt()"
+      style="background-color: #ffc107; color: #222; border: none; font-size: 18px; padding: 8px 16px; border-radius: 6px; font-weight: bold;">
+      Menu-Management-Dashboard
+    </button>
        <button *ngIf="isUserPage()">
         <!-- (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
         Orders</button>
@@ -50,6 +54,7 @@
             <button (click)="registerUser()">Register User</button>
             <button (click)="editItems()">Edit Items</button>
             <button (click)="goToInvnDash()">Inventory</button>
+            <button (click)="goToMenuMngmt()">Menu-dashboard</button>
             <button (click)="pendingOrders()">Pending Orders</button>
     
               <hr />
@@ -58,3 +63,4 @@
       </div>
 
   </div>
+<!-- -->

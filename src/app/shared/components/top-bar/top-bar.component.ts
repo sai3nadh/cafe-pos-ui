@@ -123,6 +123,15 @@ isKitchenPage(): boolean {
   this.router.navigate(['/inventory/dashboard']);
  }
 
+ isMenuMngmt(): boolean {
+  return this.currentUrl.includes('/menu-management');
+}
+
+goToMenuMngmt(){
+  this.router.navigate(['/menu-management/dashboard']);
+}
+
+
 viewReports() {
   this.router.navigate(['/report']);
   // this.closeDropdown();

@@ -38,6 +38,7 @@ export const routes: Routes = [
       path: '',
       component: MainLayoutComponent,
       children: [
+        { path: '', redirectTo: 'user', pathMatch: 'full'  },
         { path: 'user', component: UserComponent },
         { path: 'edit-menu', component: EditMenuComponent },
         { path: 'add-customer', component: AddCustomerComponent },
