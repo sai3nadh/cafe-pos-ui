@@ -84,6 +84,10 @@
                 <button (click)="addToCart(item); $event.stopPropagation()" 
                 style="background-color: rgb(14, 97, 14); color: white;">+++</button>
               </div>
+              <div class="button-container" *ngIf="selectedCategory.id==5">
+                <button (click)="addBoxToCart(item); $event.stopPropagation()" 
+                style="background-color: rgb(14, 97, 14); color: white;">BOX</button>
+              </div>
               <!-- <div class="button-container">
                 <button (click)="remove(item)" >---</button>
                 <button (click)="addToCart(item)">+++</button>

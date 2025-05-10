@@ -1190,6 +1190,56 @@ closeUsersModal(){
   }
   
 
+  //better to pass the value from the db directly like direct 
+  addBoxToCart(item: Item) {
+    if (this.editOrderId === -1) {
+      // 🔰 Fresh order
+      const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
+      if (existing) {
+        existing.qty += 10;
+      } else {
+        this.cart.push({
+          ...item,
+          qty: 10,
+          itemNote: '',
+          itemStatus: 'pending'
+        });
+      }
+    } else {
+      // ✏️ Edit existing order
+  
+      // 1. Update existing PENDING item from backend
+      const existingPending = this.cart.find(i =>
+        i.id === item.id &&
+        i.itemStatus === 'pending' &&
+        i.orderItemId !== undefined
+      );
+  
+      // 2. Or update new local pending item (added during edit)
+      const newPending = this.cart.find(i =>
+        i.id === item.id &&
+        i.itemStatus === 'pending' &&
+        i.orderItemId === undefined
+      );
+  
+      if (existingPending) {
+        existingPending.qty += 1;
+      } else if (newPending) {
+        newPending.qty += 1;
+      } else {
+        // Add new pending item
+        this.cart.push({
+          ...item,
+          qty: 1,
+          itemNote: '',
+          itemStatus: 'pending'
+          // no orderItemId → backend will treat it as new
+        });
+      }
+    }
+  
+    console.log('Cart:', this.cart);
+  }
   cancelCartItemNote(){
     this.customizeCartItemModal = false;
   }
