@@ -51,6 +51,11 @@ export const routes: Routes = [
           loadChildren: () =>
             import('./features/inventory/inventory.module').then(m => m.InventoryModule)
         }
+        ,{
+          path: 'menu-management',
+          loadChildren: () =>
+            import('./features/menu-management/menu-management.module').then(m => m.MenuManagementModule)
+        }        
       ]
     },
     {
