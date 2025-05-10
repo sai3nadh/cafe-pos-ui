@@ -57,10 +57,12 @@ export class PurchaseFormComponent implements OnInit {
   }
 
   addItem(): void {
+    console.log(this.purchaseItems);
     this.purchaseItems.push({
       ingredientId: 0,
       quantity: 0,
       unitPrice: 0
+      // totalPrice:0
     });
   }
 
@@ -75,6 +77,26 @@ export class PurchaseFormComponent implements OnInit {
     );
   }
 
+  getExpectedTotal(): number {
+    return this.purchaseItems.reduce((sum, item) => {
+      return sum + ((item.quantity || 0) * (item.unitPrice || 0));
+    }, 0);
+  }
+  
+  manualActualTotal: number = 0;
+
+  // getActualTotal(): number {
+  //   return this.purchaseItems.reduce((sum, item) => {
+  //     return sum + (item.totalPrice || 0);
+  //   }, 0);
+  // }
+  // manualTotals: { [index: number]: number } = {};
+
+  // getActualTotal(): number {
+  //   return Object.values(this.manualTotals).reduce((sum, val) => sum + (val || 0), 0);
+  // }
+  
+  
   // submit(): void {
   //   if (!this.selectedSupplierId || this.purchaseItems.length === 0) {
   //     alert('Please select a supplier and add at least one item.');
@@ -122,9 +144,18 @@ export class PurchaseFormComponent implements OnInit {
     }
   
     // ✅ Calculate the final total
-    const finalTotal = (this.isManual && this.purchaseItems.length === 0)
-      ? this.manualAmount
-      : this.totalAmount;
+    // const finalTotal = (this.isManual && this.purchaseItems.length === 0)
+    //   ? this.manualAmount
+    //   : this.totalAmount;
+
+  //     const finalTotal = (this.isManual && this.purchaseItems.length === 0)
+  // ? this.manualAmount
+  // : this.getActualTotal();
+
+      const finalTotal = (this.isManual && this.purchaseItems.length === 0)
+  ? this.manualAmount
+  : this.manualActualTotal;
+
   
     if (finalTotal <= 0) {
       alert('Total amount must be greater than zero.');
