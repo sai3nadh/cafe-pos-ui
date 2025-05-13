@@ -28,6 +28,34 @@ export class IngredientsFormComponent {
     status: 'active'
   };
 
+
+  // unitOptionds = [
+  //   'ml', 'l', 'liters', 'tsp', 'tbsp', 'cup',
+  //   'g', 'kg',
+  //   'pcs', 'unit', 'can', 'bottle',
+  //   'pack', 'slice', 'box', 'carton'
+  // ];
+
+  unitOptions = [
+    { label: 'millilitre (ml)', value: 'ml' },
+    { label: 'litre (ltr)', value: 'l' },
+    { label: 'teaspoon (tsp)', value: 'tsp' },
+    { label: 'tablespoon (tbsp)', value: 'tbsp' },
+    { label: 'cup', value: 'cup' },
+  
+    { label: 'gram (g)', value: 'g' },
+    { label: 'kilogram (kg)', value: 'kg' },
+  
+    { label: 'piece (pcs)', value: 'pcs' },
+    { label: 'unit', value: 'unit' },
+    { label: 'can', value: 'can' },
+    { label: 'bottle', value: 'bottle' },
+    { label: 'pack', value: 'pack' },
+    { label: 'slice', value: 'slice' },
+    { label: 'box', value: 'box' },
+    { label: 'carton', value: 'carton' }
+  ];
+  
   constructor(private ingredientService: IngredientService) {}
 
   ngOnInit() {

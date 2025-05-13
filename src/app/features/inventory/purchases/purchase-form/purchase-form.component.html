@@ -364,7 +364,17 @@
                 </option>
               </select>
             </td>
-            <td><input type="number" [(ngModel)]="item.quantity" /></td>
+            <!-- <td><input type="number" [(ngModel)]="item.quantity" />
+              <span>{{ getUnitByIngredientId(item.ingredientId) }}</span>
+            
+          </td> -->
+          <td>
+            <!-- <div style="display: flex; align-items: center; gap: 4px;"> -->
+              <input type="number" [(ngModel)]="item.quantity" />
+              <span>{{ getUnitByIngredientId(item.ingredientId) }}</span>
+            <!-- </div> -->
+          </td>
+          
             <td><input type="number" [(ngModel)]="item.unitPrice" /></td>
             <!-- <td><input type="number" [(ngModel)]="item.totalPrice" /></td> -->
             <td>{{ item.quantity * item.unitPrice | number: '1.2-2' }}</td>

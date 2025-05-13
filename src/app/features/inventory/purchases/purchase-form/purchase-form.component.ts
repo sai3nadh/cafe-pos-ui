@@ -84,6 +84,19 @@ export class PurchaseFormComponent implements OnInit {
   }
   
   manualActualTotal: number = 0;
+  // getUnitByIngredientId(id: number): string {
+  //   console.log(id+"dd");
+  //   console.log(this.ingredients);
+    
+  //   return this.ingredients.find(i => i.ingredientId === id)?.status || 'w';
+  // }
+  getUnitByIngredientId(id: number): string {
+    console.log('Looking for ingredientId:', id);
+    const found = this.ingredients.find(i => i.ingredientId === +id);
+    console.log('Found:', found);
+    return found?.unit || '';
+  }
+  
 
   // getActualTotal(): number {
   //   return this.purchaseItems.reduce((sum, item) => {
