@@ -1,0 +1,98 @@
+.overlay-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+  
+  .popup {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+  }
+  
+
+
+  .dashboard-container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .dashboard-card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 200px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .quick-actions {
+    margin-top: 30px;
+  }
+  
+  .quick-actions button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .links-container {
+    margin-top: 30px;
+  }
+  
+  .links-container a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  .links-container a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Popup styles */
+//   .overlay-panel {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     background: rgba(0, 0, 0, 0.5);
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     z-index: 1000;
+//   }
+  
+//   .popup {
+//     background: white;
+//     padding: 20px;
+//     border-radius: 8px;
+//     width: 90%;
+//     max-width: 600px;
+//     max-height: 90%;
+//     overflow-y: auto;
+//     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+//   }
+  

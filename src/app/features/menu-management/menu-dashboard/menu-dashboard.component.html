@@ -1,0 +1,69 @@
+<!-- <p>menu-dashboard works!</p> -->
+<div class="dashboard-container">
+    <h1>Menu Management - Dashboard</h1>
+  
+    <!-- KPI Cards -->
+    <div class="cards-container">
+      <div class="dashboard-card">
+        <h2>Total Menu Items</h2>
+        <p>45</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Categories</h2>
+        <p>6</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Ingredients Used</h2>
+        <p>120</p>
+      </div>
+      <div class="dashboard-card">
+        <h2>Items Missing Ingredients</h2>
+        <p>3</p>
+      </div>
+    </div>
+  
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button (click)="openMenuItemForm()">Add Menu Item</button>
+      <button (click)="openCategoryForm()">Add Category</button>
+      <button (click)="openIngredientMapping()">Map Ingredients</button>
+    </div>
+  
+    <!-- Quick Links -->
+    <div class="links-container">
+      <h3>Quick Links</h3>
+      <a routerLink="/menu-management/menu-items">Menu Items</a> |
+      <a routerLink="/menu-management/categories">Categories</a> |
+      <a routerLink="/menu-management/menu-items/ingredients">Ingredient Mapping</a>
+    </div>
+  
+    <!-- Menu Item Form Modal -->
+    <div *ngIf="mode === 'menu-item-form'" class="overlay-panel" (click)="goBack()">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <app-menu-item-form
+          (saved)="goBack()"
+          (cancel)="goBack()">
+        </app-menu-item-form>
+      </div>
+    </div>
+  
+    <!-- Category Form Modal -->
+    <div *ngIf="mode === 'category-form'" class="overlay-panel" (click)="goBack()">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <app-category-form
+          (saved)="goBack()"
+          (cancel)="goBack()">
+        </app-category-form>
+      </div>
+    </div>
+  
+    <!-- Ingredient Mapping Modal -->
+    <div *ngIf="mode === 'ingredient-mapping'" class="overlay-panel" (click)="goBack()">
+      <div class="popup" (click)="$event.stopPropagation()">
+        <app-menu-item-ingredients
+          (cancel)="goBack()">
+        </app-menu-item-ingredients>
+      </div>
+    </div>
+  </div>
+  

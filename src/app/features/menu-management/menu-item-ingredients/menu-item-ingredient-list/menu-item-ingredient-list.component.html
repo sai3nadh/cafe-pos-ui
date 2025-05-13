@@ -1,0 +1,34 @@
+<!-- <p>menu-item-ingredient-list works!</p> -->
+<div class="filter-container">
+    <label>Category:</label>
+    <select [(ngModel)]="selectedCategory">
+      <option *ngFor="let cat of categories">{{cat}}</option>
+    </select>
+  </div>
+  
+  <table class="responsive-table">
+    <thead>
+      <tr>
+        <th>Menu Item</th>
+        <th>Ingredients Used</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of filteredMenuItems">
+        <td>{{item.menuItemName}}</td>
+        <td>{{ getIngredientNames(item) }}</td>
+
+        <!-- <td>
+          <ng-container *ngIf="item.ingredients.length > 0; else noIngredients">
+            {{item.ingredients.map(i => i.ingredientName).join(', ')}}
+          </ng-container>
+          <ng-template #noIngredients>-</ng-template>
+        </td> -->
+        <td>
+          <button (click)="viewItem(item)">View/Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  

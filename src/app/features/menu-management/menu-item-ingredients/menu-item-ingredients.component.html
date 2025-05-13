@@ -1,0 +1,39 @@
+<!-- <p>menu-item-ingredients works!</p> -->
+<!-- Always show the list -->
+<!-- <app-menu-item-ingredient-list
+  (viewItem)="openForm($event)">
+</app-menu-item-ingredient-list> -->
+
+<!-- Form Modal / Panel -->
+<!-- <div *ngIf="mode === 'form'" class="overlay-panel" (click)="goBackToList();">
+  <div class="popup" (click)="$event.stopPropagation()">
+    <app-menu-item-ingredient-form
+      [menuItemId]="selectedMenuItemId"
+      (cancel)="goBackToList()"
+      (saved)="goBackToList()">
+    </app-menu-item-ingredient-form>
+
+    <app-menu-item-ingredient-list
+  (viewItem)="openForm($event)">
+</app-menu-item-ingredient-list>
+
+
+</div>
+</div> -->
+<!-- Always show the list -->
+<app-menu-item-ingredient-list
+  (viewItemEvent)="openForm($event)">
+</app-menu-item-ingredient-list>
+
+<!-- Form Modal / Panel -->
+<div *ngIf="mode === 'form'" class="overlay-panel" (click)="goBackToList();">
+  <div class="popup" (click)="$event.stopPropagation()">
+
+    <app-menu-item-ingredient-form
+      [menuItemId]="selectedMenuItemId!"
+      (cancel)="goBackToList()"
+      (saved)="goBackToList()">
+    </app-menu-item-ingredient-form>
+
+  </div>
+</div>

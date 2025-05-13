@@ -1,0 +1,70 @@
+<!-- <p>menu-item-ingredient-form works!</p> -->
+<!-- Menu Item Details -->
+<div>
+    <h2>{{menuItemDetails.name}}</h2>
+    <p>Description: {{menuItemDetails.description || '-'}}</p>
+    <p>Price: {{menuItemDetails.price | currency}}</p>
+  </div>
+  
+  <!-- Ingredient Mappings -->
+  <table>
+    <thead>
+      <tr>
+        <th>Ingredient</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let mapping of ingredientMappings">
+        <td>{{mapping.ingredientName}}</td>
+  
+        <td *ngIf="editId !== mapping.menuIngrId">{{mapping.quantity}}</td>
+        <td *ngIf="editId === mapping.menuIngrId">
+          <input [(ngModel)]="editQuantity" type="number" min="0">
+        </td>
+  
+        <!-- <td *ngIf="editId !== mapping.menuIngrId">{{mapping.unit}}</td> -->
+        <!-- <td *ngIf="editId === mapping.menuIngrId"> -->
+          <!-- <input [(ngModel)]="editUnit" type="text"> -->
+           <!-- {{mapping.unit}}dropdown -->
+        <!-- </td> -->
+        <td>{{mapping.unit}}</td>
+         <!-- REMOVE this if you had an editable unit -->
+
+        <td>
+          <button *ngIf="editId !== mapping.menuIngrId" (click)="startEdit(mapping)">Edit</button>
+          <button *ngIf="editId === mapping.menuIngrId" (click)="saveEdit(mapping)">Save</button>
+          <button *ngIf="editId === mapping.menuIngrId" (click)="cancelEdit()">Cancel</button>
+          <button (click)="deleteMapping(mapping.menuIngrId)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Add New Mapping -->
+  <h3>Add New Ingredient</h3>
+  <!-- <select [(ngModel)]="newIngredientId">
+    <option [ngValue]="null">Select Ingredient</option>
+    <option *ngFor="let ing of allIngredients" [ngValue]="ing.ingredientId">{{ing.name}}</option>
+  </select>
+  <input [(ngModel)]="newQuantity" type="number" min="0" placeholder="Quantity">
+  <input [(ngModel)]="newUnit" type="text" placeholder="Unit">
+   -->
+<!-- Unit shown based on selectedIngredient -->
+<!-- <input [value]="selectedIngredient?.unit || ''" type="text" placeholder="Unit" readonly> -->
+<select [(ngModel)]="selectedIngredient">
+    <option [ngValue]="null">Select Ingredient</option>
+    <option *ngFor="let ing of allIngredients" [ngValue]="ing">{{ing.name}}</option>
+  </select>
+  
+  <input [(ngModel)]="newQuantity" type="number" min="0" placeholder="Quantity">
+  <input [value]="selectedIngredient?.unit || ''" type="text" placeholder="Unit" readonly>
+  
+  <button (click)="addMapping()">Add</button>
+  
+  <!-- Back Button -->
+  <br><br>
+  <button (click)="goBack()">Back</button>
+  
