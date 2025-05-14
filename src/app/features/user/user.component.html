@@ -123,7 +123,7 @@
                         <!-- Item Name and Delete Button on the same row -->
                         <div class="cart-item-header">
                             <h3>{{ item.name }}</h3>
-                            <i *ngIf="item.itemStatus !== 'delivered'"  class="fas fa-trash-alt" (click)="confirmDeleteItem(i)"></i>
+                            <i *ngIf="item.itemStatus !== 'delivered'"  class="fas fa-trash-alt" (click)="confirmDeleteItem(i); $event.stopPropagation()"></i>
                         </div>
                 
                         <!-- Cart Item Details (Quantity, Price) in the next row -->
