@@ -27,6 +27,12 @@ triggerOpenZoomSettings() {
   setTopBarHeight(height: number) { 
     this.topBarHeightSubject.next(height);
   }
+  
+  // Optional getter
+  getTopBarHeight(): number {
+    return this.topBarHeightSubject.getValue();
+  }
+  
   triggerOpenOrdersPopup() {
     this.openOrdersPopupSubject.next();
   }
