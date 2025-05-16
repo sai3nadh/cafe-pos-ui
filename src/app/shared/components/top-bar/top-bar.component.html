@@ -31,14 +31,16 @@
       <!-- Avatar Section with Dropdown -->
     <div class="avatar-section">
          <!-- new Printing toggle button -->
-        <button *ngIf="isUserPage()" (click)="togglePrinting()" class="lock-btn"
+        <div  class="button-container">
+         <button *ngIf="isUserPage()" (click)="togglePrinting()" class="print-btn"
         [ngClass]="printingEnabled ? 'printer-on' : 'printer-off'">
           {{ printingEnabled ? 'Print: ON' : 'Print: OFF' }}
         </button>
         <button *ngIf="isUserPage()" (click)="pendingOrders()"  class="lock-btn">Kitchen</button>
         <button *ngIf="isKitchenPage()" (click)="goToHome()"  class="lock-btn">Home</button>
         <button *ngIf="isUserPage() || isKitchenPage()" (click)="logout()"  class="lock-btn">Lock</button>
-      <img class="avatar" src="https://github.com/nutlope.png" alt="Avatar"  (click)="toggleDropdown()" />
+        </div>
+      <img class="avatar" src="../../../../assets/pic.jpeg" alt="Avatar"  (click)="toggleDropdown()" />
         
         <!-- Dropdown Menu (Initially Hidden) -->
         <div *ngIf="dropdownVisible && canEdit" class="modal-overlay" (click)="closeCheckoutModal()">

@@ -33,7 +33,14 @@
     border-radius: 50%;
   }
   
-  
+  .avatar-section {
+    // position: relative;
+    // display: inline-block;
+      
+    display: FLEX;
+    flex-direction: row;
+    gap: 20PX;
+  }
   /* Modal overlay to darken the background */
 .modal-overlay {
     position: fixed;
@@ -65,19 +72,41 @@
  
   
   
+  // .lock-btn {
+  //   margin-right: 40px;
+  //   background-color: #6790ff !important; /* Force override */
+  //   color: white !important;
+  //   font-size: 2.8rem !important;
+  //   padding: 10px 50px !important;
+  //   font-weight: bold;
+  //   border: none !important;
+  //   border-radius: 8px;
+  //   margin-bottom: -30px !important;
+  //   cursor: pointer;
+  // }
+  // .lock-btn {
+  //   font-size: 1.4rem !important; // ✅ Much more balanced
+  //   padding: 8px 16px !important;
+  //   margin-right: 20px !important;
+  //   margin-bottom: 0 !important;
+  //   background-color: #6790ff !important;
+  //   color: white !important;
+  //   border: none !important;
+  //   border-radius: 8px;
+  //   font-weight: bold;
+  // }
+  
   .lock-btn {
-    margin-right: 40px;
-    background-color: #6790ff !important; /* Force override */
+    // font-size: 1.4rem !important; // ✅ Much more balanced
+    padding: 8px 16px !important;
+    margin-right: 20px !important;
+    margin-bottom: 0 !important;
+    background-color: #6790ff !important;
     color: white !important;
-    font-size: 2.8rem !important;
-    padding: 10px 50px !important;
-    font-weight: bold;
     border: none !important;
     border-radius: 8px;
-    margin-bottom: -30px !important;
-    cursor: pointer;
+    font-weight: bold;
   }
-  
   .modal-buttons {
     display: flex;
     justify-content: space-between;
@@ -96,7 +125,24 @@
   }
 
   /* Dropdown menu styling */
+  // .dropdown-menu {
+  //   position: absolute;
+  //   top: 75px;
+  //   right: 0;
+  //   background-color: #085084f0;
+  //   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  //   border-radius: 8px;
+  //   z-index: 1000;
+  //   min-width: 200px;
+  //   padding: 10px;
+  //   transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
+  //   opacity: 1;
+  //   font-family: Arial, sans-serif;
+  //   max-width: 350px
+  // }
+  
   .dropdown-menu {
+    display: grid;
     position: absolute;
     top: 75px;
     right: 0;
@@ -106,10 +152,21 @@
     z-index: 1000;
     min-width: 200px;
     padding: 10px;
-    transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
+    transition: opacity 0.3s ease-in-out;
     opacity: 1;
     font-family: Arial, sans-serif;
-    max-width: 350px
+    max-width: 90vw; // ✅ Prevents it from overflowing on small screens
+    overflow-x: auto;
+      /* ✅ ADD THESE LINES */
+  max-height: 85vh;
+  overflow-y: auto;
+  }
+  .dropdown-menu::-webkit-scrollbar {
+    width: 8px;
+  }
+  .dropdown-menu::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
   }
   
   /* Dropdown button styling */
@@ -145,4 +202,98 @@
     padding: 8px 16px !important;
     border-radius: 4px;
     font-weight: bold;
+}
+
+.print-btn {
+  // font-size: 1.4rem !important; // ✅ Much more balanced
+  padding: 8px 16px !important;
+  margin-right: 20px !important;
+  margin-bottom: 0 !important;
+  // background-color: #6790ff !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px;
+  font-weight: bold;
+  
+  // font-size: 1.2rem !important;
+  padding: 8px 12px !important;
+  margin-right: 10px !important;
+}
+
+ /* Section styling */
+ hr {
+  margin: 10px 0;
+  border: 0;
+  border-top: 1px solid #ddd;
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .nav-buttons,
+  .avatar-section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .nav-buttons button,
+  .avatar-section button {
+    // font-size: 1rem !important;
+    padding: 8px 12px !important;
+    margin: 5px 4px;
+  }
+
+  .lock-btn {
+    font-size: 1.2rem !important;
+    padding: 8px 12px !important;
+    margin-right: 10px !important;
+  }
+
+  .dropdown-menu {
+    top: auto;
+    right: auto;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
+// .dropdown-menu button {
+//   font-size: 1.2rem;
+// }
+
+/* Tablet view */
+@media (max-width: 1023px) {
+  body {
+    font-size: 15px;
+  }
+
+  .dropdown-menu button {
+    font-size: 1.1rem;
+  }
+}
+@media (max-width: 768px) {
+  .avatar-section .button-container {
+    display: none;
+  }
+}
+
+/* Mobile view */
+@media (max-width: 767px) {
+  body {
+    font-size: 14px;
+  }
+
+  .dropdown-menu button {
+    font-size: 1rem;
+  }
 }

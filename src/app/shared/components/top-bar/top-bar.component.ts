@@ -76,18 +76,27 @@ togglePrinting() {
   });
 }
 
-
-
-
 ngAfterViewInit() {
-  setTimeout(() => {
+  const resizeObserver = new ResizeObserver(() => {
     const height = this.topBarElement.nativeElement.offsetHeight;
-
-    // const height = this.elRef.nativeElement.offsetHeight;
-    console.log('TopBar Height:', height);
+    console.log('TopBar Height (Resize):', height);
     this.heightReady.emit(height);
   });
+
+  resizeObserver.observe(this.topBarElement.nativeElement);
 }
+
+
+
+// ngAfterViewInit() {
+//   setTimeout(() => {
+//     const height = this.topBarElement.nativeElement.offsetHeight;
+
+//     // const height = this.elRef.nativeElement.offsetHeight;
+//     console.log('TopBar Height:', height);
+//     this.heightReady.emit(height);
+//   });
+// }
 // ngAfterViewInit() {
 //   const height = this.elRef.nativeElement.offsetHeight;
 //   console.log('TopBar Height:', height);
