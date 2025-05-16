@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { TopBarComponent } from "../../shared/components/top-bar/top-bar.component";
 import { RouterModule } from '@angular/router'; // ✅ add this
 import { CommonModule } from '@angular/common';
@@ -21,13 +21,17 @@ export class MainLayoutComponent {
     this.topBarHeight = height;
     // alert("height"+height);
     this.headerEventsService.setTopBarHeight(height); // 👈 Share height globally
+    this.cdr.detectChanges(); // <- force change detection when showTopBar updates
 
   }
 
   showTopBar = true;
-  constructor(private headerEventsService: HeaderEventsService) {
+  constructor(private headerEventsService: HeaderEventsService
+              ,private cdr: ChangeDetectorRef
+  ) {
     this.headerEventsService.showTopBar$.subscribe(show => {
       this.showTopBar = show;
+      this.cdr.detectChanges(); // <- force change detection when showTopBar updates
     });
   }
 
