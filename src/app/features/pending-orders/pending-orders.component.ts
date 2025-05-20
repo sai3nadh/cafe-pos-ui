@@ -185,6 +185,19 @@ closeKitchenSummary() {
   this.showKitchenModal = false;
 }
 
+ parseItemNote(note: string): { name: string; qty: number }[] {
+  if (!note) return [];
+  const parts = note.split(',');
+  return parts.map(part => {
+    const match = part.trim().match(/(\d+)x\s*(.+)/i);
+    if (match) {
+      return { qty: parseInt(match[1]), name: match[2].trim() };
+    } else {
+      return { qty: 1, name: part.trim() };
+    }
+  });
+}
+
 generateKitchenSummary() {
   this.showKitchenModal=true;
   const summaryMap = new Map<string, number>();
@@ -205,8 +218,36 @@ console.log("generating kitchen--kitchen");
   this.allOrders.forEach(order => {
     order.items.forEach(item => {
       if (item.kitchen && item.itemStatus === 'pending') {
-        const currentQty = summaryMap.get(item.name) || 0;
-        summaryMap.set(item.name, currentQty + item.qty);
+        //this is woring no modifers-- total items mapping
+        // const currentQty = summaryMap.get(item.name) || 0;
+        // summaryMap.set(item.name, currentQty + item.qty);
+
+        // if we have the modifiers linked to the item
+        // if (item.modifiers?.length) {
+        //   for (const mod of item.modifiers) {
+        //     const key = `${item.name} (${mod.name})`;
+        //     const current = summaryMap.get(key) || 0;
+        //     summaryMap.set(key, current + mod.qty);
+        //   }
+        // } else {
+        //   const key = item.name;
+        //   const current = summaryMap.get(key) || 0;
+        //   summaryMap.set(key, current + item.qty);
+        // }
+        //use the item note to split and map
+        const modifiers = this.parseItemNote(item.itemNote);
+        if (modifiers.length > 0) {
+          for (const mod of modifiers) {
+            const key = `${item.name} (${mod.name})`;
+            const current = summaryMap.get(key) || 0;
+            summaryMap.set(key, current + mod.qty);
+          }
+        } else {
+          const key = item.name;
+          const current = summaryMap.get(key) || 0;
+          summaryMap.set(key, current + item.qty);
+        }
+
       }
     });
   });
