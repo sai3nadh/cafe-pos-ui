@@ -14,6 +14,8 @@
 
 // == bleo old good
 import { ChangeDetectorRef, Component } from '@angular/core';
+import { ViewChild, AfterViewInit } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';  // Add this import
@@ -55,6 +57,14 @@ export interface cartItem{
   itemNote: string;
   itemStatus?: 'pending' | 'preparing' | 'ready' | 'delivered' | 'cancelled' | null;
   statusUpdated?: string; // ISO timestamp string
+    
+  // ✅ Add this to support modifiers in cart
+  modifiers?: {
+    modifierId: number;
+    name: string;
+    default: boolean;
+    qty: number;
+  }[];
 }
 
 // src/app/models/order-summary.model.ts
@@ -184,7 +194,22 @@ export interface PurchaseHistoryResponse {
     templateUrl: './user.component.html',
     styleUrls: ['./user.component.scss']
 })
-export class UserComponent {
+export class UserComponent  implements AfterViewInit  {
+  zoomLevel = 1;
+  zoomModalVisible = false;
+  private zoomApplied:boolean = false;
+
+  @ViewChild('zoomSection', { static: false }) zoomSection!: ElementRef;
+
+  // @ViewChild('zoomSection') zoomSection!: ElementRef;
+
+  ngAfterViewInit(): void {
+    const savedZoom = localStorage.getItem('itemsZoomLevel');
+    if (savedZoom) {
+      this.zoomLevel = parseFloat(savedZoom);
+      this.applyZoom();
+    }
+  }
   categories: Category[] = [];
   customers: { id: number; name: string; avatar: string }[] = [];
   purchaseHistoryData: { [customerId: number]: PurchaseRecord[] } = {};
@@ -236,6 +261,7 @@ export class UserComponent {
       this.toggleOrdersModal();
       this.getCustomerOrdersToday();
     });
+    document.body.style.overflow = 'hidden';
 
     
     this.headerEvents.openZoomSettings$.subscribe(() => {
@@ -248,8 +274,28 @@ export class UserComponent {
   });
 
   
-  const savedZoom = localStorage.getItem('zoomLevel');
+  // zoomLevel = 1;
+  // zoomModalVisible = false;
+
+  // @ViewChild('zoomSection') zoomSection!: ElementRef;
+
+  // ngAfterViewInit(): void {
+  //   const savedZoom = localStorage.getItem('zoomLevel');
+  //   if (savedZoom) {
+  //     this.zoomLevel = parseFloat(savedZoom);
+  //     this.applyZoom();
+  //   }
+  // }
+  // // @ViewChild('zoomSection') zoomSection!: ElementRef;
+
   
+  // const savedZoom = localStorage.getItem('zoomLevel');
+  
+  // if (savedZoom) {
+  //   this.zoomLevel = parseFloat(savedZoom);
+  //   this.applyZoom();
+  // }
+  const savedZoom = localStorage.getItem('itemsZoomLevel');
   if (savedZoom) {
     this.zoomLevel = parseFloat(savedZoom);
     this.applyZoom();
@@ -400,7 +446,7 @@ toggleSittingArea(sittingArea: string) {
   ngOnDestroy() {
     // this.wsService.disconnect(); // ✅ Disconnect WebSocket when leaving
     // this.loadPurchaseHistory();
-    
+    document.body.style.overflow = '';
       // this.kitchenSub?.unsubscribe();
       this.notifSub?.unsubscribe();
 
@@ -576,7 +622,12 @@ toggleSittingArea(sittingArea: string) {
   // Example method to handle category selection
   selectCategory(category: Category) {
     this.selectedCategory = category;
-
+    setTimeout(() => {
+      if (!this.zoomApplied && this.zoomSection) {
+        this.applyZoom();
+        this.zoomApplied = true;
+      }
+    });
     console.log('Selected category:', this.selectedCategory);
   }
   
@@ -1185,11 +1236,109 @@ closeUsersModal(){
         });
       }
     }
-  
+      
+    // this.applyDefaultModifiersToCartItem(item.id);
+
     console.log('Cart:', this.cart);
   }
   
-
+ //without modifiers
+  private applyDefaultModifiersToCartItemNoModifiers(itemId: number) {
+    const cartItem = this.cart.find(i => i.id === itemId && i.itemStatus === 'pending');
+    if (!cartItem) return;
+  
+    const rawModifiers = this.modifierMap[itemId] || [];
+    const itemQty = cartItem.qty ?? 1;
+  
+    const defaultModifiers = rawModifiers.filter(mod => mod.default);
+    if (defaultModifiers.length === 0) return;
+  
+    const defaultModifierNames = defaultModifiers.map(m => m.name);
+  
+    // 1. Parse current itemNote into a map { name → qty }
+    const currentModifiersMap: { [name: string]: number } = {};
+    if (cartItem.itemNote) {
+      const parts = cartItem.itemNote.split(',').map(p => p.trim());
+      for (const part of parts) {
+        const [qtyStr, name] = part.split('x ').map(s => s.trim());
+        const qty = parseInt(qtyStr);
+        if (!isNaN(qty) && name) {
+          currentModifiersMap[name] = qty;
+        }
+      }
+    }
+  
+    // 2. Increment only the default ones
+    for (const mod of defaultModifiers) {
+      if (currentModifiersMap[mod.name]) {
+        currentModifiersMap[mod.name] += 1; // increment
+      } else {
+        currentModifiersMap[mod.name] = 1; // initialize
+      }
+    }
+  
+    // 3. Rebuild the updated itemNote
+    const updatedNote = Object.entries(currentModifiersMap)
+      .map(([name, qty]) => `${qty}x ${name}`)
+      .join(', ');
+  
+    cartItem.itemNote = updatedNote;
+    console.log("Merged itemNote:", cartItem.itemNote);
+  }
+  private applyDefaultModifiersToCartItem(itemId: number) {
+    const cartItem = this.cart.find(i => i.id === itemId && i.itemStatus === 'pending');
+    if (!cartItem) return;
+  
+    const rawModifiers = this.modifierMap[itemId] || [];
+    const itemQty = cartItem.qty ?? 1;
+  
+    const defaultModifiers = rawModifiers.filter(mod => mod.default);
+    if (defaultModifiers.length === 0) return;
+  
+    const defaultModifierNames = defaultModifiers.map(m => m.name);
+  
+    // 1. Parse current itemNote into a map { name → qty }
+    const currentModifiersMap: { [name: string]: number } = {};
+    if (cartItem.itemNote) {
+      const parts = cartItem.itemNote.split(',').map(p => p.trim());
+      for (const part of parts) {
+        const [qtyStr, name] = part.split('x ').map(s => s.trim());
+        const qty = parseInt(qtyStr);
+        if (!isNaN(qty) && name) {
+          currentModifiersMap[name] = qty;
+        }
+      }
+    }
+  
+    // 2. Increment only the default ones
+    for (const mod of defaultModifiers) {
+      if (currentModifiersMap[mod.name]) {
+        currentModifiersMap[mod.name] += 1;
+      } else {
+        currentModifiersMap[mod.name] = 1;
+      }
+    }
+  
+    // 3. Rebuild the updated itemNote
+    const updatedNote = Object.entries(currentModifiersMap)
+      .map(([name, qty]) => `${qty}x ${name}`)
+      .join(', ');
+  
+    cartItem.itemNote = updatedNote;
+  
+    // 4. 🔁 Create a proper modifiers[] array to store on cartItem
+    const updatedModifiers = rawModifiers.map(mod => ({
+      ...mod,
+      qty: currentModifiersMap[mod.name] ?? 0
+    }));
+  
+    cartItem.modifiers = updatedModifiers;
+  
+    console.log("Merged itemNote:", cartItem.itemNote);
+    console.log("Updated modifiers:", JSON.stringify(cartItem.modifiers, null, 2));
+  }
+  
+  
   //better to pass the value from the db directly like direct 
   addBoxToCart(item: Item) {
     if (this.editOrderId === -1) {
@@ -1276,7 +1425,8 @@ closeUsersModal(){
   };
   
   
-  cusotmizeCartItem(item: cartItem) {
+  // this is replaced with the below
+  cusotmizeCartIdtem(item: cartItem) {
     const rawModifiers = this.modifierMap[item.id] || [];
     const itemQty = item.qty ?? 1; // fallback if qty is undefined
 
@@ -1307,6 +1457,129 @@ closeUsersModal(){
   //set a popup msg like no options to customize
     this.customizeCartItemModal = false;}
   }
+  
+  // this function not required
+  cusotmizeCartItemdd(item: cartItem) {
+    const rawModifiers = this.modifierMap[item.id] || [];
+    const itemQty = item.qty ?? 1;
+  
+    // 🔍 Try to parse existing itemNote to see if there's custom distribution
+    const noteMap: { [name: string]: number } = {};
+    if (item.itemNote) {
+      const parts = item.itemNote.split(',').map(p => p.trim());
+      for (const part of parts) {
+        const [qtyStr, name] = part.split('x ').map(s => s.trim());
+        const qty = parseInt(qtyStr);
+        if (!isNaN(qty) && name) {
+          noteMap[name] = qty;
+        }
+      }
+    }
+  
+    // 🔁 Generate modifiers with qty from itemNote or fallback to default logic
+    const modifiers = rawModifiers.map(mod => ({
+      ...mod,
+      qty: noteMap[mod.name] ?? (mod.default ? itemQty : 0)
+    }));
+  
+    // 🧠 Set selected item with modifiers
+    this.selectedItem = {
+      ...item,
+      modifiers
+    };
+  
+    console.log("Customize modal opened with:", JSON.stringify(this.selectedItem, null, 2));
+  
+    // 🪟 Open the modal only if there are modifiers
+    this.customizeCartItemModal = modifiers.length > 0;
+  }
+  // this current working
+  cusotmizeCartItem(item: cartItem) {
+    const rawModifiers = this.modifierMap[item.id] || [];
+    const itemQty = item.qty ?? 1;
+  
+    // 🔍 Parse itemNote into a map if it exists
+    const noteMap: { [name: string]: number } = {};
+    if (item.itemNote) {
+      const parts = item.itemNote.split(',').map(p => p.trim());
+      for (const part of parts) {
+        const [qtyStr, name] = part.split('x ').map(s => s.trim());
+        const qty = parseInt(qtyStr);
+        if (!isNaN(qty) && name) {
+          noteMap[name] = qty;
+        }
+      }
+    }
+  
+    // 🧠 Generate modifiers from itemNote if available, else use default
+    const modifiers = rawModifiers.map(mod => ({
+      ...mod,
+      qty: noteMap[mod.name] ?? (mod.default ? itemQty : 0)
+    }));
+  
+    // 🧠 Set selected item
+    this.selectedItem = {
+      ...item,
+      modifiers
+    } as cartItem & {
+      modifiers: { modifierId: number; name: string; default: boolean; qty: number }[];
+    };
+  
+    // 🪟 Open modal if there are any modifiers
+    if (this.selectedItem.modifiers.length > 0) {
+      this.customizeCartItemModal = true;
+    } else {
+      this.customizeCartItemModal = false;
+      // Optional: show toast or message like "No modifiers available"
+    }
+  
+    console.log("item note", JSON.stringify(this.selectedItem, null, 2));
+  }
+  
+  // cusotmizeCartItem(item: cartItem) {
+  //   const rawModifiers = this.modifierMap[item.id] || [];
+  //   const itemQty = item.qty ?? 1;
+  
+  //   // 🔍 Try to parse existing itemNote to extract any existing modifier distribution
+  //   const noteMap: { [name: string]: number } = {};
+  //   if (item.itemNote) {
+  //     const parts = item.itemNote.split(',').map(p => p.trim());
+  //     for (const part of parts) {
+  //       const [qtyStr, name] = part.split('x ').map(s => s.trim());
+  //       const qty = parseInt(qtyStr);
+  //       if (!isNaN(qty) && name) {
+  //         noteMap[name] = qty;
+  //       }
+  //     }
+  //   }
+  
+  //   // 🔁 Generate modifiers with qty from itemNote or fallback to default logic
+  //   const modifiers = rawModifiers.map(mod => ({
+  //     ...mod,
+  //     qty: noteMap[mod.name] ?? (mod.default ? itemQty : 0)
+  //   }));
+  
+  //   // 🧠 Set selected item with modifiers
+  //   this.selectedItem = {
+  //     ...item,
+  //     modifiers
+  //   };
+  
+  //   // ✅ Persist the modifiers directly to the cart item as well
+  //   const cartIndex = this.cart.findIndex(i => i.id === item.id && i.itemStatus === 'pending');
+  //   if (cartIndex !== -1) {
+  //     this.cart[cartIndex] = {
+  //       ...this.cart[cartIndex],
+  //       modifiers: [...modifiers]  // Save modifiers for current cart item
+  //     };
+  //   }
+  
+  //   console.log("Customize modal opened with:", JSON.stringify(this.selectedItem, null, 2));
+  
+  //   // 🪟 Open the modal only if there are modifiers
+  //   this.customizeCartItemModal = modifiers.length > 0;
+  // }
+  
   getModifierTotalQty(): number {
     return this.selectedItem?.modifiers?.reduce((sum, mod) => sum + (mod.qty || 0), 0) || 0;
   }
@@ -2150,9 +2423,9 @@ closeZoomSettings(): void {
 // adjustZoom(event: any): void {
 //   document.body.style.zoom = event.target.value; // Apply zoom to the body content
 // }
-zoomLevel = 1; // Default zoom level
+// zoomLevel = 1; // Default zoom level
 
-zoomModalVisible = false; // Control visibility of the zoom modal
+// zoomModalVisible = false; // Control visibility of the zoom modal
 
 adjustZoom(event: any) {
   this.zoomLevel = event.target.value;
@@ -2167,12 +2440,28 @@ changeZoom(delta: number) {
 }
 
 
-applyZoom() {
-  // Adjust the zoom level in your application as needed
-  document.body.style.zoom = `${this.zoomLevel * 100}%`;
+// applyZoom() {
+//   // Adjust the zoom level in your application as needed
+//   document.body.style.zoom = `${this.zoomLevel * 100}%`;
+// }
+
+// applyZosom(): void {
+//   if (this.zoomSection) {
+//     (this.zoomSection.nativeElement as HTMLElement).style.zoom = `${this.zoomLevel * 100}%`;
+//   }
+// }
+applyZoom(): void {
+  if (this.zoomSection) {
+    const el = this.zoomSection.nativeElement as HTMLElement;
+    el.style.zoom = `${this.zoomLevel * 100}%`;
+
+    // Fix height issue: scale container height to match visual size
+    // el.style.height = `${100+45 / this.zoomLevel}%`;
+  }
 }
 saveAndApplyZoom(): void {
-  localStorage.setItem('zoomLevel', this.zoomLevel.toString()); // Save zoom level
+  // localStorage.setItem('zoomLevel', this.zoomLevel.toString()); // Save zoom level
+  localStorage.setItem('itemsZoomLevel', this.zoomLevel.toString()); // Save zoom level
   this.applyZoom();
 }
 

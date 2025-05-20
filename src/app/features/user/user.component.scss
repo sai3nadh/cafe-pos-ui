@@ -80,11 +80,24 @@ body {
     // height: calc(100vh - 80px); /* Full height minus top bar */
     overflow-y: auto;
     width: min-content;
-    // height: 100px;
+    height: 90vh;
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // Internet Explorer and Edge (legacy)
+  
+    &::-webkit-scrollbar {
+      display: none; // Chrome, Safari, Opera
+    }
+      // 👇 Responsive override for tablets and smaller
+    @media (max-width: 768px) {
+      width: max-content;
+    }
+    @media (max-width: 1568px) {
+      width: max-content;
+    }
   }
   
   .categories button {
-    font-size: 1.5em;
+    font-size: xx-large ;//1.5em;
     padding: 15px 25px;
     margin: 5px;
     background-color: #656f98;
@@ -93,7 +106,12 @@ body {
     border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.3s;
-    min-height: 170PX;
+    min-height: 120PX;//min-height: 170PX;
+  }
+
+  h2{
+    font-size: xxx-large;
+    margin: 10px 50px;
   }
   
   .categories button:hover,.categories button.active-category {
@@ -193,7 +211,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow-y: scroll; /* Make it scrollable if content overflows */
-    // max-height: 90vh; /* Ensure the cart content does not exceed the viewport height */
+    max-height: 90vh; /* Ensure the cart content does not exceed the viewport height */
     &.user-selected {
       background-color: #92f5f2a1; 
     }
@@ -261,7 +279,7 @@ body {
   /* Cart Checkout Button */
   .right-section button {
     width: 100%;
-    padding: 15px;
+    padding: 25px;
     background-color: #007bff;
     color: white;
     font-size: 1em;
@@ -946,7 +964,7 @@ i.fas.fa-trash-alt {
     bottom: 0;
     // left: 220px;
     padding: 20px;
-    right: 500px; /* Move to right side */
+    right: 530px; /* Move to right side */
     display: flex;
     gap: 10px;
     flex-direction: row;
@@ -1071,6 +1089,8 @@ i.fas.fa-trash-alt {
 .users-btn-container .btn {
     background-color:#445f7b;// #3b82f6; /* Default blue color for the button */
     color: white;
+    padding: 25px;
+    min-width: 250px;
   }
   
   /* When hovering over the button inside users-btn-container */
@@ -1509,13 +1529,13 @@ i.fas.fa-trash-alt {
   z-index: 1000;
 }
 
-.zoom-modal {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  // width: 550px;
-}
+// .zoom-modal {
+//   background: white;
+//   padding: 20px;
+//   border-radius: 8px;
+//   text-align: center;
+//   // width: 550px;
+// }
 
 
 .zoom-modal button {
@@ -1526,6 +1546,7 @@ i.fas.fa-trash-alt {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: xx-large;
 }
 
 /* user.component.css */
@@ -1541,20 +1562,114 @@ i.fas.fa-trash-alt {
   height: 100vh; /* Make the entire container 90% of the viewport height */
 }
 
-.zoom-buttons button {
-  font-size: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background-color: #f0f0f0;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  color: #333;
-  font-weight: bold;
+// .zoom-buttons button {
+//   font-size: 40px;
+//   padding: 10px;
+//   border: 1px solid #ddd;
+//   background-color: #f0f0f0;
+//   border-radius: 50%;
+//   cursor: pointer;
+//   transition: background-color 0.3s ease;
+//   color: #333;
+//   font-weight: bold;
+// }
+
+// .zoom-buttons button:hover {
+//   background-color: #ddd;
+// }
+
+
+.zoom-scroll-container{
+  height: 80vh;
+  overflow: auto;
+  width: 85%;
+  padding: 20px;
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // Internet Explorer and Edge (legacy)
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
 }
+
+.items-footer{
+position: sticky;
+bottom: 0;
+left: 0;
+width: 100%;
+background-color: aquamarine;
+padding: 12px;
+font-weight: bold;
+text-align: center;
+z-index: 10;
+}
+
+.zoom-modal {
+  background-color: #fff;
+  padding: 24px;
+  min-width: 40%;// 340px;
+  max-width: 480px;
+  min-height: 35%;
+  border-radius: 10px;
+  font-size: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px; // spacing between elements
+}
+
+.zoom-modal h3 {
+  font-size: 22px;
+  margin: 0 0 10px;
+}
+
+.zoom-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+
+.zoom-btn {
+  width: 80px !important;
+  height: 80px !important;
+  font-size: 64px !important;
+  font-weight: bold !important;
+  background-color: #f0f0f0 !important;
+  border: 1px solid #ccc !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #333 !important;
+  cursor: pointer;
+  transition: background-color 0.3s ease !important;
+}
+
+
+.zoom-btn:hover {
+background-color: #ddd;
+}
+
 
 .zoom-buttons button:hover {
   background-color: #ddd;
+}
+
+.zoom-modal input[type="range"] {
+  flex-grow: 1;
+  // max-width: 200px;
+  accent-color: #2196f3;
+}
+
+.zoom-modal span {
+  font-weight: bold;
+  font-size: 18px;
 }
 
 

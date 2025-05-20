@@ -56,8 +56,10 @@
           </button>
         </div>
   
+         <!-- Scrollable + Zoomed --- menu ITEMS section -->
+    <div class="zoom-scroll-container">
         <!-- Items in Selected Category -->
-        <div class="items-section" *ngIf="selectedCategory">
+        <div class="items-section" #zoomSection *ngIf="selectedCategory">
           <h2>{{ selectedCategory.name }}</h2>
           <div class="items-grid">
             <div 
@@ -99,6 +101,8 @@
             </div>
           </div>
         </div>
+        <!-- <div class="items-footer" >abcd</div> -->
+    </div>
       </div>
       <div class="right-section" [ngClass]="{ 'user-selected': selectedUser !== null }">
 
@@ -206,7 +210,7 @@
     
 
     </div>
-  </div>
+</div>
 
   <div *ngIf="zoomModalVisible" class="modal-overlay" (click)="closeZoomSettings()">
     
@@ -218,7 +222,7 @@
       
       <!-- Left and Right Buttons -->
       <div class="zoom-buttons">
-        <button (click)="changeZoom(-0.05)">-</button>
+        <button  class="zoom-btn" (click)="changeZoom(-0.05)">-</button>
         <input
           id="zoomSlider"
           type="range"
@@ -228,7 +232,7 @@
           [(ngModel)]="zoomLevel"
           (input)="adjustZoom($event)"
         />
-        <button (click)="changeZoom(0.05)">+</button>
+        <button class="zoom-btn"  (click)="changeZoom(0.05)">+</button>
       </div>
       
       <span>{{ (zoomLevel * 100).toFixed(0) }}%</span>
@@ -389,18 +393,18 @@
       <button (click)="showOrders = false" class="close-btn">Close</button>
     </div>
   </div> -->
-  <div *ngIf="showOrders" class="modal-overlay">
+  <!-- <div *ngIf="showOrders" class="modal-overlay">
     <div class="modal-content">
       <h3 class="modal-title">Orders</h3>
       
-      <!-- Filter buttons -->
+      Filter buttons
       <div class="filter-buttons">
         <button (click)="filterOrders('Pending')" class="filter-btn" [class.active]="selectedStatus === 'Pending'">Pending</button>
         <button (click)="filterOrders('Completed')" class="filter-btn" [class.active]="selectedStatus === 'Completed'">Completed</button>
         <button (click)="filterOrders('Draft')" class="filter-btn" [class.active]="selectedStatus === 'Draft'">Draft</button>
       </div>
   
-      <!-- Orders Table -->
+      Orders Table
       <table class="orders-table">
         <thead>
           <tr>
@@ -422,10 +426,10 @@
         </tbody>
       </table>
       
-      <!-- Close button -->
+      Close button
       <button (click)="showOrders = false" class="close-btn">Close</button>
     </div>
-  </div>
+  </div> -->
   
 <!-- Orders Modal -->
 
