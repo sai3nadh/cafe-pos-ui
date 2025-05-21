@@ -1,1 +1,94 @@
-<p>customer-list works!</p>
+<!-- <p>customer-list works!</p> -->
+<!-- <button (click)="onEditCustomer(customer.id)">Edit</button>
+<button (click)="onViewCustomer(customer.id)">View</button> -->
+
+
+<!-- Example list -->
+<!-- <div *ngFor="let customer of customers">
+    <div>
+      {{ customer.firstName }} {{ customer.lastName }}
+      <button (click)="onEditCustomer(customer.id)">Edit</button>
+      <button (click)="onViewCustomer(customer.id)">View</button>
+    </div>
+  </div>
+  
+  Add button
+  <button (click)="addCustomer.emit()">Add Customer</button>
+   -->
+
+   <!-- This is correct -->
+<!-- <div *ngFor="let customer of customers">
+    <button (click)="onEditCustomer(customer.id)">Edit</button>
+    <button (click)="onViewCustomer(customer.id)">View</button>
+  </div> -->
+  <!-- <div class="page-container">
+
+    <div class="customer-section">
+      <div class="section-header">
+        <h2>Customer List</h2>
+        <button (click)="onAdd()">➕ Add Customer</button>
+      </div>
+  
+      <table class="customer-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of customers; let i = index">
+            <td data-label="#"> {{ i + 1 }} </td>
+            <td data-label="Name"> {{ customer.firstName }} {{ customer.lastName }} </td>
+            <td data-label="Actions">
+              <button (click)="onView(customer.id)">View</button>
+              <button (click)="onEdit(customer.id)">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+   -->
+
+   <div class="page-container">
+    <div class="customer-section">
+      <div class="section-header">
+        <h2>Customer List</h2>
+        <button (click)="onAdd()">➕ Add Customer</button>
+      </div>
+  
+      <table class="customer-table" *ngIf="customers.length > 0; else noData">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of customers; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ customer.fullName }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phoneNumber }}</td>
+            <td>
+              <!-- <button (click)="onView(customer.id)">View</button>
+              <button (click)="onEdit(customer.id)">Edit</button> -->
+              <button (click)="onView(customer.id.toString())">View</button>
+<button (click)="onEdit(customer.id.toString())">Edit</button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <ng-template #noData>
+        <p>No customers found.</p>
+      </ng-template>
+    </div>
+  </div>
+  

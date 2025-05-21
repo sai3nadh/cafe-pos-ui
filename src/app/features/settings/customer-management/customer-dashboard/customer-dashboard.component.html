@@ -1,1 +1,38 @@
-<p>customer-dashboard works!</p>
+<!-- <p>customer-dashboard works!</p> -->
+<!-- LIST -->
+<div *ngIf="mode === 'list'">
+    <app-customer-list
+      (addCustomer)="openForm()"
+      (editCustomer)="openForm($event)"
+      (viewCustomer)="openDetail($event)">
+    </app-customer-list>
+  </div>
+  
+  <!-- FORM MODAL -->
+  <div *ngIf="mode === 'form'" class="overlay-panel" (click)="goBack()">
+    <div class="popup" (click)="$event.stopPropagation()">
+      <app-customer-form
+        [customerId]="selectedCustomerId"
+        (saved)="goBack()"
+        (cancel)="goBack()">
+      </app-customer-form>
+    </div>
+  </div>
+  
+  <!-- DETAIL MODAL -->
+  <div *ngIf="mode === 'detail'" class="overlay-panel" (click)="goBack()">
+    <div class="popup" (click)="$event.stopPropagation()">
+      <!-- <app-customer-detail
+        [customerId]="selectedCustomerId"
+        (close)="goBack()">
+      </app-customer-detail> -->
+
+      <app-customer-detail
+  [customerId]="selectedCustomerId"
+  [showCloseButton]="true"
+  (close)="goBack()">
+</app-customer-detail>
+
+    </div>
+  </div>
+  

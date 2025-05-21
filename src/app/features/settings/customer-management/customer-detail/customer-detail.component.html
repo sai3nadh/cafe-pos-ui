@@ -1,1 +1,85 @@
-<p>customer-detail works!</p>
+<!-- <p>customer-detail works!</p> -->
+<!-- <div class="customer-detail" *ngIf="customer">
+    <h2>Customer Details</h2>
+  
+    <div class="profile">
+      <img *ngIf="customer.image" [src]="'data:image/jpeg;base64,' + customer.image" alt="Customer Image" />
+      <div *ngIf="!customer.image" class="placeholder-image">No Image</div>
+    </div>
+  
+    <ul class="details-list">
+      <li><strong>Name:</strong> {{ customer.firstName }} {{ customer.lastName }}</li>
+      <li><strong>Email:</strong> {{ customer.email }}</li>
+      <li><strong>Phone:</strong> {{ customer.phoneNumber }}</li>
+      <li><strong>Address:</strong> {{ customer.address || 'N/A' }}</li>
+      <li><strong>Birthday:</strong> {{ customer.birthday || 'N/A' }}</li>
+    </ul>
+  </div>
+  
+  <ng-template #loadingOrEmpty>
+    <p>Loading customer data...</p>
+  </ng-template>
+   --> 
+
+
+   <!-- <p>customer-detail works!</p> -->
+<!-- <div class="customer-detail" *ngIf="customer">
+    <h2>Customer: {{ customer.firstName }} {{ customer.lastName }}</h2>
+  
+    <div class="profile">
+      <img *ngIf="customer.image" [src]="'data:image/jpeg;base64,' + customer.image" alt="Customer Image" />
+      <div *ngIf="!customer.image" class="placeholder-image">No Image</div>
+    </div>
+  
+    <ul class="details-list">
+      <li><strong>Email:</strong> {{ customer.email }}</li>
+      <li><strong>Phone:</strong> {{ customer.phoneNumber }}</li>
+      <li><strong>Address:</strong> {{ customer.address || 'N/A' }}</li>
+      <li><strong>Birthday:</strong> {{ customer.birthday || 'N/A' }}</li>
+    </ul>
+  
+    <button (click)="close.emit()">⬅ Back</button>
+  </div>
+  
+  <ng-template #loadingOrEmpty>
+    <p>Loading customer data...</p>
+  </ng-template>
+   -->
+
+   <div class="customer-detail" *ngIf="customer">
+    <h2>Customer Details</h2>
+  
+    <div class="customer-card">
+      <div class="avatar">
+        <img
+          *ngIf="customer.image"
+          [src]="'data:image/jpeg;base64,' + customer.image"
+          alt="Customer Image"
+        />
+        <div *ngIf="!customer.image" class="avatar-placeholder">No Image</div>
+      </div>
+  
+      <div class="info">
+        <p><strong>Name:</strong> {{ customer.firstName }} {{ customer.lastName }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <p><strong>Phone:</strong> {{ customer.phoneNumber }}</p>
+        <p><strong>Address:</strong> {{ customer.address || 'N/A' }}</p>
+        <p><strong>Birthday:</strong> {{ customer.birthday || 'N/A' }}</p>
+      </div>
+    </div>
+  
+    <div class="actions">
+        <button (click)="showCloseButton ? close.emit() : goBack()">⬅ Back</button>
+
+        <!-- <button *ngIf="showCloseButton" (click)="close.emit()">⬅ Back emit</button>
+        <button *ngIf="!showCloseButton" (click)="goBack()">⬅ Back</button> -->
+        <!-- <button (click)="goBack()">⬅ Back</button> -->
+
+      <!-- <button (click)="close.emit()">⬅ Back</button> -->
+    </div>
+  </div>
+  
+  <ng-template #loadingOrEmpty>
+    <p>Loading customer data...</p>
+  </ng-template>
+  

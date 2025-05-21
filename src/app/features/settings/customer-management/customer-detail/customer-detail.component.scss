@@ -1,0 +1,163 @@
+// :host {
+//     display: block;
+//     max-width: 700px;
+//     margin: auto;
+//     padding: 1.5rem;
+//     background: white;
+//     border-radius: 12px;
+//     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+//   }
+  
+//   h2 {
+//     margin-bottom: 1rem;
+//     color: #333;
+//   }
+  
+//   .customer-detail {
+//     .profile {
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       margin-bottom: 1rem;
+  
+//       img {
+//         width: 120px;
+//         height: 120px;
+//         border-radius: 50%;
+//         object-fit: cover;
+//         border: 2px solid #ddd;
+//       }
+  
+//       .placeholder-image {
+//         width: 120px;
+//         height: 120px;
+//         border-radius: 50%;
+//         background-color: #f0f0f0;
+//         color: #777;
+//         display: flex;
+//         align-items: center;
+//         justify-content: center;
+//         font-size: 0.9rem;
+//         border: 2px dashed #ccc;
+//       }
+//     }
+  
+//     .details-list {
+//       list-style: none;
+//       padding: 0;
+//       margin: 0;
+  
+//       li {
+//         margin: 0.5rem 0;
+//         font-size: 1rem;
+  
+//         strong {
+//           display: inline-block;
+//           width: 100px;
+//           color: #555;
+//         }
+//       }
+//     }
+//   }
+  
+//   button {
+//     margin-top: 2rem;
+//     padding: 0.6rem 1.2rem;
+//     font-size: 1rem;
+//     border: none;
+//     border-radius: 8px;
+//     background-color: #ccc;
+//     cursor: pointer;
+//     transition: background 0.2s;
+  
+//     &:hover {
+//       background-color: #bbb;
+//     }
+//   }
+  
+:host {
+    display: block;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .customer-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .avatar {
+    flex: 0 0 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+    .avatar-placeholder {
+      font-size: 0.9rem;
+      color: #888;
+      text-align: center;
+      padding: 1rem;
+    }
+  }
+  
+  .info {
+    flex: 1;
+    min-width: 200px;
+  
+    p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      color: #444;
+  
+      strong {
+        color: #666;
+        display: inline-block;
+        width: 100px;
+      }
+    }
+  }
+  
+  .actions {
+    text-align: center;
+    margin-top: 2rem;
+  
+    button {
+      padding: 0.7rem 1.4rem;
+      font-size: 1rem;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+  
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+  }
+  
