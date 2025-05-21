@@ -151,6 +151,12 @@ addCustomer() {
   // this.closeDropdown();
 }
 
+customerMngmt() {
+
+  // console.log('Going to Drafts...');
+  this.router.navigate(['/customers']);
+  // this.closeDropdown();
+}
 pendingOrders(){
   // this.closeDropdown();
   this.router.navigate(['/pending-orders']);
