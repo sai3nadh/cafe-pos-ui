@@ -1,0 +1,137 @@
+.form-container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  
+    h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+  
+      label {
+        margin-top: 1rem;
+        font-weight: 600;
+        color: #444;
+      }
+  
+      input[type='text'],
+      input[type='email'],
+      input[type='tel'],
+      input[type='password'],
+      select {
+        padding: 0.6rem 0.75rem;
+        margin-top: 0.25rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+  
+        &:focus {
+          border-color: #4caf50;
+          outline: none;
+        }
+      }
+  
+      select {
+        background-color: #fff;
+      }
+  
+      .message {
+        font-size: 0.95rem;
+        margin-top: 1rem;
+        padding: 0.5rem;
+        border-radius: 6px;
+  
+        &.success {
+          background-color: #e8f5e9;
+          color: #2e7d32;
+          border: 1px solid #a5d6a7;
+        }
+  
+        &.error {
+          background-color: #ffebee;
+          color: #c62828;
+          border: 1px solid #ef9a9a;
+        }
+      }
+  
+      .button-group {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        gap: 1rem;
+  
+        button {
+          padding: 0.6rem 1.2rem;
+          font-size: 1rem;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+  
+          &:first-child {
+            background-color: #4caf50;
+            color: #fff;
+  
+            &:hover {
+              background-color: #43a047;
+            }
+          }
+  
+          &:last-child {
+            background-color: #e0e0e0;
+            color: #333;
+  
+            &:hover {
+              background-color: #ccc;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Responsive tweaks
+  @media (max-width: 500px) {
+    .form-container {
+      padding: 1.25rem;
+    }
+  
+    form .button-group {
+      flex-direction: column;
+  
+      button {
+        width: 100%;
+      }
+    }
+  }
+  
+
+  .account-credentials {
+    margin-top: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  

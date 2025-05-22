@@ -1,1 +1,48 @@
-<p>staff-detail works!</p>
+<!-- <p>staff-detail works!</p>
+<h3>Staff Details</h3>
+<ng-template #loading>
+    <p>Loading staff details...</p>
+</ng-template>
+
+<div *ngIf="staff as s; else loading" class="staff-card">
+    <p><strong>Name:</strong> {{ s.firstName }} {{ s.lastName }}</p>
+    <p><strong>Username:</strong> {{ s.username }}</p>
+    <p><strong>Email:</strong> {{ s.email }}</p>
+    <p><strong>Phone:</strong> {{ s.phoneNumber }}</p>
+    <p><strong>Role:</strong> {{ s.role }}</p>
+</div>
+ 
+<div class="actions" *ngIf="showCloseButton">
+  <button (click)="close.emit()">⬅ Back</button>
+</div> -->
+
+<div class="staff-detail" *ngIf="staff as s; else loading">
+    <h3>Staff Details</h3>
+  
+    <div class="staff-card">
+      <!-- Optional avatar section (only if you plan to have staff images in the future) -->
+      <!--
+      <div class="avatar">
+        <img *ngIf="s.image" [src]="'data:image/jpeg;base64,' + s.image" alt="Staff Image" />
+        <div *ngIf="!s.image" class="avatar-placeholder">No Image</div>
+      </div>
+      -->
+  
+      <div class="info">
+        <p><strong>Name:</strong> {{ s.firstName }} {{ s.lastName }}</p>
+        <p><strong>Username:</strong> {{ s.username }}</p>
+        <p><strong>Email:</strong> {{ s.email }}</p>
+        <p><strong>Phone:</strong> {{ s.phoneNumber }}</p>
+        <p><strong>Role:</strong> {{ s.role }}</p>
+      </div>
+    </div>
+  
+    <div class="actions" *ngIf="showCloseButton">
+      <button (click)="close.emit()">⬅ Back</button>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <p>Loading staff details...</p>
+  </ng-template>
+  

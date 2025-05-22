@@ -1,1 +1,68 @@
-<p>staff-list works!</p>
+<!-- <p>staff-list works!</p> -->
+<!-- <h3>Staff List</h3>
+
+<button (click)="onAdd()">➕ Add Staff</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let staff of staffList">
+      <td>{{ staff.name }}</td>
+      <td>{{ staff.email }}</td>
+      <td>
+        <button (click)="onView(staff.id)">View</button>
+        <button (click)="onEdit(staff.id)">Edit</button>
+      </td>
+    </tr>
+  </tbody>
+</table> -->
+
+
+
+
+<div class="page-container">
+    <div class="staff-section">
+      <div class="section-header">
+        <h2>Staff List</h2>
+        <button (click)="onAdd()">➕ Add Staff</button>
+      </div>
+  
+      <table class="staff-table" *ngIf="staffList.length > 0; else noData">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Mobile</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let staff of staffList; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ staff.firstName + ' ' + staff.lastName }}</td>
+            <td>{{ staff.email }}</td>
+            <td>{{ staff.role }}</td>
+            <td>{{ staff.phoneNumber }}</td>
+           
+            <td>
+              <button (click)="onView(staff.staffId.toString())">View</button>
+              <button (click)="onEdit(staff.staffId.toString())">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <ng-template #noData>
+        <p>No staff found.</p>
+      </ng-template>
+    </div>
+  </div>
+  

@@ -1,1 +1,32 @@
-<p>staff-dashboard works!</p>
+<!-- <p>staff-dashboard works!</p> -->
+<!-- LIST VIEW -->
+<div *ngIf="mode === 'list'">
+    <app-staff-list
+      (addStaff)="openForm()"
+      (editStaff)="openForm($event)"
+      (viewStaff)="openDetail($event)">
+    </app-staff-list>
+  </div>
+  
+  <!-- FORM MODAL -->
+  <div *ngIf="mode === 'form'" class="overlay-panel" (click)="goBack()">
+    <div class="popup" (click)="$event.stopPropagation()">
+      <app-staff-form
+        [staffId]="selectedStaffId"
+        (saved)="goBack()"
+        (cancel)="goBack()">
+      </app-staff-form>
+    </div>
+  </div>
+  
+  <!-- DETAIL MODAL -->
+  <div *ngIf="mode === 'detail'" class="overlay-panel" (click)="goBack()">
+    <div class="popup" (click)="$event.stopPropagation()">
+      <app-staff-detail
+        [staffId]="selectedStaffId"
+        [showCloseButton]="true"
+        (close)="goBack()">
+      </app-staff-detail>
+    </div>
+  </div>
+  

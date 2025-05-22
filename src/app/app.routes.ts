@@ -62,6 +62,12 @@ export const routes: Routes = [
           loadChildren: () =>
             import('./features/settings/customer-management/customer-management-routing.module')
               .then(m => m.CustomerManagementRoutingModule)
+        },
+        {
+          path: 'staff',
+          loadChildren: () =>
+            import('./features/settings/staff-management/staff-management-routing.module')
+              .then(m => m.StaffManagementRoutingModule)
         }
       ]
     },
