@@ -68,6 +68,12 @@ export const routes: Routes = [
           loadChildren: () =>
             import('./features/settings/staff-management/staff-management-routing.module')
               .then(m => m.StaffManagementRoutingModule)
+        },
+         {
+          path: 'settings',
+          loadChildren: () =>
+            import('./features/settings/settings-routing.module')
+              .then(m => m.SettingsRoutingModule)
         }
       ]
     },

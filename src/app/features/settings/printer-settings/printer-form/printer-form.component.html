@@ -1,1 +1,39 @@
-<p>printer-form works!</p>
+<!-- <p>printer-form works!</p> -->
+<div *ngIf="isLoading">Loading...</div>
+<div *ngIf="!isLoading && !editMode">
+  <h2>Printer Settings</h2>
+  <p><strong>Enabled:</strong> {{ config.printerEnabled ? 'Yes' : 'No' }}</p>
+  <p><strong>Receipt Printer IP:</strong> {{ config.receiptPrinterIp }}</p>
+  <p><strong>Receipt Printer Port:</strong> {{ config.receiptPrinterPort }}</p>
+  <p><strong>Kitchen Printer IP:</strong> {{ config.kitchenPrinterIp }}</p>
+  <button (click)="editMode = true">Edit</button>
+</div>
+
+<div *ngIf="!isLoading && editMode">
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      <input type="checkbox" formControlName="printerEnabled" />
+      Enable Printing
+    </label>
+
+    <label>
+      Receipt Printer IP:
+      <input type="text" formControlName="receiptPrinterIp" />
+    </label>
+
+    <label>
+      Receipt Printer Port:
+      <input type="number" formControlName="receiptPrinterPort" />
+    </label>
+
+    <label>
+      Kitchen Printer IP:
+      <input type="text" formControlName="kitchenPrinterIp" />
+    </label>
+
+    <button type="submit" [disabled]="isSaving">Save</button>
+    <button type="button" (click)="cancel()">Cancel</button>
+  </form>
+
+  <p *ngIf="error" class="error">{{ error }}</p>
+</div>

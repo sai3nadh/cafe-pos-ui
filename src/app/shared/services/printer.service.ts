@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { PrinterConfig } from '../../features/settings/printer-settings/models/printer-config.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,26 +30,37 @@ setPrinterStatus(enabled: boolean): Observable<{ success: boolean; message: stri
     );
   }
   
+  // printer page get and update logic
+  //  private baseUrl = `${environment.apiUrl}/printer/config`;
 
-  // ✅ (Optional) If you want to later use IP and port changing from frontend
-  getReceiptPrinterIp(): Observable<string> {
-    return this.http.get<string>(`${this.baseUrl}/receipt-ip`);
+
+  getConfig(): Observable<PrinterConfig> {
+    return this.http.get<PrinterConfig>(`${this.baseUrl}/config`);
   }
 
-  setReceiptPrinterIp(ip: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/receipt-ip`, ip);
+  updateConfig(config: PrinterConfig): Observable<any> {
+    return this.http.put(`${this.baseUrl}/config`, config);
   }
 
-  getKitchenPrinterIp(): Observable<string> {
-    return this.http.get<string>(`${this.baseUrl}/kitchen-ip`);
-  }
+  // // ✅ (Optional) If you want to later use IP and port changing from frontend
+  // getReceiptPrinterIp(): Observable<string> {
+  //   return this.http.get<string>(`${this.baseUrl}/receipt-ip`);
+  // }
 
-  setKitchenPrinterIp(ip: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/kitchen-ip`, ip);
-  }
+  // setReceiptPrinterIp(ip: string): Observable<void> {
+  //   return this.http.post<void>(`${this.baseUrl}/receipt-ip`, ip);
+  // }
 
-  setReceiptPrinterPort(port: number): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/receipt-port`, port);
-  }
+  // getKitchenPrinterIp(): Observable<string> {
+  //   return this.http.get<string>(`${this.baseUrl}/kitchen-ip`);
+  // }
+
+  // setKitchenPrinterIp(ip: string): Observable<void> {
+  //   return this.http.post<void>(`${this.baseUrl}/kitchen-ip`, ip);
+  // }
+
+  // setReceiptPrinterPort(port: number): Observable<void> {
+  //   return this.http.post<void>(`${this.baseUrl}/receipt-port`, port);
+  // }
 
 }

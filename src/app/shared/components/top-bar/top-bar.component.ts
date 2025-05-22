@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { StorageService } from '../../../features/services/storage.service';
 import { HeaderEventsService } from '../../../features/services/header-events.service';
 import { PrinterService } from '../../services/printer.service';
+import { PrintingStatusService } from '../../services/printing-status.service';
+import { WebSocketService } from '../../../features/services/websocket.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -32,7 +34,11 @@ constructor(
   private elRef: ElementRef,
   private headerEvents: HeaderEventsService
   ,private printerService: PrinterService
+  ,private printingStatusService: PrintingStatusService
+  ,private wsService: WebSocketService
+
 ) {
+  console.log('🚀 TopBarComponent constructed');
 
   this.currentUrl = this.router.url; 
   // Listen to route changes
@@ -41,39 +47,69 @@ constructor(
   });
 }
 ngOnInit() {
-  const saved = localStorage.getItem('printingEnabled');
+  console.log('👂 TopBarComponent subscribing to status$');
 
-  if (saved !== null) {
-    // 👉 Use saved value from localStorage (user's previous choice on this device)
-    this.printingEnabled = (saved === 'true');
-  } else {
-    // 👉 No saved value → get from backend
-    this.printerService.getPrinterStatus().subscribe(status => {
+  this.wsService.connect();
+   this.printingStatusService.status$.subscribe(status => {
+        console.log('✅ [TopBarComponent] Got status update:', status);
+    // alert("new satus= "+ status);
       this.printingEnabled = status;
-      // 👉 Save backend value in localStorage for next time
-      localStorage.setItem('printingEnabled', String(status));
     });
-  }
+    // Listen to changes from other tabs
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'printingEnabled') {
+      const newStatus = event.newValue === 'true';
+      this.printingEnabled = newStatus;
+    }
+  });
+   // 🌐 Listen to WebSocket topic (multi-device real-time sync)
+  this.wsService.subscribeToTopic<string>('/topic/printer-status').subscribe((msg: string) => {
+    console.log('🌍 [WebSocket] Printer status from backend:', msg);
+    const newStatus = msg === 'true';
+    this.printingStatusService.setStatus(newStatus); // 💡 Also update BehaviorSubject
+  });
+
+  // const saved = localStorage.getItem('printingEnabled');
+
+  // if (saved !== null) {
+  //   // 👉 Use saved value from localStorage (user's previous choice on this device)
+  //   this.printingEnabled = (saved === 'true');
+  // } else {
+  //   // 👉 No saved value → get from backend
+  //   this.printerService.getPrinterStatus().subscribe(status => {
+  //     this.printingEnabled = status;
+  //     // 👉 Save backend value in localStorage for next time
+  //     localStorage.setItem('printingEnabled', String(status));
+  //   });
+  // }
 }
 
 togglePrinting() {
   const newValue = !this.printingEnabled;
 
-  this.printerService.setPrinterStatus(newValue).subscribe({
-    next: (response) => {
-      if (response.success) {
-        this.printingEnabled = newValue;
-        localStorage.setItem('printingEnabled', String(newValue));
-        console.log(response.message);  // Or show a toast/alert to the user
-      } else {
-        alert('Failed to update printing status: ' + response.message);
-      }
-    },
-    error: (err) => {
-      console.error('Server error while updating printer status', err);
-      alert('Server error while updating printer status.');
-    }
-  });
+    this.printerService.setPrinterStatus(newValue).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.printingStatusService.setStatus(newValue); // 🔁 Update shared state
+        }
+      },
+      error: () => alert('Failed to update status')
+    });
+  // this.printerService.setPrinterStatus(newValue).subscribe({
+  //   next: (response) => {
+  //     if (response.success) {
+  //       this.printingEnabled = newValue;
+  //       localStorage.setItem('printingEnabled', String(newValue));
+  //       console.log(response.message);  // Or show a toast/alert to the user
+  //     } else {
+  //       alert('Failed to update printing status: ' + response.message);
+  //     }
+  //   },
+  //   error: (err) => {
+  //     console.error('Server error while updating printer status', err);
+  //     alert('Server error while updating printer status.');
+  //   }
+  // });
 }
 
 ngAfterViewInit() {
