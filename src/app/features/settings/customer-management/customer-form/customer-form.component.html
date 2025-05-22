@@ -1,46 +1,4 @@
 <!-- <p>customer-form works!</p> -->
-<!-- <div class="form-container">
-    <h2>{{ isEditMode ? 'Edit' : 'Add' }} Customer</h2>
-  
-    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-      <label>First Name:</label>
-      <input type="text" formControlName="firstName" />
-      <div *ngIf="submitted && customerForm.get('firstName')?.invalid">Required</div>
-  
-      <label>Last Name:</label>
-      <input type="text" formControlName="lastName" />
-      <div *ngIf="submitted && customerForm.get('lastName')?.invalid">Required</div>
-  
-      <label>Email:</label>
-      <input type="email" formControlName="email" />
-      <div *ngIf="submitted && customerForm.get('email')?.invalid">Invalid email</div>
-  
-      <label>Phone Number:</label>
-      <input type="text" formControlName="phoneNumber" />
-  
-      <label>Address:</label>
-      <input type="text" formControlName="address" />
-  
-      <label>Birthday:</label>
-      <input type="date" formControlName="birthday" />
-  Image Upload
-<div class="form-field">
-    <label for="image">Upload Image:</label>
-    <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*" />
-  
-    👇 Image preview
-    <div *ngIf="compressedImage" class="image-preview">
-      <img [src]="compressedImage" alt="Image Preview" style="max-width: 150px; margin-top: 10px;" />
-    </div>
-  </div>
-  
-      <div class="actions">
-        <button type="submit">{{ isEditMode ? 'Update' : 'Add' }}</button>
-        <button type="button" (click)="onCancel()">Cancel</button>
-      </div>
-    </form>
-  </div>
-   -->
 
    <div class="form-container">
     <h2>{{ isEditMode ? 'Edit' : 'Add' }} Customer</h2>

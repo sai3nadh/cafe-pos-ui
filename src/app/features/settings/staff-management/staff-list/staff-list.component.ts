@@ -49,20 +49,4 @@ export class StaffListComponent {
   onView(id: string) {
     this.viewStaff.emit(id);
   }
-//   @Output() addStaff = new EventEmitter<void>();
-// @Output() editStaff = new EventEmitter<string>();
-// @Output() viewStaff = new EventEmitter<string>();
-
-// onAdd() {
-//   this.addStaff.emit();
-// }
-
-// onEdit(id: string) {
-//   this.editStaff.emit(id);
-// }
-
-// onView(id: string) {
-//   this.viewStaff.emit(id);
-// }
-
 }
