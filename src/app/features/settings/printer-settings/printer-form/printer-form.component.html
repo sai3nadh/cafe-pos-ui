@@ -1,4 +1,4 @@
-<!-- <p>printer-form works!</p> -->
+<!-- <p>printer-form works!</p>
 <div *ngIf="isLoading">Loading...</div>
 <div *ngIf="!isLoading && !editMode">
   <h2>Printer Settings</h2>
@@ -36,4 +36,52 @@
   </form>
 
   <p *ngIf="error" class="error">{{ error }}</p>
+</div> -->
+
+
+<div class="form-container">
+  <div *ngIf="isLoading" class="loading-text">Loading...</div>
+
+  <!-- View Mode -->
+  <div *ngIf="!isLoading && !editMode">
+    <h2>Printer Settings</h2>
+    <div class="display-info">
+      <p><strong>Enabled:</strong> {{ config.printerEnabled ? 'Yes' : 'No' }}</p>
+      <p><strong>Receipt Printer IP:</strong> {{ config.receiptPrinterIp }}</p>
+      <p><strong>Receipt Printer Port:</strong> {{ config.receiptPrinterPort }}</p>
+      <p><strong>Kitchen Printer IP:</strong> {{ config.kitchenPrinterIp }}</p>
+    </div>
+
+    <div class="button-group">
+      <button type="button" (click)="editMode = true">Edit</button>
+    </div>
+  </div>
+
+  <!-- Edit Mode -->
+  <div *ngIf="!isLoading && editMode">
+    <h2>Edit Printer Settings</h2>
+    <form [formGroup]="form" (ngSubmit)="save()">
+
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="printerEnabled" />
+        Enable Printing
+      </label>
+
+      <label for="receiptPrinterIp">Receipt Printer IP</label>
+      <input id="receiptPrinterIp" type="text" formControlName="receiptPrinterIp" placeholder="e.g., 192.168.1.100" />
+
+      <label for="receiptPrinterPort">Receipt Printer Port</label>
+      <input id="receiptPrinterPort" type="number" formControlName="receiptPrinterPort" placeholder="e.g., 9100" />
+
+      <label for="kitchenPrinterIp">Kitchen Printer IP</label>
+      <input id="kitchenPrinterIp" type="text" formControlName="kitchenPrinterIp" placeholder="e.g., 192.168.1.101" />
+
+      <div *ngIf="error" class="message error">{{ error }}</div>
+
+      <div class="button-group">
+        <button type="submit" [disabled]="isSaving">Save</button>
+        <button type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
