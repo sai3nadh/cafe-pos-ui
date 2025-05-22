@@ -1,1 +1,71 @@
-<p>settings-dashboard works!</p>
+<!-- <p>settings-dashboard works!</p> -->
+<div class="dashboard-container">
+  <h2>Settings</h2>
+
+  <div class="card-grid">
+    <div class="card" (click)="goTo('staff')">
+      👥 <strong>Manage Staff</strong>
+      <p>Role-based user accounts</p>
+    </div>
+
+    <div class="card" (click)="goTo('customers')">
+      🧾 <strong>Manage Customers</strong>
+      <p>Customer list and info</p>
+    </div>
+
+    <div class="card" (click)="goTo('printers')">
+      🖨️ <strong>Printer Settings</strong>
+      <p>Configure printer IPs</p>
+    </div>
+
+    <div  class="card disabled" (click)="goTo('profile')">
+      🔐 <strong>My Profile</strong>
+      <p>Update password or pin</p>
+    </div>
+  <!-- </div> -->
+
+    <!-- New Cards for Quick Links -->
+    <div class="card" (click)="goTo('/inventory/stock-list')">
+      📦 <strong>Stock List</strong>
+      <p>View and manage stock</p>
+    </div>
+
+    <div class="card" (click)="goTo('/inventory/stock-movements')">
+      🔄 <strong>Stock Movements</strong>
+      <p>Track inventory changes</p>
+    </div>
+
+    <div class="card" (click)="goTo('/inventory/purchases')">
+      🛒 <strong>Purchases</strong>
+      <p>Manage purchase records</p>
+    </div>
+
+    <div class="card" (click)="goTo('/inventory/suppliers')">
+      🧑‍💼 <strong>Suppliers</strong>
+      <p>Supplier details</p>
+    </div>
+
+    <div class="card" (click)="goTo('/inventory/ingredients')">
+      🥫 <strong>Ingredients</strong>
+      <p>Manage raw materials</p>
+    </div>
+    <!-- Menu Management Dashboard -->
+<div class="card" (click)="goTo('/menu-management/dashboard')">
+  📋 <strong>Menu Dashboard</strong>
+  <p>Overview of menu setup</p>
+</div>
+
+<!-- Ingredient Mapping for Menu Items -->
+<div class="card" (click)="goTo('/menu-management/menu-items/ingredients')">
+  🧩 <strong>Ingredient Mapping</strong>
+  <p>Link items with ingredients</p>
+</div>
+
+<!-- Reports -->
+<div class="card" (click)="goTo('/report')">
+  📈 <strong>Reports</strong>
+  <p>Sales, stock & performance</p>
+</div>
+
+  </div>
+</div>
