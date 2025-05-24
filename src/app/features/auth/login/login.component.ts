@@ -123,15 +123,15 @@ this.isLoading = true;
 
   this.loginService.loginWithPin(this.selectedUser.username, this.pin).subscribe({
     next: (res) => {
-      // alert(`Welcome ${res.username}`);
-      this.storageService.setLocalVariable('userId', res.userId);
-      // this.storageService.setLocalVariable('userId', res.userId);
-      // this.storageService.setLocalVariable('userId', res.userId);
-      this.storageService.setLocalVariable('username', res.username);
-      this.storageService.setLocalVariable('firstName', res.firstName);
-      this.storageService.setLocalVariable('lastName', res.lastName);
-      this.storageService.setLocalVariable('role', res.role);
-   
+      // Store user details in local storage
+      this.storageService.setLocalVariable('userId', res.user.userId);
+      this.storageService.setLocalVariable('username', res.user.username);
+      this.storageService.setLocalVariable('firstName', res.user.firstName);
+      this.storageService.setLocalVariable('lastName', res.user.lastName);
+      this.storageService.setLocalVariable('role', res.user.role.toLocaleLowerCase());
+
+      // Store the JWT token in local storage
+      this.storageService.setLocalVariable('authToken', res.token);
       this.isLoading = false;
       this.router.navigate(['/user']);
     },

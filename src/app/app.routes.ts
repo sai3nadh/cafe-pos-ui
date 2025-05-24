@@ -10,6 +10,8 @@ import { ReportComponent } from './features/report/report.component';
 import { DisplayComponent } from './features/display/display.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { EmptyLayoutComponent } from './layouts/empty-layout/empty-layout.component';
+import { RoleGuard } from './guards/role.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routaaes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -33,7 +35,7 @@ export const routaaes: Routes = [
 ];
 
 
-export const routes: Routes = [
+export const routesOld: Routes = [
     {
       path: '',
       component: MainLayoutComponent,
@@ -91,3 +93,70 @@ export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '**', redirectTo: 'login' }
   ];
+
+  
+export const routes: Routes = [
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'user', pathMatch: 'full' },
+
+      { path: 'user', component: UserComponent, canActivate: [AuthGuard] },
+      { path: 'edit-menu', component: EditMenuComponent, canActivate: [RoleGuard], data: { roles: ['admin', 'menu-manager'] } },
+      { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuard] , data: { roles: ['admin', 'owner'] } },
+      { path: 'pending-orders', component: PendingOrdersComponent, canActivate: [AuthGuard] },
+      { path: 'register', component: RegisterComponent, canActivate: [RoleGuard], data: { roles: ['admin', 'owner'] } },
+      { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+      { path: 'report', component: ReportComponent, canActivate: [RoleGuard], data: { roles: ['admin'] } },
+
+      {
+        path: 'inventory',
+        loadChildren: () =>
+          import('./features/inventory/inventory.module').then(m => m.InventoryModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'owner', 'inventory'] }
+      },
+      {
+        path: 'menu-management',
+        loadChildren: () =>
+          import('./features/menu-management/menu-management.module').then(m => m.MenuManagementModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'owner', 'menu-manager'] }
+      },
+      {
+        path: 'customers',
+        loadChildren: () =>
+          import('./features/settings/customer-management/customer-management-routing.module')
+            .then(m => m.CustomerManagementRoutingModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'owner'] }
+      },
+      {
+        path: 'staff',
+        loadChildren: () =>
+          import('./features/settings/staff-management/staff-management-routing.module')
+            .then(m => m.StaffManagementRoutingModule),
+        canActivate: [RoleGuard],
+        data: { roles: ['admin', 'owner'] }
+      },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./features/settings/settings-routing.module')
+            .then(m => m.SettingsRoutingModule),
+        canActivate: [AuthGuard] // general access — internal routes can have RoleGuard
+      }
+    ]
+  },
+  {
+    path: '',
+    component: EmptyLayoutComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: 'display', component: DisplayComponent }
+    ]
+  },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
+];

@@ -74,6 +74,16 @@ export class StorageService {
     return null;
   }
 
+  
+  getLocal<T = any>(key: string): T | null {
+    const raw = localStorage.getItem(key);
+    try {
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return raw as T;
+    }
+  }
+
   // Clear the local variable from localStorage
   clearLocalVariable(key: string): void {
     this.localVariable = null; // Optional: clear it from the service

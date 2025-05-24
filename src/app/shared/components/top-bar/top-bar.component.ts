@@ -22,10 +22,11 @@ export class TopBarComponent {
   @Output() heightReady = new EventEmitter<number>();
 
 dropdownVisible: boolean= false;
-canEdit: boolean = true;
+canEdit: boolean = false;
 
 currentUrl: string = '';
 printingEnabled: boolean = true;  // default true
+role: string = ""; // example user id
 
 
 constructor(
@@ -48,7 +49,10 @@ constructor(
 }
 ngOnInit() {
   console.log('👂 TopBarComponent subscribing to status$');
-
+ this.role = this.storageService.getLocalVariable("role");
+    if(this.role.toLocaleLowerCase() == "admin" || this.role.toLocaleLowerCase() == "owner" ){
+      this.canEdit = true;
+    }
   this.wsService.connect();
    this.printingStatusService.status$.subscribe(status => {
         console.log('✅ [TopBarComponent] Got status update:', status);
@@ -157,8 +161,16 @@ isKitchenPage(): boolean {
   this.router.navigate(['/inventory/dashboard']);
  }
 
+ goToSettings(){
+  this.router.navigate(['/settings']);
+ }
+
  isMenuMngmt(): boolean {
   return this.currentUrl.includes('/menu-management');
+}
+
+ isSetting(): boolean {
+  return this.currentUrl.includes('/settings') || this.currentUrl.includes('/inventory') || this.currentUrl.includes('/menu-management');
 }
 
 goToMenuMngmt(){
@@ -217,8 +229,9 @@ showOrdersIcon: any;
 
   // Toggle dropdown visibility
    toggleDropdown() {
-    if(this.canEdit){
-    this.dropdownVisible = !this.dropdownVisible;
+    if(this.canEdit || true){
+      // alert("aaa");
+    this.dropdownVisible = true;// !this.dropdownVisible;
     }
   }
 closeCheckoutModal() {

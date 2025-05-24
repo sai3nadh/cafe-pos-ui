@@ -5,6 +5,10 @@
       <button (click)="goToHome()">Cafe-SISILI</button>
       <!-- <button  *ngIf="isInven()" (click)="goToInvnDash()">Inventory-Dashboard</button> -->
       <!-- Orders Button -->
+    <button *ngIf="isSetting()" (click)="goToSettings()"
+      style="background-color: #ffc107; color: #222; border: none; font-size: 18px; padding: 8px 16px; border-radius: 6px; font-weight: bold;">
+      Admin-Panel
+    </button>
       <button *ngIf="isInven()" (click)="goToInvnDash()"
       style="background-color: #ffc107; color: #222; border: none; font-size: 18px; padding: 8px 16px; border-radius: 6px; font-weight: bold;">
       Inventory-Dashboard
@@ -43,21 +47,23 @@
       <img class="avatar" src="../../../../assets/pic.jpeg" alt="Avatar"  (click)="toggleDropdown()" />
         
         <!-- Dropdown Menu (Initially Hidden) -->
-        <div *ngIf="dropdownVisible && canEdit" class="modal-overlay" (click)="closeCheckoutModal()">
+        <!-- <div *ngIf="dropdownVisible && canEdit" class="modal-overlay" (click)="closeCheckoutModal()"> -->
+        <div *ngIf="dropdownVisible" class="modal-overlay" (click)="closeCheckoutModal()">
         <div *ngIf="dropdownVisible" class="dropdown-menu">
             <!-- <button (click)="viewOrders()">View Orders</button>
             <button (click)="viewReports()">View Reports</button> -->
-            <button >View Orders</button>
+            <!-- <button >View Orders</button> -->
             <button (click)="viewReports()" >View Reports</button>
             <!-- Zoom Settings Button -->
             <button (click)="openZoomSettings()" class="bg-green-500 text-white px-4 py-2 rounded">Zoom Settings</button>
-            <button (click)="customerMngmt()">Customer mngmnt</button>
-            <button (click)="addCustomer()">Add Customer</button>
-            <button (click)="orderDisplay()">Display Orders</button>
-            <button (click)="registerUser()">Register User</button>
-            <button (click)="editItems()">Edit Items</button>
-            <button (click)="goToInvnDash()">Inventory</button>
-            <button (click)="goToMenuMngmt()">Menu-dashboard</button>
+            <button *ngIf="canEdit"  (click)="customerMngmt()">Customer mngmnt</button>
+            <button *ngIf="canEdit" (click)="addCustomer()">Add Customer</button>
+            <button (click)="orderDisplay()">Kitchen Orders</button>
+            <button *ngIf="canEdit" (click)="registerUser()">Register User</button>
+            <button *ngIf="canEdit" (click)="editItems()">Edit Items</button>
+            <button *ngIf="canEdit" (click)="goToInvnDash()">Inventory</button>
+            <button *ngIf="canEdit" (click)="goToSettings()">Admin-Panel</button>
+            <button *ngIf="canEdit" (click)="goToMenuMngmt()">Menu-dashboard</button>
             <button (click)="pendingOrders()">Pending Orders</button>
     
               <hr />

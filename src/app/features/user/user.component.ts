@@ -248,7 +248,7 @@ export class UserComponent  implements AfterViewInit  {
 
   ngOnInit() {
     this.isLoading=true;
-    this.orderService.checkLogin();
+    // this.orderService.checkLogin();
     console.log('Categories:', this.categories);
     console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
