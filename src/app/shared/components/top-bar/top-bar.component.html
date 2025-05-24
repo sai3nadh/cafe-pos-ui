@@ -58,13 +58,13 @@
             <button (click)="openZoomSettings()" class="bg-green-500 text-white px-4 py-2 rounded">Zoom Settings</button>
             <button *ngIf="canEdit"  (click)="customerMngmt()">Customer mngmnt</button>
             <button *ngIf="canEdit" (click)="addCustomer()">Add Customer</button>
-            <button (click)="orderDisplay()">Kitchen Orders</button>
+            <button (click)="orderDisplay()">Display Board</button>
             <button *ngIf="canEdit" (click)="registerUser()">Register User</button>
             <button *ngIf="canEdit" (click)="editItems()">Edit Items</button>
             <button *ngIf="canEdit" (click)="goToInvnDash()">Inventory</button>
             <button *ngIf="canEdit" (click)="goToSettings()">Admin-Panel</button>
             <button *ngIf="canEdit" (click)="goToMenuMngmt()">Menu-dashboard</button>
-            <button (click)="pendingOrders()">Pending Orders</button>
+            <button (click)="pendingOrders()">Kitchen Orders</button>
     
               <hr />
           <button (click)="logout()">Logout</button>
