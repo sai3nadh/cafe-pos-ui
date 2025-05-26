@@ -204,11 +204,25 @@ export class UserComponent  implements AfterViewInit  {
   // @ViewChild('zoomSection') zoomSection!: ElementRef;
 
   ngAfterViewInit(): void {
-    const savedZoom = localStorage.getItem('itemsZoomLevel');
-    if (savedZoom) {
-      this.zoomLevel = parseFloat(savedZoom);
-      this.applyZoom();
-    }
+    // const savedZoom = localStorage.getItem('itemsZoomLevel');// || "10";
+    // if (savedZoom) {
+    //   this.zoomLevel = parseFloat(savedZoom);
+    //   this.applyZoom();
+    // }
+    // if (!this.zoomApplied && this.zoomSection) {
+    //     this.applyZoom();
+    //     this.zoomApplied = true;
+    //   }
+    const savedZoom = localStorage.getItem('itemsZoomLevel')||'0.7';
+    this.zoomLevel = parseFloat(savedZoom);
+  // If both conditions are good, apply zoom
+  if (savedZoom && this.zoomSection && !this.zoomApplied) {
+    // this.zoomLevel = parseFloat(savedZoom);
+    this.applyZoom();
+    this.zoomApplied = true;
+  } else {
+    console.warn("Zoom not applied – either zoom value is missing or section not found.");
+  }
   }
   categories: Category[] = [];
   customers: { id: number; name: string; avatar: string }[] = [];
@@ -242,6 +256,21 @@ export class UserComponent  implements AfterViewInit  {
   ) {}
   items: DisplayItem[] = [];
 
+  topBarHeight = 0;
+
+  onTopBarHeight(height: number) {
+  this.topBarHeight = height; // ✅ Save it locally
+  // console.log("top"+this.topBarHeight);
+  // this.cdr.detectChanges();   // ✅ Make sure UI reflects the change
+}
+
+windowHeight = window.innerHeight;
+
+@HostListener('window:resize', ['$event'])
+onResize(event: any) {
+  this.windowHeight = event.target.innerHeight; 
+}
+
   // private sub!: Subscription;
   private notifSub!: Subscription;
   imageBaseUrl = environment.imageBaseUrl;
@@ -261,7 +290,8 @@ export class UserComponent  implements AfterViewInit  {
       this.toggleOrdersModal();
       this.getCustomerOrdersToday();
     });
-    document.body.style.overflow = 'hidden';
+    // document.body.style.overflow = 'hidden';
+document.body.style.overflow = window.innerWidth <= 600 ? 'auto' : 'hidden';
 
     
     this.headerEvents.openZoomSettings$.subscribe(() => {
@@ -310,9 +340,9 @@ export class UserComponent  implements AfterViewInit  {
     // }
     this.editOrderId=-1;
     this.alreadyPaidAmount = 0;
-    if(localStorage.getItem('zoomLevel')!=null){
-    document.body.style.zoom = `${Number(localStorage.getItem('zoomLevel')) * 100}%`;
-  }
+  //   if(localStorage.getItem('zoomLevel')!=null){
+  //   document.body.style.zoom = `${Number(localStorage.getItem('zoomLevel')) * 100}%`;
+  // }
      // Find the category with the name "Beverages"
   // const selectedCategory = this.categories.find(category => category.name === "Beverages");
   

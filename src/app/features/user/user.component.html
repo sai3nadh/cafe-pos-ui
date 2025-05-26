@@ -104,33 +104,33 @@
         <!-- <div class="items-footer" >abcd</div> -->
     </div>
       </div>
-      <div class="right-section" [ngClass]="{ 'user-selected': selectedUser !== null }">
+      <!-- <div class="right-section" *ngIf="false" [ngClass]="{ 'user-selected': selectedUser !== null }">
 
         <input type="text" [(ngModel)]="guestName" placeholder="Guest Name" [disabled]="guestName.startsWith('edit Order - #')"/>
   
                  
               <div class="cart-items" [ngClass]="{ 'with-bg': selectedUser !== null }">
 
-                <!-- PART 1: New Items (TOP) -->
+                PART 1: New Items (TOP)
                 <div>
                     <h3>New Items</h3>
                     <ul>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
                     
                     <li *ngFor="let item of cart; let i = index">
-                          <!-- enable below to work on customize items -->
+                          enable below to work on customize items
                       <div class="cart-item" 
 
                         (click)="item.kitchen ? cusotmizeCartItem(item) : null">
 
-                         <!-- (click)="cusotmizeCartItem(item)"> -->
-                        <!-- Item Name and Delete Button on the same row -->
+                         (click)="cusotmizeCartItem(item)">
+                        Item Name and Delete Button on the same row
                         <div class="cart-item-header">
                             <h3>{{ item.name }}</h3>
                             <i *ngIf="item.itemStatus !== 'delivered'"  class="fas fa-trash-alt" (click)="confirmDeleteItem(i); $event.stopPropagation()"></i>
                         </div>
                 
-                        <!-- Cart Item Details (Quantity, Price) in the next row -->
+                        Cart Item Details (Quantity, Price) in the next row
                         <div class="cart-item-details">
                             <label>Qty:</label>
                             <input 
@@ -155,7 +155,7 @@
                 <hr />
               
                 
-               <!-- Show total pending amount above the orders -->
+               Show total pending amount above the orders
               <p *ngIf="getTotalPendingAmount() > 0">
                 <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
               </p>
@@ -163,7 +163,7 @@
                 <div *ngIf="purchaseHistory && purchaseHistory.length > 0">
                   <h4>Previous Orders for this Customer</h4>
                 
-                  <!-- Iterate through each order -->
+                  Iterate through each order
                   <div *ngFor="let order of purchaseHistory">
                     <p><strong>Order ID:</strong> {{ order.id }}</p>
                     <p><strong>Order Number:</strong> {{ order.orderNumber }}</p>
@@ -185,29 +185,119 @@
               </div>
 
               
-              
+         
+              <div *ngIf="false">
         <div class="total">
           Total: ₹{{ getTotal().toFixed(2) }}
         </div>
     
         <div class="totals">
-          <!-- Total amount including current cart and pending amount -->
+          Total amount including current cart and pending amount
           <p>
             <strong>
               Grand Total: ₹{{ (getTotal() + getTotalPendingAmount()) | number:'1.2-2' }}
             </strong>
           </p>
         
-          <!-- Show pending amount separately if it's greater than 0 -->
+          Show pending amount separately if it's greater than 0
           <p *ngIf="getTotalPendingAmount() > 0">
             <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
           </p>
         </div>
         
-        <!-- <button (click)="checkout()">Checkout</button> -->
+        <button (click)="checkout()">Checkout</button>
         <button (click)="checkout()" [disabled]="cart.length === 0 && purchaseHistory.length === 0 ">Checkout</button>
+
+        </div>
+    </div> -->
+    <div class="right-section" 
+    [style.height.px]="windowHeight - topBarHeight-100"
+    [ngClass]="{ 'user-selected': selectedUser !== null }">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- 🔝 Fixed Top: Guest Name -->
+    <input type="text"
+          [(ngModel)]="guestName"
+          placeholder="Guest Name"
+          [disabled]="guestName.startsWith('edit Order - #')" />
+
+    <!-- 🛒 Scrollable Cart Items -->
+    <div class="cart-items" [ngClass]="{ 'with-bg': selectedUser !== null }">
+      <div>
+        <h3>New Items</h3>
+        <ul>
+          <li *ngFor="let item of cart; let i = index">
+            <div class="cart-item" (click)="item.kitchen ? cusotmizeCartItem(item) : null">
+              <div class="cart-item-header">
+                <!-- <h3>{{ item.name }}</h3> -->
+                <div class="item-name">{{ item.name }}</div>
+                <i *ngIf="item.itemStatus !== 'delivered'"
+                  class="fas fa-trash-alt"
+                  (click)="confirmDeleteItem(i); $event.stopPropagation()"></i>
+                  
+              </div>
+              <div class="cart-item-details">
+                <label>Qty:</label>
+                <input type="number"
+                      [(ngModel)]="item.qty"
+                      (change)="updateCartItem(item)" size="4" />
+                <span>
+                  x ₹{{ item.price.toFixed(2) }}
+                  = ₹{{ (item.price * item.qty) | number:'1.2-2' }}
+                </span>
+              </div>
+            </div>
+            <hr />
+          </li>
+        </ul>
+      </div>
+
+      <!-- Optional: Previous Orders + Pending -->
+      <p *ngIf="getTotalPendingAmount() > 0">
+        <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
+      </p>
+
+      <div *ngIf="purchaseHistory && purchaseHistory.length > 0">
+        <h4>Previous Orders for this Customer</h4>
+        <div *ngFor="let order of purchaseHistory">
+          <p><strong>Order ID:</strong> {{ order.id }}</p>
+          <p><strong>Order Number:</strong> {{ order.orderNumber }}</p>
+          <p><strong>Time:</strong> {{ order.time }}</p>
+          <p><strong>Status:</strong> {{ order.status }}</p>
+          <p><strong>Pending Amount:</strong> ₹{{ (order.total - order.paidAmount) | number:'1.2-2' }}</p>
+
+          <h5>Items:</h5>
+          <ul>
+            <li *ngFor="let item of order.items">
+              {{ item.name }} (x{{ item.qty }}) -
+              ₹{{ (item.price * item.qty) | number:'1.2-2' }}
+            </li>
+          </ul>
+          <hr />
+        </div>
+      </div>
     </div>
-    
+
+    <!-- 🔽 Fixed Bottom: Totals + Checkout -->
+    <div class="totals">
+      <p class="total">
+        Total: ₹{{ getTotal().toFixed(2) }}
+      </p>
+      <p>
+        <strong>
+          Grand Total: ₹{{ (getTotal() + getTotalPendingAmount()) | number:'1.2-2' }}
+        </strong>
+      </p>
+      <p *ngIf="getTotalPendingAmount() > 0">
+        <strong>Total Pending Amount: ₹{{ getTotalPendingAmount() | number:'1.2-2' }}</strong>
+      </p>
+
+      <button (click)="checkout()" [disabled]="cart.length === 0 && purchaseHistory.length === 0">
+        Checkout
+      </button>
+  </div>
+</div>
+
 
     </div>
 </div>
