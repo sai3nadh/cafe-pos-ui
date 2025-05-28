@@ -843,6 +843,21 @@ i.fas.fa-trash-alt {
     color: rgb(200, 0, 0); /* Change color on hover to indicate action */
   }
   
+.item-card.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.stock-warning {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.stock-alert {
+  color: rgb(255, 72, 5);
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
 
   /* Ensure mobile responsiveness */
 @media screen and (max-width: 600px) {

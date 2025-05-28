@@ -46,6 +46,19 @@ interface Item {
   kitchen: boolean;
 }
 
+export interface MenuItemAvailability {
+  menuItemId: number;
+  name: string;
+  maxAvailableQty: number;
+  lowStock: boolean;
+  ingredientBreakdown?: {
+    ingredientName: string;
+    requiredPerItem: number;
+    availableStock: number;
+    maxPossible: number;
+  }[];
+}
+
 export interface cartItem{
   orderItemId?: number; 
   id: number;
@@ -195,6 +208,9 @@ export interface PurchaseHistoryResponse {
     styleUrls: ['./user.component.scss']
 })
 export class UserComponent  implements AfterViewInit  {
+
+  availabilityMap: { [menuItemId: number]: MenuItemAvailability } = {};
+
   zoomLevel = 1;
   zoomModalVisible = false;
   private zoomApplied:boolean = false;
@@ -352,6 +368,7 @@ document.body.style.overflow = window.innerWidth <= 600 ? 'auto' : 'hidden';
   // }
   // this.testPrint();
   this.loadCat();
+  this.loadAvailability();
   this.loadCustomers() 
 // //below to connect rabbit
   this.wsService.connect(); // ✅ Ensure WebSocket connects on init
@@ -544,6 +561,17 @@ toggleSittingArea(sittingArea: string) {
     );
   }
 
+
+  loadAvailability() {
+  this.categoryService.getAvailability().subscribe(data => {
+    this.availabilityMap = {};
+    for (const entry of data) {
+      this.availabilityMap[entry.menuItemId] = entry;
+    }
+    console.log(this.availabilityMap);
+    
+  });
+}
   loadPurchaseHistory() {
     this.orderService.fetchPurchaseHistory().subscribe((data) => {
       this.purchaseHistoryData = data;
@@ -1161,9 +1189,22 @@ closeUsersModal(){
   //   this.selectedCategory = category;
   // }
 
-  getItemsByCategory(categoryId: number): DisplayItem[] {
-    return this.items.filter(item => item.category === categoryId);
-  }
+  // getItemsByCategoryOld(categoryId: number): DisplayItem[] {
+  //   return this.items.filter(item => item.category === categoryId);
+  // }
+
+  getItemsByCategory(categoryId: number): (DisplayItem & { maxAvailableQty: number, lowStock: boolean })[] {
+  return this.items
+    .filter(item => item.category === categoryId)
+    .map(item => {
+      const availability = this.availabilityMap[item.id] || { maxAvailableQty: 99999, lowStock: false };
+      return {
+        ...item,
+        maxAvailableQty: availability.maxAvailableQty,
+        lowStock: availability.lowStock
+      };
+    });
+}
 
   addToCartOld_working(item: Item) {
     // this.closeDropdown();
