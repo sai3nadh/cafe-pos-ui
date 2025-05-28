@@ -95,6 +95,7 @@ export class PendingOrdersComponent {
         this.topBarHeight = height;
         console.log('TopBar height in PendingOrdersComponent:', height);
       });
+      document.body.style.overflow = window.innerWidth <= 600 ? 'auto' : 'hidden';
     }
 
     allOrders: OrderDto[] =[];
