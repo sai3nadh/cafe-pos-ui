@@ -845,11 +845,12 @@ i.fas.fa-trash-alt {
   
 .item-card.disabled {
   opacity: 0.5;
-  pointer-events: none;
+  // pointer-events: none;
 }
 .stock-warning {
   color: red;
-  font-size: 0.9rem;
+  font-size: 1.0rem;
+  font-weight: bold;
 }
 
 .stock-alert {

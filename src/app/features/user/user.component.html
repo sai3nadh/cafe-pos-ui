@@ -102,10 +102,13 @@
               <!-- <button (click)="addToCart(item)">Add</button> -->
             </div>
             </div>
+              <div *ngIf="false">
              <div class="item-card"
-              *ngFor="let item of getItemsByCategory(selectedCategory.id)"
+              *ngFor="let item of getItemsByCategory(selectedCategory?.id||0)"
               [class.disabled]="item.maxAvailableQty === 0"
-              (click)="item.maxAvailableQty > 0 && addToCart(item)">
+                            (click)="item.maxAvailableQty > 0 && addToCart(item)">
+              <!-- (click)="handleCardClick(item)"> -->
+              <!-- (click)="item.maxAvailableQty > 0 && addToCart(item)"> -->
               
             <h3>{{ item.name }}</h3>
 
@@ -119,8 +122,10 @@
 
             <div class="button-container">
               <button (click)="remove(item); $event.stopPropagation()" 
-                      [disabled]="item.maxAvailableQty === 0"
-                      style="background-color: rgb(202, 46, 34); color: white;">
+                      style="background-color: rgb(202, 46, 34); color: white;"
+                      [disabled]="!isRemovable(item)">
+                      <!-- [disabled]="item.maxAvailableQty === 0" -->
+
                 ---
               </button>
               <button (click)="addToCart(item); $event.stopPropagation()"
@@ -130,6 +135,37 @@
               </button>
             </div>
           </div>
+        </div>
+        <div class="item-card"
+            *ngFor="let item of filteredItems; trackBy: trackByItemId"
+            [class.disabled]="item.maxAvailableQty === 0"
+            (click)="item.maxAvailableQty > 0 && addToCart(item)">
+
+          <h3>{{ item.name }}</h3>
+
+          <img class="item-icons" 
+              [src]="imageBaseUrl + item.imagePath"
+              loading="lazy"
+              alt="{{ item.name }}" />
+
+          <span *ngIf="item.maxAvailableQty === 0" class="stock-warning">Out of Stock</span>
+          <span *ngIf="item.maxAvailableQty < 10 && item.maxAvailableQty > 0" class="stock-alert">Low Stock</span>
+
+          <div class="button-container">
+            <button (click)="remove(item); $event.stopPropagation()" 
+                    style="background-color: rgb(202, 46, 34); color: white;"
+                    [disabled]="!isRemovable(item)">
+              ---
+            </button>
+            <button (click)="addToCart(item); $event.stopPropagation()"
+                    [disabled]="item.maxAvailableQty === 0"
+                    style="background-color: rgb(14, 97, 14); color: white;">
+              +++
+            </button>
+          </div>
+        </div>
+
+
           </div>
         </div>
         <!-- <div class="items-footer" >abcd</div> -->
@@ -271,6 +307,8 @@
                 <label>Qty:</label>
                 <input type="number"
                       [(ngModel)]="item.qty"
+                        (focus)="storePreviousQty(item)"
+                      (click)="$event.stopPropagation()"
                       (change)="updateCartItem(item)" size="4" />
                 <span>
                   x ₹{{ item.price.toFixed(2) }}

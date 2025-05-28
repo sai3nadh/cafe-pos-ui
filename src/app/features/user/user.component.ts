@@ -294,8 +294,8 @@ onResize(event: any) {
   ngOnInit() {
     this.isLoading=true;
     // this.orderService.checkLogin();
-    console.log('Categories:', this.categories);
-    console.log('Items:', this.items);
+    // console.log('Categories:', this.categories);
+    // console.log('Items:', this.items);
     this.userId = this.storageService.getLocalVariable("userId");
     this.role = this.storageService.getLocalVariable("role");
     if(this.role.toLocaleLowerCase() == "admin" || this.role.toLocaleLowerCase() == "owner" ){
@@ -552,6 +552,8 @@ toggleSittingArea(sittingArea: string) {
         // Select default category if necessary
         // const selectedCategory = this.categories.find(cat => cat.name === 'Beverages');
         if (this.categories.length>0) {
+          this.selectedCategory = this.categories[0];
+          this.updateFilteredItems();  // Refresh visible items
           this.selectCategory(this.categories[0]);
         }
       },
@@ -563,13 +565,15 @@ toggleSittingArea(sittingArea: string) {
 
 
   loadAvailability() {
+    this.isLoading=true;
   this.categoryService.getAvailability().subscribe(data => {
     this.availabilityMap = {};
     for (const entry of data) {
       this.availabilityMap[entry.menuItemId] = entry;
     }
-    console.log(this.availabilityMap);
-    
+    // console.log(this.availabilityMap);
+      this.updateFilteredItems();  // Refresh UI after stock change
+      this.isLoading=false;
   });
 }
   loadPurchaseHistory() {
@@ -686,7 +690,8 @@ toggleSittingArea(sittingArea: string) {
         this.zoomApplied = true;
       }
     });
-    console.log('Selected category:', this.selectedCategory);
+    // console.log('Selected category:', this.selectedCategory);
+    this.updateFilteredItems();  // Refresh UI after stock change
   }
   
   // items: Item[] = [];
@@ -1043,6 +1048,7 @@ console.log(matchedSummary?.customerName?.toString() ?? 'No customer found');
       this.previousCart =[];
       this.purchaseHistory= [];
       this.customAmount ="0";
+      this.loadAvailability();
     }
 
     handlePayment(paymentType: string) {
@@ -1206,6 +1212,67 @@ closeUsersModal(){
     });
 }
 
+filteredItems: (DisplayItem & { maxAvailableQty: number; lowStock: boolean })[] = [];
+
+trackByItemId(index: number, item: Item): number {
+  return item.id;
+}
+// loadCatNew() {
+//   this.categoryService.loadCategories().subscribe(
+//     (data: ApiCategory[]) => {
+//       // Load categories
+//       this.categories = data.map(cat => ({
+//         id: cat.categoryId,
+//         name: cat.name
+//       }));
+
+//       // Load items
+//       this.items = data.flatMap(cat =>
+//         cat.menuItems.map(item => ({
+//           id: item.menuItemId,
+//           name: item.name,
+//           category: cat.categoryId,
+//           price: item.price,
+//           kitchen: item.kitchenItem,
+//           imagePath: item.imagePath
+//         }))
+//       );
+
+//       // console.log('Categories:', this.categories);
+//       // console.log('Items:', this.items);
+
+//       // Set default category
+//       if (this.categories.length > 0) {
+//         this.selectedCategory = this.categories[0];
+//         this.updateFilteredItems();  // Refresh visible items
+//         this.selectCategory(this.categories[0]);
+//       }
+//     },
+//     error => console.error('Error loading categories', error)
+//   );
+// }
+updateFilteredItems(): void {
+  if (!this.selectedCategory) return;
+
+  this.filteredItems = this.items
+    .filter(item => item.category === this.selectedCategory?.id)
+    .map(item => {
+      const availability = this.availabilityMap[item.id] || {
+        maxAvailableQty: 99999,
+        lowStock: false
+      };
+      return {
+        ...item,
+        maxAvailableQty: availability.maxAvailableQty,
+        lowStock: availability.lowStock
+      };
+    });
+
+  // console.log('Filtered Items:', this.filteredItems);
+}
+
+
+
   addToCartOld_working(item: Item) {
     // this.closeDropdown();
     const existingItem = this.cart.find(i => i.id === item.id);
@@ -1261,7 +1328,30 @@ closeUsersModal(){
   
     console.log('Cart:', this.cart);
   }
+//  handleCardClick(item: Item) {
+//   const extendedItem = item as Item & { maxAvailableQty: number };
+
+//   if (extendedItem.maxAvailableQty > 0) {
+//     this.addToCart(item);
+//   } else {
+//     const inCart = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
+//     if (inCart) {
+//       this.remove(item);
+//     }
+//   }
+// }
+isRemovable(item: Item & { maxAvailableQty?: number }): boolean {
+  return this.cart.some(i => i.id === item.id && i.itemStatus === 'pending');
+}
+
+
   addToCart(item: Item) {
+    if (this.availabilityMap[item.id].maxAvailableQty > 0) {
+      // console.log("before"+this.availabilityMap[item.id].maxAvailableQty);
+      this.availabilityMap[item.id].maxAvailableQty -= 1;
+      // console.log("updated"+this.availabilityMap[item.id].maxAvailableQty);
+    }
+
     if (this.editOrderId === -1) {
       // 🔰 Fresh order
       const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
@@ -1309,6 +1399,7 @@ closeUsersModal(){
     }
       
     // this.applyDefaultModifiersToCartItem(item.id);
+  this.updateFilteredItems();  // Refresh UI after stock change
 
     console.log('Cart:', this.cart);
   }
@@ -1767,7 +1858,12 @@ closeUsersModal(){
 
   remove(item: Item) {
     this.closeDropdown();
-  
+     if (this.availabilityMap[item.id].maxAvailableQty >= 0) {
+      // console.log("before"+this.availabilityMap[item.id].maxAvailableQty);
+      this.availabilityMap[item.id].maxAvailableQty += 1;
+      // console.log("updated"+this.availabilityMap[item.id].maxAvailableQty); 
+    }
+
     if (this.editOrderId === -1) {
       // 🔰 Fresh order logic
       const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
@@ -1805,7 +1901,8 @@ closeUsersModal(){
         }
       }
     }
-  
+    this.updateFilteredItems();  // Refresh UI after stock change
+
     console.log('Cart after removal:', this.cart);
   }
   
@@ -1825,14 +1922,35 @@ closeUsersModal(){
   }
 
   // Method to delete the item from the cart
+  // deleteItem() {
+  //   if (this.itemToDeleteIndex !== null) {
+  //     this.cart.splice(this.itemToDeleteIndex, 1);  // Remove the item from the cart
+  //   }
+  //   this.showToast = false;  // Hide the toast
+  //   this.showDeleteModal = false;  // Close the modal
+  //   this.itemToDeleteIndex = null; // Reset the index
+  // }
   deleteItem() {
     if (this.itemToDeleteIndex !== null) {
-      this.cart.splice(this.itemToDeleteIndex, 1);  // Remove the item from the cart
+      const item = this.cart[this.itemToDeleteIndex];
+
+      // ✅ Restore stock
+      if (item && item.qty && this.availabilityMap[item.id]) {
+        this.availabilityMap[item.id].maxAvailableQty += item.qty;
+      }
+
+      // ✅ Remove from cart
+      this.cart.splice(this.itemToDeleteIndex, 1);
     }
-    this.showToast = false;  // Hide the toast
-    this.showDeleteModal = false;  // Close the modal
-    this.itemToDeleteIndex = null; // Reset the index
-  }
+
+    // ✅ Reset modal state
+    this.showToast = false;
+    this.showDeleteModal = false;
+    this.itemToDeleteIndex = null;
+
+    this.updateFilteredItems();  // Refresh UI after stock change
+
+}
 
   // Method to cancel the deletion
   cancelDelete() {
@@ -1840,11 +1958,95 @@ closeUsersModal(){
     this.itemToDeleteIndex = null; // Reset the index
   }
 
-  updateCartItem(item: Item) {
-    if (item.qty && item.qty <= 0) {
-      this.cart = this.cart.filter(i => i.id !== item.id);
+  previousQtyMap: { [itemId: number]: number } = {};
+  storePreviousQty(item: Item) {
+    if (item.qty != null) {
+      this.previousQtyMap[item.id] = item.qty;
     }
   }
+
+  // updateCartItem(item: Item) {
+  //   if (item.qty && item.qty <= 0) {
+  //     this.cart = this.cart.filter(i => i.id !== item.id);
+  //   }
+  // }
+  updateCartItem(item: Item) {
+    const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
+    if (!existing) return;
+
+    if (item.qty == null) {
+      return; // Or handle error
+    }
+    const previousQty = this.previousQtyMap[item.id] || 0;
+    const newQty = item.qty;
+    
+
+    if (newQty <= 0) {
+      // Remove item from cart
+      this.cart = this.cart.filter(i => i.id !== item.id);
+      this.availabilityMap[item.id].maxAvailableQty += previousQty;
+    } else {
+      const diff = newQty - previousQty;
+      // this.availabilityMap[item.id].maxAvailableQty -= diff;
+      if (diff > 0) {
+          // User increased qty — check availability first
+          if (this.availabilityMap[item.id].maxAvailableQty >= diff) {
+            this.availabilityMap[item.id].maxAvailableQty -= diff;
+          } else {
+            alert(`Only ${this.availabilityMap[item.id].maxAvailableQty} items available`);
+            item.qty = previousQty; // Revert the change in UI
+            return;
+          }
+        } else if (diff < 0) {
+          // User decreased qty — release stock
+          this.availabilityMap[item.id].maxAvailableQty += Math.abs(diff);
+        }
+    }
+    this.updateFilteredItems();  // Refresh UI after stock change
+
+    // Clear stored previous quantity
+    delete this.previousQtyMap[item.id];
+}
+
+
+//   updateCartItem(item: Item) {
+//   const existing = this.cart.find(i => i.id === item.id && i.itemStatus === 'pending');
+//   if (!existing) return;
+
+//   const previousQty = existing.qty;
+//   const newQty = item.qty;
+// console.log(newQty +"---"+ previousQty);
+
+//   // Remove item if qty is 0 or invalid
+//   if (!newQty || newQty <= 0) {
+//     this.availabilityMap[item.id].maxAvailableQty += previousQty;
+//     this.cart = this.cart.filter(i => !(i.id === item.id && i.itemStatus === 'pending'));
+//     return;
+//   }
+
+//   const difference = newQty - previousQty;
+//     console.log("diff"+difference);
+
+//   if (difference > 0) {
+//     console.log("diff"+difference);
+    
+//     // Trying to add more
+//     if (this.availabilityMap[item.id].maxAvailableQty >= difference) {
+//       this.availabilityMap[item.id].maxAvailableQty -= difference;
+//       existing.qty = newQty;
+//     } else {
+//       // Not enough stock, cap to max allowed
+//       const allowed = previousQty + this.availabilityMap[item.id].maxAvailableQty;
+//       existing.qty = allowed;
+//       this.availabilityMap[item.id].maxAvailableQty = 0;
+//     }
+//   } else if (difference < 0) {
+//     // Reducing quantity
+//     this.availabilityMap[item.id].maxAvailableQty += Math.abs(difference);
+//     existing.qty = newQty;
+//   }
+// }
+
 
   // Method to select payment type
   selectPaymentType(type: string) {
