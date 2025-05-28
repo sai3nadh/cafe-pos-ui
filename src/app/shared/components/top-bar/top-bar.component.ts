@@ -47,6 +47,8 @@ constructor(
     this.currentUrl = this.router.url;
   });
 }
+isMobile = false;
+
 ngOnInit() {
   console.log('👂 TopBarComponent subscribing to status$');
  this.role = this.storageService.getLocalVariable("role");
@@ -65,6 +67,11 @@ ngOnInit() {
       const newStatus = event.newValue === 'true';
       this.printingEnabled = newStatus;
     }
+  });
+   this.isMobile = window.innerWidth <= 768;
+  // Optional: update on resize too
+  window.addEventListener('resize', () => {
+    this.isMobile = window.innerWidth <= 768;
   });
    // 🌐 Listen to WebSocket topic (multi-device real-time sync)
   this.wsService.subscribeToTopic<string>('/topic/printer-status').subscribe((msg: string) => {

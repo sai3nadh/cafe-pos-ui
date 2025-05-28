@@ -17,17 +17,33 @@
       style="background-color: #ffc107; color: #222; border: none; font-size: 18px; padding: 8px 16px; border-radius: 6px; font-weight: bold;">
       Menu-Management-Dashboard
     </button>
-       <button *ngIf="isUserPage()">
-        <!-- (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
-        Orders</button>
+       <!-- <button *ngIf="isUserPage()">
+        (click)="showOrders = !showOrders; closeDropdown();openModal()" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Orders</button> -->
     <!-- <button (click)="usersmenu()" class="bg-blue-500 text-white px-4 py-2 rounded"> -->
     <!-- <button *ngIf="isUserPage()" (click)="toggleUsers()" class="bg-blue-500 text-white px-4 py-2 rounded">
         Users
       </button> -->
-      <button *ngIf="isUserPage()" (click)="toggleUsersPopUp()" class="bg-blue-500 text-white px-4 py-2 rounded">
-        Users
-      </button>
-   <button *ngIf="isUserPage()" (click)="openOrdersPopup();">Orders-Icon</button>
+      <!-- <button *ngIf="isUserPage()" (click)="openOrdersPopup();"
+    style="background-color: #ffc107; margin-left: 50px;  color: #222; border: none; font-size: 33px; padding: 8px 16px; border-radius: 6px; font-weight: bold;"
+    >Current-Orders</button> -->
+      <button
+        *ngIf="isUserPage()"
+        (click)="toggleUsersPopUp()"
+        class="nav-action-button"
+        [ngStyle]="{ 'margin-left.px': isMobile ? 0 : 50 }"
+      >
+      Users
+    </button>
+    <button
+      *ngIf="isUserPage()"
+      (click)="openOrdersPopup()"
+      class="nav-action-button"
+      [ngStyle]="{ 'margin-left.px': isMobile ? 0 : 50 }"
+    >
+      {{ isMobile ? 'Orders' : 'All-Orders' }}
+    </button>
+
 
       <!-- <button *ngIf="isUserPage()" (click)="showOrdersIcon = !showOrdersIcon; toggleOrdersModal();getCustomerOrdersToday();">Orders-Icon</button> -->
     </div>

@@ -227,6 +227,17 @@
   border-top: 1px solid #ddd;
 }
 
+.nav-action-button {
+  background-color: #ffc107 !important;
+  color: #222 !important;
+  border: none;
+  font-size: 33px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .top-bar {
     flex-direction: row;
@@ -235,13 +246,24 @@
     padding: 10px;
   }
 
-  .nav-buttons,
-  .avatar-section {
-    width: 100%;
+   .nav-buttons {
     display: flex;
+    gap: 10px;
     flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    align-items: center;
+    justify-content: flex-start; // ✅ Push left
+  }
+  // .nav-buttons,
+  .avatar-section {
+    // width: 100%;
+    // display: flex;
+    // flex-wrap: wrap;
+    // justify-content: space-between;
+    // margin-bottom: 10px;
+     display: flex;
+  align-items: center;
+  margin-left: auto;       // ✅ Pushes to right
+  gap: 10px;
   }
 
   .nav-buttons button,
