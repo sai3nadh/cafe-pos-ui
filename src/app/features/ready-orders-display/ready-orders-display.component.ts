@@ -111,13 +111,28 @@ export class ReadyOrdersDisplayComponent {
     }, 300);
   }
   
+  // calculateItemsPerPagsse(): number {
+  //   const screenWidth = window.innerWidth;
+  //   const screenHeight = window.innerHeight;
+  //   const minBoxWidth = 150;
+  //   const minBoxHeight = 250;
+  //   const cols = Math.floor(screenWidth / minBoxWidth);
+  //   const rows = Math.floor((screenHeight - 200) / minBoxHeight); // 100 = header est.
+  //   return Math.max(cols * rows, 1);
+  // }
   calculateItemsPerPage(): number {
+    const box = document.querySelector('.order-box') as HTMLElement;
+    if (!box) return 1;
+
+    const boxWidth = box.offsetWidth;
+    const boxHeight = box.offsetHeight;
+
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    const minBoxWidth = 150;
-    const minBoxHeight = 250;
-    const cols = Math.floor(screenWidth / minBoxWidth);
-    const rows = Math.floor((screenHeight - 200) / minBoxHeight); // 100 = header est.
+
+    const cols = Math.floor(screenWidth / boxWidth);
+    const rows = Math.floor((screenHeight - 200) / boxHeight);
+
     return Math.max(cols * rows, 1);
   }
 
