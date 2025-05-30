@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { OrderService } from '../home/order.service';
+import { OrderService } from '../../home/order.service';
 import { interval, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { WebSocketService } from '../services/websocket.service';
-import { NotificationApiService } from '../services/notification-api.service';
+import { WebSocketService } from '../../services/websocket.service';
+import { NotificationApiService } from '../../services/notification-api.service';
 
 @Component({
   selector: 'app-ready-orders-display',

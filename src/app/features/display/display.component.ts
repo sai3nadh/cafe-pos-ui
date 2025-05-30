@@ -7,7 +7,7 @@ import { StorageService } from '../services/storage.service';
 import { OrderService } from '../home/order.service';
 import { WebSocketService } from '../services/websocket.service';
 import { NotificationApiService } from '../services/notification-api.service';
-import { ReadyOrdersDisplayComponent } from "../ready-orders-display/ready-orders-display.component";
+import { ReadyOrdersDisplayComponent } from "./ready-orders-display/ready-orders-display.component";
 
 @Component({
   selector: 'app-display',
