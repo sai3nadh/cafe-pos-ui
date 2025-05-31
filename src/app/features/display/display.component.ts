@@ -8,6 +8,7 @@ import { OrderService } from '../home/order.service';
 import { WebSocketService } from '../services/websocket.service';
 import { NotificationApiService } from '../services/notification-api.service';
 import { ReadyOrdersDisplayComponent } from "./ready-orders-display/ready-orders-display.component";
+import { MenuDisplayComponent } from "./menu-display/menu-display.component";
 
 @Component({
   selector: 'app-display',
@@ -15,7 +16,8 @@ import { ReadyOrdersDisplayComponent } from "./ready-orders-display/ready-orders
     CommonModule,
     FormsModule // To enable ngModel for form binding
     ,
-    ReactiveFormsModule, ReadyOrdersDisplayComponent],
+    ReactiveFormsModule, 
+    ReadyOrdersDisplayComponent, MenuDisplayComponent],
   templateUrl: './display.component.html',
   styleUrl: './display.component.scss'
 })
@@ -34,4 +36,21 @@ export class DisplayComponent {
         ,private notifcationService : NotificationApiService
       ) {
       }
+
+       hasOrders = false;
+onOrderPresenceChanged(present: boolean) {
+  this.hasOrders = present;
+  console.log("hasorders"+ this.hasOrders);
+  
+}
+
+  // ngOnInit() {
+  //   this.checkOrders();
+  // }
+
+  // checkOrders() {
+  //   this.orderService.getReadyOrdersToday().subscribe(data => {
+  //     this.hasOrders = data.length > 0;
+  //   });
+  // }
 }

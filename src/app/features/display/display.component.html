@@ -1,5 +1,56 @@
 <!-- <p>display works!</p> -->
-<div class="display-wrapper">
+<!-- <div class="display-wrapper">
     <app-ready-orders-display></app-ready-orders-display>
-  </div>
+  </div> -->
+  <!-- <div class="display-wrapper">
+  <ng-container *ngIf="hasOrders; else fallback">
+    <app-ready-orders-display></app-ready-orders-display>
+  </ng-container>
+
+  <ng-template #fallback>
+    <app-menu-display></app-menu-display>
+  </ng-template>
+</div> -->
+
+<!-- <app-ready-orders-display
+  (orderPresenceChanged)="onOrderPresenceChanged($event)">
+</app-ready-orders-display> -->
+<!-- <div class="display-wrapper"> -->
+  <!-- <ng-container *ngIf="hasOrders; else fallback">
+    <app-ready-orders-display
+      (orderPresenceChanged)="onOrderPresenceChanged($event)">
+    </app-ready-orders-display>
+  </ng-container> -->
+ <!-- <app-ready-orders-display
+      (orderPresenceChanged)="onOrderPresenceChanged($event)">
+    </app-ready-orders-display>
+  <ng-template #fallback>
+    <app-menu-display></app-menu-display>
+  </ng-template>
+</div> -->
+
+
+<div class="display-wrapper" 
   
+>
+  <!-- Always render orders -->
+  <app-ready-orders-display
+   [ngClass]="{ 'hidden': !hasOrders }"
+    (orderPresenceChanged)="onOrderPresenceChanged($event)">
+  </app-ready-orders-display>
+</div>
+
+<!-- Fallback wrapper OUTSIDE to avoid layout conflicts -->
+<div class="fallback-wrapper" *ngIf="!hasOrders">
+  <app-menu-display></app-menu-display>
+</div>
+
+
+<!-- Always rendered, but hidden when not needed
+<app-ready-orders-display
+  [ngClass]="{ 'hidden': !hasOrders }"
+  (orderPresenceChanged)="onOrderPresenceChanged($event)">
+</app-ready-orders-display>
+
+Show fallback on top
+<app-menu-display *ngIf="!hasOrders"></app-menu-display> -->

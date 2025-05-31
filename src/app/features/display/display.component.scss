@@ -1,0 +1,29 @@
+.display-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+}
+
+.fallback-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  pointer-events: none; // allow clicks to pass through if needed
+}
+.hidden {
+  display: none;
+}
+
+// app-ready-orders-display,
+// app-menu-display {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+// }

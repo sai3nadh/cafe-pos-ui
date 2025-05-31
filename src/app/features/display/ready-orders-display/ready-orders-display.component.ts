@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { OrderService } from '../../home/order.service';
 import { interval, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,8 @@ import { NotificationApiService } from '../../services/notification-api.service'
 })
 export class ReadyOrdersDisplayComponent {
   
+  @Output() orderPresenceChanged = new EventEmitter<boolean>();
+
   allOrders: string[] = [];
   visibleOrders: string[] = [];
   currentPage = 0;
@@ -59,6 +61,11 @@ export class ReadyOrdersDisplayComponent {
     this.orderService.getReadyOrdersToday().subscribe(data => {
       this.allOrders = data.map(order => '#' + order.orderNumber.slice(-3));
       this.updateVisibleOrders();
+
+      this.orderPresenceChanged.emit(this.allOrders.length > 0);
+// this.orderPresenceChanged.emit(this.allOrders.length > 0);
+console.log('📢 Emitting orderPresenceChanged:', this.allOrders.length > 0);
+
     });
   }
 
