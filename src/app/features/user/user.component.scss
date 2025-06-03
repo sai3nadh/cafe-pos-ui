@@ -96,18 +96,33 @@
     }
   }
   
+  // .categories button {
+  //   font-size: xx-large ;//1.5em;
+  //   padding: 15px 25px;
+  //   margin: 5px;
+  //   background-color: #656f98;
+  //   color: white;
+  //   border: none;
+  //   border-radius: 15px;
+  //   cursor: pointer;
+  //   transition: background-color 0.3s;
+  //   min-height: 120PX;//min-height: 170PX;
+  // }
   .categories button {
-    font-size: xx-large ;//1.5em;
-    padding: 15px 25px;
-    margin: 5px;
-    background-color: #656f98;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    min-height: 120PX;//min-height: 170PX;
-  }
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  padding: 0.6rem 1rem;
+  margin: 6px 0;
+  background-color: #656f98;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-height: 64px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 
   h2{
     font-size: xxx-large;
@@ -179,30 +194,90 @@
   }
   
 
- .items-grid {
+//  .items-grid {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); /* Automatically adjust column count */
+//   gap: 20px;  /* Dynamic space between items */
+//   padding: 10px;
+//   overflow: hidden;  /* Prevent horizontal scrollbar */
+//   justify-items: center;  /* Center the items horizontally in the available space */
+// }
+.items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); /* Automatically adjust column count */
-  gap: 20px;  /* Dynamic space between items */
-  padding: 10px;
-  overflow: hidden;  /* Prevent horizontal scrollbar */
-  justify-items: center;  /* Center the items horizontally in the available space */
+  // grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
 }
+
   
   /* Ensure each item card is the same size and aligned */
+  // .item-card {
+  //   width: 200px;
+  //   min-height: 300px;
+  //   padding: 15px;
+  //   border: 1px solid #ccc;
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: space-between;
+  //   align-items: center;
+  //   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  //   border-radius: 10px;
+  //   margin-right: 40;
+  //   margin-left: 20px;  
+  // }
   .item-card {
-    width: 200px;
-    min-height: 300px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    margin-right: 40;
-    margin-left: 20px;  
-  }
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  // font-size: clamp(0.85rem, 1.6vw, 1rem);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1em;
+}
+
+.item-icons {
+  width: 80px;
+  height: 80px;
+  // width: 64px;
+  // height: 64px;
+  object-fit: contain;
+  margin: 0.5rem auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0.5rem;
+}
+
+.button-container button {
+  padding: 0.3rem 0.8rem;
+  font-size: 1rem;
+  
+  // padding: 0.25rem 0.6rem;
+  // font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.item-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
   /* Right Section (Cart) */
   // .right-section {
   //   width: 400px; /* Increased the width of the cart */
@@ -964,13 +1039,13 @@ i.fas.fa-trash-alt {
     border: 7px solid #ff4b4b; 
   }
   
-     .item-icons {
-    width: 130px;
-    height: 130px;
-    border-radius: 5%;
-    cursor: pointer;
-    margin-right: 15px;
-  }
+  //    .item-icons {
+  //   width: 130px;
+  //   height: 130px;
+  //   border-radius: 5%;
+  //   cursor: pointer;
+  //   margin-right: 15px;
+  // }
   /* Dropdown menu styling */
   // .dropdown-menu {
   //   position: absolute;
@@ -1956,7 +2031,7 @@ i.fas.fa-trash-alt {
 
 
 .zoom-scroll-container{
-  height: 80vh;
+  height: 70vh;
   overflow: auto;
   width: 85%;
   padding: 20px;
