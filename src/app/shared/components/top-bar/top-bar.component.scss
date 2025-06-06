@@ -6,7 +6,7 @@
     left: 0;
     width: 100%;
     background-color: #445f7b;
-    padding: 15px;
+    padding: 10px;//15px;
     color: white;
     z-index: 1000; /* Ensure the top bar stays above other content */
     display: flex;
@@ -19,16 +19,17 @@
     background-color: transparent;
     border: none;
     color: white;
-    font-size: 1em;
+    // font-size: 1em;
     cursor: pointer;
     padding: 10px;
     margin-left: 5px;
-    font-size: xx-large;
+    // font-size: xx-large;
+    font-size: 1.5rem;
   }
   
   .avatar-section img {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     margin-right: 30px;
     border-radius: 50%;
   }

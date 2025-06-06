@@ -31,17 +31,19 @@
         *ngIf="isUserPage()"
         (click)="toggleUsersPopUp()"
         class="nav-action-button"
-        [ngStyle]="{ 'margin-left.px': isMobile ? 0 : 50 }"
+        [ngStyle]="{ 'margin-left.px': isMobile || isNarrowScreen ? 20 : 50 }"
       >
       Users
+            <!-- {{ isMobile || isNarrowScreen ? 'USR' : 'Users' }} -->
+
     </button>
     <button
       *ngIf="isUserPage()"
       (click)="openOrdersPopup()"
       class="nav-action-button"
-      [ngStyle]="{ 'margin-left.px': isMobile ? 0 : 50 }"
+      [ngStyle]="{ 'margin-left.px': isMobile || isNarrowScreen ? 20 : 50 }"
     >
-      {{ isMobile ? 'Orders' : 'All-Orders' }}
+      {{ isMobile || isNarrowScreen ? 'Orders' : 'All-Orders' }}
     </button>
 
 
@@ -52,14 +54,32 @@
     <div class="avatar-section">
          <!-- new Printing toggle button -->
         <div  class="button-container">
-         <button *ngIf="isUserPage()" (click)="togglePrinting()" class="print-btn"
+         <!-- <button *ngIf="isUserPage()" (click)="togglePrinting()" class="print-btn"
         [ngClass]="printingEnabled ? 'printer-on' : 'printer-off'">
           {{ printingEnabled ? 'Print: ON' : 'Print: OFF' }}
         </button>
         <button *ngIf="isUserPage()" (click)="pendingOrders()"  class="lock-btn">Kitchen</button>
         <button *ngIf="isKitchenPage()" (click)="goToHome()"  class="lock-btn">Home</button>
-        <button *ngIf="isUserPage() || isKitchenPage()" (click)="logout()"  class="lock-btn">Lock</button>
-        </div>
+        <button *ngIf="isUserPage() || isKitchenPage()" (click)="logout()"  class="lock-btn">Lock</button> -->
+    
+
+<button class="print-btn" 
+    *ngIf="isUserPage()" 
+    (click)="togglePrinting()"
+    [ngClass]="printingEnabled ? 'printer-on' : 'printer-off'">
+      {{ isNarrowScreen ? (printingEnabled ? 'ON' : 'OFF') : (printingEnabled ? 'Print: ON' : 'Print: OFF') }}
+</button>
+    <button *ngIf="isKitchenPage()" (click)="goToHome()"  class="lock-btn">Home</button>
+
+<button class="lock-btn"
+*ngIf="isUserPage()"
+(click)="pendingOrders()">
+  {{ isNarrowScreen ? 'Ktchn' : 'Kitchen' }}
+</button>
+    <button class="lock-btn">
+  {{ isNarrowScreen ? '🔒' : 'Logout' }}
+</button>
+      </div>
       <img class="avatar" src="../../../../assets/pic.jpeg" alt="Avatar"  (click)="toggleDropdown()" />
         
         <!-- Dropdown Menu (Initially Hidden) -->

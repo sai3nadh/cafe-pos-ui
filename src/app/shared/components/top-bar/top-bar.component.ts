@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild, AfterViewInit, NgZone } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { StorageService } from '../../../features/services/storage.service';
@@ -37,7 +37,7 @@ constructor(
   ,private printerService: PrinterService
   ,private printingStatusService: PrintingStatusService
   ,private wsService: WebSocketService
-
+  ,private ngZone: NgZone
 ) {
   console.log('🚀 TopBarComponent constructed');
 
@@ -48,6 +48,8 @@ constructor(
   });
 }
 isMobile = false;
+isNarrowScreen: boolean = window.innerWidth <= 800;
+resizeListener: any;
 
 ngOnInit() {
   console.log('👂 TopBarComponent subscribing to status$');
@@ -93,6 +95,18 @@ ngOnInit() {
   //     localStorage.setItem('printingEnabled', String(status));
   //   });
   // }
+
+  this.resizeListener = () => {
+  this.ngZone.run(() => {
+    this.isNarrowScreen = window.innerWidth <= 800;
+  });
+};
+
+window.addEventListener('resize', this.resizeListener);
+
+}
+ngOnDestroy() {
+  window.removeEventListener('resize', this.resizeListener);
 }
 
 togglePrinting() {
