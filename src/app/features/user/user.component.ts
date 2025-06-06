@@ -229,16 +229,16 @@ export class UserComponent  implements AfterViewInit  {
     //     this.applyZoom();
     //     this.zoomApplied = true;
     //   }
-    const savedZoom = localStorage.getItem('itemsZoomLevel')||'0.7';
-    this.zoomLevel = parseFloat(savedZoom);
-  // If both conditions are good, apply zoom
-  if (savedZoom && this.zoomSection && !this.zoomApplied) {
-    // this.zoomLevel = parseFloat(savedZoom);
-    this.applyZoom();
-    this.zoomApplied = true;
-  } else {
-    console.warn("Zoom not applied – either zoom value is missing or section not found.");
-  }
+  //   const savedZoom = localStorage.getItem('itemsZoomLevel')||'0.7';
+  //   this.zoomLevel = parseFloat(savedZoom);
+  // // If both conditions are good, apply zoom
+  // if (savedZoom && this.zoomSection && !this.zoomApplied) {
+  //   // this.zoomLevel = parseFloat(savedZoom);
+  //   this.applyZoom();
+  //   this.zoomApplied = true;
+  // } else {
+  //   console.warn("Zoom not applied – either zoom value is missing or section not found.");
+  // }
   }
   categories: Category[] = [];
   customers: { id: number; name: string; avatar: string }[] = [];
@@ -555,6 +555,12 @@ toggleSittingArea(sittingArea: string) {
           this.selectedCategory = this.categories[0];
           this.updateFilteredItems();  // Refresh visible items
           this.selectCategory(this.categories[0]);
+          setTimeout(() => {
+            if (!this.zoomApplied && this.zoomSection) {
+              this.applyZoom();
+              this.zoomApplied = true;
+            }
+          }, 0);
         }
       },
       error => {
