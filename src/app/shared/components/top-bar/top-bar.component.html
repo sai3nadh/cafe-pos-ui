@@ -76,7 +76,7 @@
 (click)="pendingOrders()">
   {{ isNarrowScreen ? 'Ktchn' : 'Kitchen' }}
 </button>
-    <button class="lock-btn">
+    <button class="lock-btn" *ngIf="isUserPage() || isKitchenPage()" (click)="logout()">
   {{ isNarrowScreen ? '🔒' : 'Logout' }}
 </button>
       </div>
